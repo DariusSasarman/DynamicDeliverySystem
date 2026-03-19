@@ -22,3 +22,9 @@ not just** "Leave it at the entrance" or "It's been placed in an easybox where y
   - [ ] Extend said interface to a mobile-native application
 
 That's about it for now. I'm sure I'll add more intermediate steps to this roadmap but it's enough for now.
+
+## Use case diagram
+
+![Untitled Diagram](https://github.com/user-attachments/assets/3dcfc7f7-9cd3-48d6-97c4-5e0657cdc50c)
+
+
