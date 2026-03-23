@@ -12,7 +12,7 @@ not just** "Leave it at the entrance" or "It's been placed in an easybox where y
 
 ## Roadmap : 
   - [x] Define the use-cases 
-  - [ ] Determine the general architecture of the project
+  - [x] Determine the general architecture of the project
   - [ ] Design the classes this system relies upon, in a class diagram
   - [ ] Implement said classes as a database schema <sup> ( I'm thinking postgres ) </sup>
   - [ ] Translate the class diagram into a back-end implementation <sup> ( How about Spring Boot? ) </sup> 
@@ -27,4 +27,7 @@ That's about it for now. I'm sure I'll add more intermediate steps to this roadm
 
 ![Untitled Diagram](https://github.com/user-attachments/assets/3dcfc7f7-9cd3-48d6-97c4-5e0657cdc50c)
 
+## C4-style Architectural Diagram
+
+<img width="781" height="521" alt="Untitled Diagram drawio" src="https://github.com/user-attachments/assets/ce76a887-ec39-4c1c-8d6c-c5f377e388e0" />
 
