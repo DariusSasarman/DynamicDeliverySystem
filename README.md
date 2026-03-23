@@ -14,10 +14,10 @@ not just** "Leave it at the entrance" or "It's been placed in an easybox where y
   - [x] Define the use-cases 
   - [x] Determine the general architecture of the project
   - [ ] Design the classes this system relies upon, in a class diagram
-  - [ ] Implement said classes as a database schema <sup> ( I'm thinking postgres ) </sup>
-  - [ ] Translate the class diagram into a back-end implementation <sup> ( How about Spring Boot? ) </sup> 
+  - [ ] Implement said classes as a database schema 
+  - [ ] Translate the class diagram into a back-end implementation
   - [ ] Have said implementation talk to an nginx reverse proxy
-  - [ ] Provide a user-friendly front-end web interface <sup> ( Can't promise React - I familiar with vanilla ) </sup>
+  - [ ] Provide a user-friendly front-end web interface 
   - [ ] Tie it all up with a docker-compose.yml file so it builds nicely and not only "Works on my machine"
   - [ ] Extend said interface to a mobile-native application
 
