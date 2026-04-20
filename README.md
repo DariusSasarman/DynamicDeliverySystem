@@ -25,9 +25,8 @@ That's about it for now. I'm sure I'll add more intermediate steps to this roadm
 
 ## Use case diagram
 
-![Untitled Diagram](https://github.com/user-attachments/assets/3dcfc7f7-9cd3-48d6-97c4-5e0657cdc50c)
+<img width="879" height="622" alt="Untitled Diagram drawio(1)" src="https://github.com/user-attachments/assets/1977eafb-48e5-4be5-ad63-d0d7408315bc" />
 
 ## C4-style Architectural Diagram
 
-<img width="781" height="521" alt="Untitled Diagram drawio" src="https://github.com/user-attachments/assets/ce76a887-ec39-4c1c-8d6c-c5f377e388e0" />
-
+<img width="781" height="521" alt="Untitled Diagram drawio(2)" src="https://github.com/user-attachments/assets/c8d70de1-0e88-4a3b-bf88-1208f59d49df" />
