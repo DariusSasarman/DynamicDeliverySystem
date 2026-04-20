@@ -1,0 +1,43 @@
+.header {
+  border: 2px solid #222f68;
+  height: 15vh;
+  width: 99vw;
+  display: flex;
+  position: absolute;
+  gap: 10px;
+  align-items: center;
+  font-size: 40px;
+  overflow: hidden;
+}
+
+button {
+  background: transparent;
+  font: size 40px;
+  border: none;
+  color: #222f68;
+  padding: 8px 20px;
+  width: 250px;
+  height: 50px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #222f6820;
+}
+
+button:active {
+  background: #ff000020;
+}
+
+.menuButton {
+  height: 50%;
+  margin-left: auto;
+  margin-right: 30px;
+}
+
+.menuButton:active {
+  background: #ff000020;
+}

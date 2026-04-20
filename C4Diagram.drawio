@@ -1,0 +1,49 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0" version="29.6.4">
+  <diagram name="Page-1" id="iYabFh-WktrTuU7t_arv">
+    <mxGraphModel dx="1054" dy="585" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="UTK2HzJydRR5yw0RABqp-6" parent="1" style="dashed=1;dashPattern=8 4;fillColor=none;strokeColor=#666666;fontStyle=1;fontSize=11;verticalAlign=top;align=left;spacingLeft=8;spacingTop=4;" value="Dynamic Delivery System [system boundary]" vertex="1">
+          <mxGeometry height="520" width="580" x="500" y="515" as="geometry" />
+        </mxCell>
+        <mxCell id="UTK2HzJydRR5yw0RABqp-7" parent="1" style="dashed=1;dashPattern=4 4;fillColor=none;strokeColor=#aaaaaa;fontSize=10;fontStyle=0;verticalAlign=top;align=left;spacingLeft=6;spacingTop=4;" value="Docker network · internal" vertex="1">
+          <mxGeometry height="320" width="290" x="760" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="UTK2HzJydRR5yw0RABqp-8" parent="1" style="shape=mxgraph.c4.person2;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=11;" value="Web User&#xa;[Person]" vertex="1">
+          <mxGeometry height="70" width="120" x="305" y="565" as="geometry" />
+        </mxCell>
+        <mxCell id="UTK2HzJydRR5yw0RABqp-9" parent="1" style="shape=mxgraph.c4.person2;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=11;" value="App User&#xa;[Person]" vertex="1">
+          <mxGeometry height="70" width="120" x="300" y="725" as="geometry" />
+        </mxCell>
+        <mxCell id="UTK2HzJydRR5yw0RABqp-10" parent="1" style="shape=mxgraph.c4.container2;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=0;fontSize=11;" value="Nginx&#xa;[Container: reverse proxy] &#xa;Sole exposed port · TLS" vertex="1">
+          <mxGeometry height="80" width="220" x="530" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="UTK2HzJydRR5yw0RABqp-11" parent="1" style="shape=mxgraph.c4.container2;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=11;" value="React SPA &#xa;[Client: JavaScript] &#xa;Static build · served by Nginx" vertex="1">
+          <mxGeometry height="80" width="220" x="530" y="750" as="geometry" />
+        </mxCell>
+        <mxCell id="UTK2HzJydRR5yw0RABqp-12" parent="1" style="shape=mxgraph.c4.container2;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=0;fontSize=11;" value="Spring Boot &#xa;[Java / REST API] &#xa;Internal only" vertex="1">
+          <mxGeometry height="80" width="240" x="780" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="UTK2HzJydRR5yw0RABqp-13" parent="1" style="shape=mxgraph.c4.container2;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=0;fontSize=11;" value="PostgreSQL &#xa;[Database] &#xa;Internal only" vertex="1">
+          <mxGeometry height="80" width="240" x="780" y="880" as="geometry" />
+        </mxCell>
+        <mxCell id="UTK2HzJydRR5yw0RABqp-14" edge="1" parent="1" source="UTK2HzJydRR5yw0RABqp-8" style="edgeStyle=orthogonalEdgeStyle;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="UTK2HzJydRR5yw0RABqp-10" value="HTTPS">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UTK2HzJydRR5yw0RABqp-15" edge="1" parent="1" source="UTK2HzJydRR5yw0RABqp-9" style="edgeStyle=orthogonalEdgeStyle;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" target="UTK2HzJydRR5yw0RABqp-10" value="HTTPS /api/">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UTK2HzJydRR5yw0RABqp-16" edge="1" parent="1" source="UTK2HzJydRR5yw0RABqp-10" style="edgeStyle=orthogonalEdgeStyle;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="UTK2HzJydRR5yw0RABqp-11" value="serves static files">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UTK2HzJydRR5yw0RABqp-17" edge="1" parent="1" source="UTK2HzJydRR5yw0RABqp-10" style="edgeStyle=orthogonalEdgeStyle;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="UTK2HzJydRR5yw0RABqp-12" value="proxy /api/*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UTK2HzJydRR5yw0RABqp-19" edge="1" parent="1" source="UTK2HzJydRR5yw0RABqp-12" style="edgeStyle=orthogonalEdgeStyle;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="UTK2HzJydRR5yw0RABqp-13" value="JDBC">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
