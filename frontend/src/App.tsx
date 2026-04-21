@@ -1,5 +1,6 @@
 import "./App.css";
-import { AccountTypes, getTargetState } from "./utils/utils";
+import { AccountTypes } from "./utils/InternalUtils";
+import { getTargetState } from "./utils/ApiCalls";
 import UserView from "./components/user/basic/UserView"
 import DeliveryView from "./components/user/delivery/DeliveryView"
 import ManagerView from "./components/user/manager/ManagerView";

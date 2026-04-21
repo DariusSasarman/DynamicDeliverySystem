@@ -5,6 +5,4 @@ export enum AccountTypes {
   MANAGER = "manager",
 }
 
-export function getTargetState() : AccountTypes {
-  return AccountTypes.NONE;
-}
+

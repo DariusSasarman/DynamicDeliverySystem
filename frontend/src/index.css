@@ -1,0 +1,13 @@
+body, html, #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+.app-container { 
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    min-height: 100vh;
+    min-width: 100vw;
+}
