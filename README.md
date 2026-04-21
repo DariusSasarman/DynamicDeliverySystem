@@ -13,10 +13,10 @@ not just** "Leave it at the entrance" or "It's been placed in an easybox where y
 ## Roadmap : 
   - [x] Define the use-cases 
   - [x] Determine the general architecture of the project
-  - [ ] Design the classes this system relies upon, in a class diagram
-  - [ ] Provide a user-friendly front-end web interface 
+  - [ ] Design the classes this system relies upon, in a class diagram 
   - [ ] Implement said classes as a database schema 
   - [ ] Translate the class diagram into a back-end implementation
+  - [ ] Provide a user-friendly front-end web interface
   - [ ] Have said implementation talk to an nginx reverse proxy
   - [ ] Tie it all up with a docker-compose.yml file so it builds nicely and not only "Works on my machine"
   - [ ] Extend said interface to a mobile-native application
