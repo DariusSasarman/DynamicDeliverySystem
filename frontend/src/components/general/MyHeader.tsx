@@ -1,5 +1,5 @@
 import "./MyHeader.css"
-
+import "../../App.css"
 function MyHeader({ button1, button2, button3, goToHome, showSidemenu }) {
   return (
     <>
