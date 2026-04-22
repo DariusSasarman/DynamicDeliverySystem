@@ -1,11 +1,13 @@
 .header {
   border: 2px solid #222f68;
   height: 15vh;
-  width: 99vw;
+  width: 100vw;
   display: flex;
   position: absolute;
   gap: 10px;
   align-items: center;
+  justify-self:baseline;
+  align-self: baseline;
   font-size: 40px;
   overflow: hidden;
 }

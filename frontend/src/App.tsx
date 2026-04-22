@@ -1,10 +1,11 @@
 import "./App.css";
 import { AccountTypes } from "./utils/InternalUtils";
 import { getTargetState } from "./utils/ApiCalls";
-import UserView from "./components/user/basic/UserView"
-import DeliveryView from "./components/user/delivery/DeliveryView"
+import UserView from "./components/user/basic/UserView";
+import DeliveryView from "./components/user/delivery/DeliveryView";
 import ManagerView from "./components/user/manager/ManagerView";
 import NoneView from "./components/user/none/NoneView";
+import { useEffect, useState } from "react";
 
 const VIEW_MAP: Record<AccountTypes, React.ComponentType> = {
   [AccountTypes.BASIC]: UserView,
@@ -12,13 +13,28 @@ const VIEW_MAP: Record<AccountTypes, React.ComponentType> = {
   [AccountTypes.MANAGER]: ManagerView,
   [AccountTypes.NONE]: NoneView,
 };
-
 function App() {
-  const accountState = getTargetState();
+  const [accountState, setAccountState] = useState<AccountTypes | null>(null);
 
-  const CurrentView = VIEW_MAP[accountState] || NoneView;
+  useEffect(() => {
+    const initSite = async () => {
+      const state = await getTargetState();
+      setAccountState(state);
+    };
+    initSite();
+  }, []);
 
-  return <CurrentView />;
+  if (accountState === null) {
+    return <div className="app-container">Loading...</div>;
+  }
+
+  const ComponentToRender = VIEW_MAP[accountState] || NoneView;
+
+  return (
+    <div className="app-container">
+      <ComponentToRender />
+    </div>
+  );
 }
 
 export default App;

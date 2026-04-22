@@ -129,7 +129,7 @@ function NoneView() {
             Please enter your desired credentials
           </div>
           <input
-            type="text"
+            type="email"
             onChange={(e) => checkLoginEmail(e.target.value)}
             placeholder="Enter your email"
           ></input>
@@ -160,7 +160,7 @@ function NoneView() {
           ></img>
           <div style={{ color: "#222f68" }}>Please enter your credentials</div>
           <input
-            type="text"
+            type="email"
             onChange={(e) => checkLoginEmail(e.target.value)}
             placeholder="Enter email"
           ></input>

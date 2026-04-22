@@ -19,3 +19,33 @@ button:hover {
 button:active {
   background: #ff000020;
 }
+
+input[type="text"], 
+input[type="email"], 
+input[type="password"],
+textarea {
+  width: 250px;
+  padding: 10px 16px;
+  margin: 8px 0;
+  display: inline-block;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #222f68;
+  background-color: #ffffff;
+  border: 2px solid #222f6820; 
+  border-radius: 6px;
+  outline: none; 
+}
+
+input:hover {
+  border-color: #222f6840;
+}
+
+input:focus {
+  border-color: #222f68; 
+  background-color: transparent;
+}
+
+input::placeholder {
+  color: #222f6880;
+}
