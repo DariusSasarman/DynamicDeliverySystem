@@ -9,8 +9,7 @@
     height: 88vh; 
     width: 40vw;
     min-width: 320px;
-    
-    /* ADD THIS */
+    overflow:scroll;
     margin: auto; 
     position: absolute;
     top: 50%;
