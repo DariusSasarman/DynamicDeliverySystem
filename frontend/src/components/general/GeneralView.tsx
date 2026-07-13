@@ -7,21 +7,16 @@ import { getBasicButtonList } from "../user/basic/BasicButtonList";
 import { getManagerButtonList } from "../user/manager/ManagerButtonList";
 import { getDeliveryButtonList } from "../user/delivery/DeliveryButtonList";
 import NoneView from "../user/none/NoneView";
+import WelcomeView from "./WelcomeView";
 function GeneralView({accountState})
 {
-    const HOME_MAP : Record<AccountTypes, any> = {
-        [AccountTypes.BASIC]: () => () => <div> Welcome Basic User!</div>,
-        [AccountTypes.DELIVERY]: () => () => <div> Welcome Delivery User!</div>,
-        [AccountTypes.MANAGER]: () => () => <div>Welcome Manager User!</div>,
-        [AccountTypes.NONE]: () => () => <div> You shouldn't see this...</div>,
-    };
 
     const [shownSidebar, setShowSidebar] = useState(false);
     
-    const [ActiveComponent, setActiveComponent] = useState(HOME_MAP[accountState]);
+    const [ActiveComponent, setActiveComponent] = useState(() => WelcomeView);
     
     const goToHome = () => {
-        setActiveComponent(HOME_MAP[accountState])
+        setActiveComponent(() => WelcomeView)
     };
 
     const showSidemenu = () => {
@@ -35,7 +30,8 @@ function GeneralView({accountState})
         [AccountTypes.NONE]: [],
     };
 
-    const buttons = BUTTONS_MAP[accountState] || null;
+    const buttons = BUTTONS_MAP[accountState] || [];
+    const topThreeButtons = buttons.slice(0, 3);
     
     if(accountState == AccountTypes.NONE)
     {
@@ -51,14 +47,24 @@ function GeneralView({accountState})
             showSidemenu={() => showSidemenu()}
         ></MyHeader>
         <div className="main-content">
-            <ActiveComponent/>
+            <ActiveComponent />
+        
+        {ActiveComponent === WelcomeView && (
+        topThreeButtons.map((btn, index) => (
+        <button
+        key={index}
+        onClick={btn.onClick}
+        >
+        {btn.label}
+        </button>
+        ))
+        )}
         </div>
         <Sidebar
             buttons = {buttons}
             isOpen = {shownSidebar}
             onClose= {() => setShowSidebar(false)}
         ></Sidebar>
-
         </>
     );
 }

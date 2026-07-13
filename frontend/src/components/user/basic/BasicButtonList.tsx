@@ -9,5 +9,9 @@ export const getBasicButtonList = (setActiveView) => [
     { 
         label: "Profile", 
         onClick: () => setActiveView(() => () => <div>Profile</div>) 
+    },
+    {
+        label : "My packages",
+        onClick: () => setActiveView(()=>() => <div> Here are your packages</div>)
     }
 ];
