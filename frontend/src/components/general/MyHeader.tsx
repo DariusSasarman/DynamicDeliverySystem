@@ -1,6 +1,8 @@
 import "./MyHeader.css"
 import "../../App.css"
-function MyHeader({ button1, button2, button3, goToHome, showSidemenu }) {
+function MyHeader({ goToHome, showSidemenu }) {
+
+
   return (
     <>
       <div className="header">
@@ -9,9 +11,6 @@ function MyHeader({ button1, button2, button3, goToHome, showSidemenu }) {
           src="/src/assets/logo.png"
           onClick={goToHome}
         ></img>
-        <button onClick={button1.onClick}> {button1.props.children} </button>
-        <button onClick={button2.onClick}> {button2.props.children} </button>
-        <button onClick={button3.onClick}> {button3.props.children}</button>
         <img
           className="menuButton"
           src="/src/assets/menu.png"

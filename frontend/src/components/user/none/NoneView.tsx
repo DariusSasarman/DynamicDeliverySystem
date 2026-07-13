@@ -90,17 +90,21 @@ function NoneView() {
   return (
     <>
       {errorMessage && (
-        <div
-          style={{
-            color: "white",
-            fontSize: "12px",
-            margin: "5px",
-            position: "absolute",
-            borderRadius: "20px",
-            backgroundColor: "#222f68",
-            whiteSpace: "pre-line",
-          }}
-        >
+          <div
+            style={{
+              color: "white",
+              fontSize: "12px",
+              margin: "5px",
+              position: "fixed",
+              top: "20px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              borderRadius: "20px",
+              backgroundColor: "#222f68",
+              whiteSpace: "pre-line",
+              zIndex: 1000,
+            }}
+          >
           <div style={{ margin: "10px", flexDirection: "row" }}>
             {" "}
             {errorMessage}{" "}
