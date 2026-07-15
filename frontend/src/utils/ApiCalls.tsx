@@ -36,3 +36,8 @@ export async function getTargetState(): Promise<AccountTypes> {
     return AccountTypes.NONE;
   }
 }
+
+export function getInvoiceCount(email : String)
+{
+    return 10;
+}

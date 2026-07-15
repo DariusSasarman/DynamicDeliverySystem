@@ -8,6 +8,8 @@ import { getManagerButtonList } from "../user/manager/ManagerButtonList";
 import { getDeliveryButtonList } from "../user/delivery/DeliveryButtonList";
 import NoneView from "../user/none/NoneView";
 import WelcomeView from "./WelcomeView";
+import InvoiceView from "./InvoiceView";
+import { getInvoiceCount } from "../../utils/ApiCalls";
 function GeneralView({accountState})
 {
 
@@ -45,6 +47,8 @@ function GeneralView({accountState})
         <MyHeader
             goToHome={goToHome}
             showSidemenu={() => showSidemenu()}
+            invoiceCount={getInvoiceCount("test@gmail.com")}
+            invoiceMenu={()=> setActiveComponent(() => InvoiceView)}
         ></MyHeader>
         <div className="main-content">
             <ActiveComponent />

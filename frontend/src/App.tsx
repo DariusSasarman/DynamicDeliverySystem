@@ -2,7 +2,8 @@ import "./App.css";
 import { AccountTypes } from "./utils/InternalUtils";
 import { getTargetState } from "./utils/ApiCalls";
 import { useEffect, useState } from "react";
-import GeneralView from "./components/general/GeneralView"; // Your new orchestrator component
+import GeneralView from "./components/general/GeneralView"; 
+import WelcomeView from "./components/general/WelcomeView";
 
 function App() {
   const [accountState, setAccountState] = useState<AccountTypes | null>(null);
@@ -16,7 +17,7 @@ function App() {
   }, []);
 
   if (accountState === null) {
-    return <div className="app-container">Loading...</div>;
+    return <WelcomeView></WelcomeView>;
   }
 
   return (

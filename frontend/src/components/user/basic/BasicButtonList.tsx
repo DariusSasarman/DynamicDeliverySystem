@@ -1,17 +1,22 @@
 export const getBasicButtonList = (setActiveView) => [
-    { 
-        label: "Dashboard", 
-        onClick: () => setActiveView(() => () => 
-        <div style={{ backgroundColor: "black", color: "white", padding: "20px" }}>
-            Dashboard
-        </div>) 
-    },
-    { 
-        label: "Profile", 
-        onClick: () => setActiveView(() => () => <div>Profile</div>) 
+    {
+        label: "Status",
+        onClick: () => setActiveView(() => () => <div>Delivery Status</div>)
     },
     {
-        label : "My packages",
-        onClick: () => setActiveView(()=>() => <div> Here are your packages</div>)
+        label: "Confirm a delivery",
+        onClick: () => setActiveView(() => ()=> <div></div>)
+    },
+    {
+        label: "Place an order",
+        onClick: () => setActiveView(() => ()=> <div></div>)
+    },
+    {
+        label: "File a complaint",
+        onclick: () => setActiveView(() => ()=><div></div>)
+    },
+    {
+        label: "My account (schedule)",
+        onClick: () => setActiveView(() => ()=> <div></div>)
     }
 ];

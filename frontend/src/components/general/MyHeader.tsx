@@ -1,8 +1,7 @@
-import "./MyHeader.css"
-import "../../App.css"
-function MyHeader({ goToHome, showSidemenu }) {
-
-
+import "./MyHeader.css";
+import "../../App.css";
+function MyHeader({ goToHome, showSidemenu, invoiceCount, invoiceMenu }) {
+  /// invoices
   return (
     <>
       <div className="header">
@@ -11,6 +10,11 @@ function MyHeader({ goToHome, showSidemenu }) {
           src="/src/assets/logo.png"
           onClick={goToHome}
         ></img>
+        {invoiceCount > 0 && (
+          <div className="invoice-badge" onClick={invoiceMenu}>
+            {invoiceCount}
+          </div>
+        )}
         <img
           className="menuButton"
           src="/src/assets/menu.png"
