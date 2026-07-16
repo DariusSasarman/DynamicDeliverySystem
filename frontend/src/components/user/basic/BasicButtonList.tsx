@@ -1,22 +1,30 @@
+import PackagesStatus from "./PackagesStatus";
+
 export const getBasicButtonList = (setActiveView) => [
     {
-        label: "Status",
-        onClick: () => setActiveView(() => () => <div>Delivery Status</div>)
-    },
-    {
-        label: "Confirm a delivery",
-        onClick: () => setActiveView(() => ()=> <div></div>)
+        label: "Packages Status",
+        onClick: () => setActiveView(() => PackagesStatus)
     },
     {
         label: "Place an order",
-        onClick: () => setActiveView(() => ()=> <div></div>)
-    },
-    {
-        label: "File a complaint",
-        onclick: () => setActiveView(() => ()=><div></div>)
+        onClick: () => setActiveView(() => ()=> <div>
+            Pick-up point is inferred from schedule.
+            Delivery point is inferred from recipient email.
+        </div>)
     },
     {
         label: "My account (schedule)",
-        onClick: () => setActiveView(() => ()=> <div></div>)
+        onClick: () => setActiveView(() => ()=> <div>
+            There should be a fast "single address" option.
+            Though, it should be secondary, 
+        </div>)
+    },
+    {
+        label: "File a complaint",
+        onClick: () => setActiveView(() => ()=><div>
+            "Package damaged"
+            "Not ariving"
+            "Extra details pls"
+        </div>)
     }
 ];

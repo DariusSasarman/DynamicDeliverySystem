@@ -5,4 +5,7 @@ export enum AccountTypes {
   MANAGER = "manager",
 }
 
-
+export function getStoredEmail()
+{
+  return "example@mail.com"
+}

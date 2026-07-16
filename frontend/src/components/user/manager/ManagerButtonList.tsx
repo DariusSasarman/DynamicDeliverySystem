@@ -2,18 +2,20 @@
 export const getManagerButtonList = (setActiveView) =>[
     {
         label: "Resolve Requests",
-        onClick: () => setActiveView(() => ()=> <div></div>)
+        onClick: () => setActiveView(() => ()=> 
+        <div>
+            Can be "delivery" or "pick-up".
+            "Pick-up"s must be routed 
+            either to a different warehouse manager,
+            either to a client.
+        </div>)
     },
     {
-        label: "Check status of requests",
+        label: "Track carriers",
         onClick: () => setActiveView(() => ()=> <div></div>)
     },
     {
         label: "Resolve Complaints",
-        onClick: () => setActiveView(() => ()=> <div></div>)
-    },
-    {
-        label: "View nearest assignment",
         onClick: () => setActiveView(() => ()=> <div></div>)
     },
     {
