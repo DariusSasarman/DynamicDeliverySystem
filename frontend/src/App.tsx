@@ -1,6 +1,6 @@
 import "./App.css";
 import { AccountTypes } from "./utils/InternalUtils";
-import { getTargetState } from "./utils/ApiCalls";
+import { getTargetState } from "./utils/LoginApiCalls";
 import { useEffect, useState } from "react";
 import GeneralView from "./components/general/GeneralView"; 
 import WelcomeView from "./components/general/WelcomeView";

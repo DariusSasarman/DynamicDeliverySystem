@@ -1,9 +1,14 @@
 import PackagesStatus from "./PackagesStatus";
+import ConfirmDelivery from "./ConfirmDelivery";
 
 export const getBasicButtonList = (setActiveView) => [
     {
         label: "Packages Status",
         onClick: () => setActiveView(() => PackagesStatus)
+    },
+    {
+        label: "Confirm Delivery",
+        onClick: () => setActiveView(() => ConfirmDelivery)
     },
     {
         label: "Place an order",

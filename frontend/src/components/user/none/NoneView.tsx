@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../../../App.css";
 import "./NoneView.css";
-import { submitLogin, submitRegistration } from "../../../utils/ApiCalls";
+import { submitLogin, submitRegistration } from "../../../utils/LoginApiCalls";
 
 function NoneView() {
   const [email, setEmail] = useState("");

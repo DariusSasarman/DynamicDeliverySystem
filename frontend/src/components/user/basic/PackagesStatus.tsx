@@ -7,7 +7,7 @@ import {
   TileLayer,
   useMap,
 } from "react-leaflet";
-import { getPackageClientList } from "../../../utils/ApiCalls";
+import { getPackageClientList } from "../../../utils/ClientRequests/BasicApiCalls";
 import { getStoredEmail } from "../../../utils/InternalUtils";
 
 function ChangeMapView({ position }) {

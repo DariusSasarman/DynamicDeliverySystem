@@ -34,13 +34,3 @@ export async function getTargetState(): Promise<AccountTypes> {
     return AccountTypes.NONE;
   }
 }
-
-export async function getInvoiceCount(email: String) {
-  await new Promise((resolve) => setTimeout(resolve, 50));
-  return 10;
-}
-
-export async function getPackageClientList(email: String) {
-  await new Promise((resolve) => setTimeout(resolve, 50));
-  return [{ id: 123, pos: [10, 3] }, {id : 111, pos: [6,7]}];
-}
