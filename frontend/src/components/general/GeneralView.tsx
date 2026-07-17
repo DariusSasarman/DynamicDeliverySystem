@@ -9,7 +9,7 @@ import { getDeliveryButtonList } from "../user/delivery/DeliveryButtonList";
 import NoneView from "../user/none/NoneView";
 import WelcomeView from "./WelcomeView";
 import InvoiceView from "./InvoiceView";
-import { getInvoiceCount } from "../../utils/HeaderApiCalls";
+import { getInvoiceCount } from "../../utils/ClientRequests/HeaderApiCalls";
 import { getStoredEmail } from "../../utils/InternalUtils";
 
 function GeneralView({accountState})
