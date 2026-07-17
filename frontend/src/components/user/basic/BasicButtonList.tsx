@@ -1,5 +1,6 @@
 import PackagesStatus from "./PackagesStatus";
 import ConfirmDelivery from "./ConfirmDelivery";
+import PlaceDelivery from "./PlaceDelivery";
 
 export const getBasicButtonList = (setActiveView) => [
     {
@@ -12,10 +13,7 @@ export const getBasicButtonList = (setActiveView) => [
     },
     {
         label: "Place an order",
-        onClick: () => setActiveView(() => ()=> <div>
-            Pick-up point is inferred from schedule.
-            Delivery point is inferred from recipient email.
-        </div>)
+        onClick: () => setActiveView(() => PlaceDelivery)
     },
     {
         label: "My account (schedule)",

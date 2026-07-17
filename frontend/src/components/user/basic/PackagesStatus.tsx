@@ -87,7 +87,7 @@ function PackagesStatus() {
         background: "#f9f9f9",
       }}
     >
-      <h3>Your Packages</h3>
+      <h3>Last known location:</h3>
 
       {packageList.map((pkg) => (
         <button
