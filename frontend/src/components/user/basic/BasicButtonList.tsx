@@ -1,6 +1,7 @@
 import PackagesStatus from "./PackagesStatus";
 import ConfirmDelivery from "./ConfirmDelivery";
 import PlaceDelivery from "./PlaceDelivery";
+import Schedule from "./Schedule";
 
 export const getBasicButtonList = (setActiveView) => [
     {
@@ -17,10 +18,7 @@ export const getBasicButtonList = (setActiveView) => [
     },
     {
         label: "My account (schedule)",
-        onClick: () => setActiveView(() => ()=> <div>
-            There should be a fast "single address" option.
-            Though, it should be secondary, 
-        </div>)
+        onClick: () => setActiveView(() =>  Schedule)
     },
     {
         label: "File a complaint",

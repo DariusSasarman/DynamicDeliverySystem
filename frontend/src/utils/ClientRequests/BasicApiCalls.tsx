@@ -15,3 +15,26 @@ export async function sendPickupRequest(pickUpDate, receiverEmail : String)
   await new Promise((resolve) => setTimeout(resolve, 50));
   return true;
 }
+
+export async function getSchedule(email:String) {
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  return [
+    {
+      "address": "Home",
+      "from": 8,
+      "until": 16,
+      "days": ["Mon", "Tue", "Wed", "Thu", "Fri"]
+    },
+    {
+      "address": "University",
+      "from": 16,
+      "until": 20,
+      "days": ["Mon", "Wed"]
+    }
+  ];
+}
+
+export async function saveSchedule(email,schedule)
+{
+
+}
