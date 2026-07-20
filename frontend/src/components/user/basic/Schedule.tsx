@@ -8,26 +8,47 @@ import { getStoredEmail } from "../../../utils/InternalUtils";
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const HOURS = Array.from({ length: 13 }, (_, i) => i + 8);
 
-const headerStyle = {};
-
 export default function Schedule() {
   const [schedule, setSchedule] = useState([]);
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   useEffect(() => {
     async function loadSchedule() {
       const result = await getSchedule(getStoredEmail());
 
-      if (result && result.length > 0) {
-        setSchedule(result);
-      } else {
-        setSchedule([
-          {
-            address: "",
-            from: 8,
-            until: 20,
-            days: [],
-          },
-        ]);
+      if (result) {
+        // Supports both:
+        // { phoneNumber, schedule }
+        // or just an array (older API)
+        if (Array.isArray(result)) {
+          setSchedule(
+            result.length > 0
+              ? result
+              : [
+                  {
+                    address: "",
+                    from: 8,
+                    until: 20,
+                    days: [],
+                  },
+                ]
+          );
+        } else {
+          setPhoneNumber(result.phoneNumber ?? "");
+
+          setSchedule(
+            result.schedule && result.schedule.length > 0
+              ? result.schedule
+              : [
+                  {
+                    address: "",
+                    from: 8,
+                    until: 20,
+                    days: [],
+                  },
+                ]
+          );
+        }
       }
     }
 
@@ -65,7 +86,11 @@ export default function Schedule() {
   }
 
   async function handleSave() {
-    await saveSchedule(getStoredEmail(), schedule);
+    await saveSchedule(getStoredEmail(), {
+      phoneNumber,
+      schedule,
+    });
+
     alert("Schedule saved.");
   }
 
@@ -74,6 +99,7 @@ export default function Schedule() {
       style={{
         maxWidth: "1200px",
         margin: "40px auto",
+        marginTop : "110px",
         padding: "30px",
         background: "#fff",
         borderRadius: "16px",
@@ -81,20 +107,11 @@ export default function Schedule() {
         fontFamily: "Arial, sans-serif",
       }}
     >
-      <h2
-        style={{
-          marginBottom: "8px",
-          color: "#222f68",
-        }}
-      >
-        Weekly Schedule
-      </h2>
-
       {schedule.length === 1 && schedule[0].address === "" && (
         <p
           style={{
             color: "#222f68",
-            marginBottom: "30px",
+            marginBottom: "25px",
             lineHeight: 1.6,
           }}
         >
@@ -103,6 +120,58 @@ export default function Schedule() {
         </p>
       )}
 
+      <div
+        style={{
+          marginBottom: "30px",
+          maxWidth: "420px",
+        }}
+      >
+        <label
+          style={{
+            display: "block",
+            marginBottom: "8px",
+            fontWeight: "600",
+            color: "#222f68",
+          }}
+        >
+          Contact Phone Number
+        </label>
+
+        <input
+          type="tel"
+          placeholder="+40 7xx xxx xxx"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "10px 12px",
+            borderRadius: "8px",
+            border: "1px solid #d6d6d6",
+            fontSize: "14px",
+            outline: "none",
+            boxSizing: "border-box",
+          }}
+        />
+
+        <p
+          style={{
+            marginTop: "8px",
+            fontSize: "13px",
+            color: "#666",
+          }}
+        >
+          Couriers may use this number if they need to contact you regarding a
+          delivery.
+        </p>
+      </div>
+      <h2
+        style={{
+          marginBottom: "8px",
+          color: "#222f68",
+        }}
+      >
+        Weekly Schedule
+      </h2>
       <table
         style={{
           width: "100%",
@@ -123,6 +192,7 @@ export default function Schedule() {
             >
               Address
             </th>
+
             <th
               style={{
                 textAlign: "left",
@@ -134,6 +204,7 @@ export default function Schedule() {
             >
               From
             </th>
+
             <th
               style={{
                 textAlign: "left",
@@ -145,6 +216,7 @@ export default function Schedule() {
             >
               Until
             </th>
+
             <th
               style={{
                 textAlign: "left",
@@ -176,6 +248,10 @@ export default function Schedule() {
                 }}
               >
                 <input
+                  value={row.address}
+                  onChange={(e) =>
+                    updateRow(index, "address", e.target.value)
+                  }
                   style={{
                     width: "95%",
                     padding: "10px 12px",
@@ -183,26 +259,22 @@ export default function Schedule() {
                     border: "1px solid #d6d6d6",
                     fontSize: "14px",
                     outline: "none",
-                    transition: "0.2s",
                   }}
-                  value={row.address}
-                  onChange={(e) => updateRow(index, "address", e.target.value)}
                 />
               </td>
 
               <td style={{ padding: "16px" }}>
                 <select
-                  style={{
-                    padding: "10px 12px",
-                    borderRadius: "8px",
-                    border: "1px solid #d6d6d6",
-                    background: "#fff",
-                    fontSize: "14px",
-                  }}
                   value={row.from}
                   onChange={(e) =>
                     updateRow(index, "from", Number(e.target.value))
                   }
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: "8px",
+                    border: "1px solid #d6d6d6",
+                    fontSize: "14px",
+                  }}
                 >
                   {HOURS.map((hour) => (
                     <option key={hour} value={hour}>
@@ -214,17 +286,16 @@ export default function Schedule() {
 
               <td style={{ padding: "16px" }}>
                 <select
-                  style={{
-                    padding: "10px 12px",
-                    borderRadius: "8px",
-                    border: "1px solid #d6d6d6",
-                    background: "#fff",
-                    fontSize: "14px",
-                  }}
                   value={row.until}
                   onChange={(e) =>
                     updateRow(index, "until", Number(e.target.value))
                   }
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: "8px",
+                    border: "1px solid #d6d6d6",
+                    fontSize: "14px",
+                  }}
                 >
                   {HOURS.map((hour) => (
                     <option key={hour} value={hour}>
@@ -262,7 +333,6 @@ export default function Schedule() {
                           : "#f2f2f2",
                         cursor: "pointer",
                         userSelect: "none",
-                        transition: "0.2s",
                         fontSize: "14px",
                       }}
                     >

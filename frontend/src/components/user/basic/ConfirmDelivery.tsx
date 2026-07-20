@@ -213,10 +213,7 @@ function ConfirmDelivery() {
 
                         <button
                             onClick={() => {
-                                fetchPackages();
-                                setConfirmationStatus(false);
-                                setTargetDelivery(null);
-                                setDeliveryCode("");
+                                window.location.reload();
                             }}
                             style={{
                                 ...buttonStyle,

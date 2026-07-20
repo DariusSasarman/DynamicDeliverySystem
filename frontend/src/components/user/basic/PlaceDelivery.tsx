@@ -17,9 +17,7 @@ function PlaceDelivery() {
         }
 
         alert("Pickup request sent!");
-
-        setNewRequestDeliveryEmail("");
-        setNewPickUpDate("");
+        window.location.reload();
     };
 
     return (

@@ -2,6 +2,7 @@ import PackagesStatus from "./PackagesStatus";
 import ConfirmDelivery from "./ConfirmDelivery";
 import PlaceDelivery from "./PlaceDelivery";
 import Schedule from "./Schedule";
+import FileComplaint from "./FileComplaint";
 
 export const getBasicButtonList = (setActiveView) => [
     {
@@ -22,10 +23,6 @@ export const getBasicButtonList = (setActiveView) => [
     },
     {
         label: "File a complaint",
-        onClick: () => setActiveView(() => ()=><div>
-            "Package damaged"
-            "Not ariving"
-            "Extra details pls"
-        </div>)
+        onClick: () => setActiveView(() => FileComplaint)
     }
 ];
