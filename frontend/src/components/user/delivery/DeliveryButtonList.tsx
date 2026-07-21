@@ -1,3 +1,4 @@
+import FinishDelivery from "./FinishDelivery";
 import ViewNearestDelivery from "./ViewNearestDelivery";
 
 export const getDeliveryButtonList = (setActiveView ) =>[
@@ -7,11 +8,7 @@ export const getDeliveryButtonList = (setActiveView ) =>[
     },
     {
         label: "Finish delivery",
-        onClick: () => setActiveView(() => ()=> 
-            <div> 
-                Generates a qr code that opens a link on client's phone. 
-                If credentials match, then it's delivered.
-            </div>)
+        onClick: () => setActiveView(() => FinishDelivery)
     },
     {
         label: "Review Current Assignments",
