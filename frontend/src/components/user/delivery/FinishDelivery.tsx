@@ -140,20 +140,33 @@ function FinishDelivery() {
 
                         <div
                             style={{
-                                fontSize: "48px",
-                                fontWeight: "bold",
-                                fontFamily: "monospace",
-                                textAlign: "center",
+                                width: "40vw",
+                                maxWidth: "100%",
+                                overflowX: "auto",
+                                overflowY: "hidden",
+                                whiteSpace: "nowrap",
                                 padding: "24px",
                                 border: "2px dashed #222f68",
                                 borderRadius: "10px",
                                 marginBottom: "24px",
-                                color: "#222f68",
-                                letterSpacing: "6px",
                                 background: "#f8f9ff",
+                                boxSizing: "border-box",
                             }}
                         >
-                            {deliveryCode}
+                            <div
+                                style={{
+                                    display: "inline-block",
+                                    minWidth: "100%",
+                                    textAlign: "center",
+                                    fontSize: "48px",
+                                    fontWeight: "bold",
+                                    fontFamily: "monospace",
+                                    color: "#222f68",
+                                    letterSpacing: "6px",
+                                }}
+                            >
+                                {deliveryCode}
+                            </div>
                         </div>
 
                         <div
@@ -177,7 +190,10 @@ function FinishDelivery() {
                             </button>
 
                             <button
-                                onClick={() => {setConfirmationStatus(true); window.location.reload()}}
+                                onClick={() => {
+                                    setConfirmationStatus(true);
+                                    window.location.reload();
+                                }}
                                 style={buttonStyle}
                             >
                                 Done
