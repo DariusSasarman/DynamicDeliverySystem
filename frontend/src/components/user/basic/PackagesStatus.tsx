@@ -13,6 +13,7 @@ import { getStoredEmail } from "../../../utils/InternalUtils";
 function ChangeMapView({ position }) {
   const map = useMap();
   useEffect(() => {
+    navigator.geolocation.getCurrentPosition
     if (position) {
       map.flyTo(position, 13);
     }
