@@ -1,3 +1,4 @@
+import CurrentAssignments from "./CurrentAsignments";
 import FinishDelivery from "./FinishDelivery";
 import ViewNearestDelivery from "./ViewNearestDelivery";
 
@@ -12,7 +13,7 @@ export const getDeliveryButtonList = (setActiveView ) =>[
     },
     {
         label: "Review Current Assignments",
-        onClick: () => setActiveView(() => ()=> <div></div>)
+        onClick: () => setActiveView(() => CurrentAssignments)
     },
     
 ];

@@ -17,25 +17,7 @@ export default function Schedule() {
       const result = await getSchedule(getStoredEmail());
 
       if (result) {
-        // Supports both:
-        // { phoneNumber, schedule }
-        // or just an array (older API)
-        if (Array.isArray(result)) {
-          setSchedule(
-            result.length > 0
-              ? result
-              : [
-                  {
-                    address: "",
-                    from: 8,
-                    until: 20,
-                    days: [],
-                  },
-                ]
-          );
-        } else {
           setPhoneNumber(result.phoneNumber ?? "");
-
           setSchedule(
             result.schedule && result.schedule.length > 0
               ? result.schedule
@@ -48,7 +30,6 @@ export default function Schedule() {
                   },
                 ]
           );
-        }
       }
     }
 
@@ -350,7 +331,15 @@ export default function Schedule() {
           ))}
         </tbody>
       </table>
-
+      <p
+          style={{
+            marginTop: "8px",
+            fontSize: "13px",
+            color: "#666",
+          }}
+        >
+          * Addresses are translated automatically. Please make sure the given address is as acurate as possible.
+        </p>
       <div
         style={{
           marginTop: "25px",
