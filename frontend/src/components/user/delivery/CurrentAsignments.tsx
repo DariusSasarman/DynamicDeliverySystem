@@ -106,6 +106,9 @@ function CurrentAssignments() {
                         >
                             {detailsCache[pkg.id] ? (
                                 <>
+                                    <strong>📥 Type </strong>
+                                    <span>{detailsCache[pkg.id].type}</span>
+
                                     <strong>📞 Phone</strong>
                                     <span>{detailsCache[pkg.id].phoneNumber}</span>
 
