@@ -8,6 +8,17 @@ import { getStoredEmail } from "../../../utils/InternalUtils";
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const HOURS = Array.from({ length: 13 }, (_, i) => i + 8);
 
+const EMPTY_ROW = {
+  country: "",
+  county: "",
+  city: "",
+  street: "",
+  number: "",
+  from: 8,
+  until: 20,
+  days: [],
+};
+
 export default function Schedule() {
   const [schedule, setSchedule] = useState([]);
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -17,19 +28,12 @@ export default function Schedule() {
       const result = await getSchedule(getStoredEmail());
 
       if (result) {
-          setPhoneNumber(result.phoneNumber ?? "");
-          setSchedule(
-            result.schedule && result.schedule.length > 0
-              ? result.schedule
-              : [
-                  {
-                    address: "",
-                    from: 8,
-                    until: 20,
-                    days: [],
-                  },
-                ]
-          );
+        setPhoneNumber(result.phoneNumber ?? "");
+        setSchedule(
+          result.schedule && result.schedule.length > 0
+            ? result.schedule
+            : [{ ...EMPTY_ROW }],
+        );
       }
     }
 
@@ -55,15 +59,7 @@ export default function Schedule() {
   }
 
   function addRow() {
-    setSchedule([
-      ...schedule,
-      {
-        address: "",
-        from: 8,
-        until: 20,
-        days: [],
-      },
-    ]);
+    setSchedule([...schedule, { ...EMPTY_ROW }]);
   }
 
   async function handleSave() {
@@ -75,12 +71,29 @@ export default function Schedule() {
     alert("Schedule saved.");
   }
 
+  const isEmptyDefault =
+    schedule.length === 1 &&
+    !schedule[0].country &&
+    !schedule[0].county &&
+    !schedule[0].city &&
+    !schedule[0].street &&
+    !schedule[0].number;
+
+  const addressLabelStyle = {
+    display: "block",
+    marginBottom: "4px",
+    fontSize: "11px",
+    fontWeight: "600",
+    color: "#888",
+    textTransform: "uppercase",
+  };
+
   return (
     <div
       style={{
         maxWidth: "1200px",
         margin: "40px auto",
-        marginTop : "110px",
+        marginTop: "130px",
         padding: "30px",
         background: "#fff",
         borderRadius: "16px",
@@ -88,7 +101,7 @@ export default function Schedule() {
         fontFamily: "Arial, sans-serif",
       }}
     >
-      {schedule.length === 1 && schedule[0].address === "" && (
+      {isEmptyDefault && (
         <p
           style={{
             color: "#222f68",
@@ -101,12 +114,7 @@ export default function Schedule() {
         </p>
       )}
 
-      <div
-        style={{
-          marginBottom: "30px",
-          maxWidth: "420px",
-        }}
-      >
+      <div style={{ marginBottom: "30px", maxWidth: "420px" }}>
         <label
           style={{
             display: "block",
@@ -134,25 +142,14 @@ export default function Schedule() {
           }}
         />
 
-        <p
-          style={{
-            marginTop: "8px",
-            fontSize: "13px",
-            color: "#666",
-          }}
-        >
+        <p style={{ marginTop: "8px", fontSize: "13px", color: "#666" }}>
           Couriers may use this number if they need to contact you regarding a
           delivery.
         </p>
       </div>
-      <h2
-        style={{
-          marginBottom: "8px",
-          color: "#222f68",
-        }}
-      >
-        Weekly Schedule
-      </h2>
+
+      <h2 style={{ marginBottom: "8px", color: "#222f68" }}>Weekly Schedule</h2>
+
       <table
         style={{
           width: "100%",
@@ -173,7 +170,6 @@ export default function Schedule() {
             >
               Address
             </th>
-
             <th
               style={{
                 textAlign: "left",
@@ -185,7 +181,6 @@ export default function Schedule() {
             >
               From
             </th>
-
             <th
               style={{
                 textAlign: "left",
@@ -197,7 +192,6 @@ export default function Schedule() {
             >
               Until
             </th>
-
             <th
               style={{
                 textAlign: "left",
@@ -226,22 +220,105 @@ export default function Schedule() {
                   padding: "16px",
                   borderTopLeftRadius: "10px",
                   borderBottomLeftRadius: "10px",
+                  minWidth: "320px",
                 }}
               >
-                <input
-                  value={row.address}
-                  onChange={(e) =>
-                    updateRow(index, "address", e.target.value)
-                  }
+                <div
                   style={{
-                    width: "95%",
-                    padding: "10px 12px",
-                    borderRadius: "8px",
-                    border: "1px solid #d6d6d6",
-                    fontSize: "14px",
-                    outline: "none",
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: "8px",
                   }}
-                />
+                >
+                  <div>
+                    <label style={addressLabelStyle}>Country</label>
+                    <input
+                      value={row.country}
+                      onChange={(e) =>
+                        updateRow(index, "country", e.target.value)
+                      }
+                      style={{
+                        width: "100%",
+                        padding: "8px 10px",
+                        borderRadius: "8px",
+                        border: "1px solid #d6d6d6",
+                        fontSize: "13px",
+                        outline: "none",
+                        boxSizing: "border-box",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label style={addressLabelStyle}>County</label>
+                    <input
+                      value={row.county}
+                      onChange={(e) =>
+                        updateRow(index, "county", e.target.value)
+                      }
+                      style={{
+                        width: "100%",
+                        padding: "8px 10px",
+                        borderRadius: "8px",
+                        border: "1px solid #d6d6d6",
+                        fontSize: "13px",
+                        outline: "none",
+                        boxSizing: "border-box",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label style={addressLabelStyle}>City</label>
+                    <input
+                      value={row.city}
+                      onChange={(e) => updateRow(index, "city", e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "8px 10px",
+                        borderRadius: "8px",
+                        border: "1px solid #d6d6d6",
+                        fontSize: "13px",
+                        outline: "none",
+                        boxSizing: "border-box",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label style={addressLabelStyle}>Number</label>
+                    <input
+                      value={row.number}
+                      onChange={(e) =>
+                        updateRow(index, "number", e.target.value)
+                      }
+                      style={{
+                        width: "100%",
+                        padding: "8px 10px",
+                        borderRadius: "8px",
+                        border: "1px solid #d6d6d6",
+                        fontSize: "13px",
+                        outline: "none",
+                        boxSizing: "border-box",
+                      }}
+                    />
+                  </div>
+                  <div style={{ gridColumn: "1 / -1" }}>
+                    <label style={addressLabelStyle}>Street</label>
+                    <input
+                      value={row.street}
+                      onChange={(e) =>
+                        updateRow(index, "street", e.target.value)
+                      }
+                      style={{
+                        width: "100%",
+                        padding: "8px 10px",
+                        borderRadius: "8px",
+                        border: "1px solid #d6d6d6",
+                        fontSize: "13px",
+                        outline: "none",
+                        boxSizing: "border-box",
+                      }}
+                    />
+                  </div>
+                </div>
               </td>
 
               <td style={{ padding: "16px" }}>
@@ -293,13 +370,7 @@ export default function Schedule() {
                   borderBottomRightRadius: "10px",
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "8px",
-                  }}
-                >
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                   {DAYS.map((day) => (
                     <label
                       key={day}
@@ -331,28 +402,15 @@ export default function Schedule() {
           ))}
         </tbody>
       </table>
-      <p
-          style={{
-            marginTop: "8px",
-            fontSize: "13px",
-            color: "#666",
-          }}
-        >
-          * Addresses are translated automatically. Please make sure the given address is as acurate as possible.
-        </p>
-      <div
-        style={{
-          marginTop: "25px",
-        }}
-      >
-        <button onClick={addRow}>Add Address</button>
 
-        <button
-          style={{
-            marginLeft: "10px",
-          }}
-          onClick={handleSave}
-        >
+      <p style={{ marginTop: "8px", fontSize: "13px", color: "#666" }}>
+        * Addresses are translated automatically. Please make sure the given
+        address is as accurate as possible.
+      </p>
+
+      <div style={{ marginTop: "25px" }}>
+        <button onClick={addRow}>Add Address</button>
+        <button style={{ marginLeft: "10px" }} onClick={handleSave}>
           Save
         </button>
       </div>

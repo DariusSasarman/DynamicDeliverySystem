@@ -10,6 +10,7 @@ function Sidebar({ buttons = [], isOpen, onClose }) {
       <nav className="sidebar-nav">
         {buttons.map((btn, index) => (
           <button 
+            style={{height:"40px"}}
             key={index} 
             className="sidebar-button" 
             onClick={btn.onClick}

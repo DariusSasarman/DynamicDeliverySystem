@@ -1,7 +1,16 @@
+import CouriersCurrentPosition from "./CouriersCurrentPosition";
 
 export const getManagerButtonList = (setActiveView) =>[
     {
-        label: "Resolve Requests",
+        label: "Track couriers",
+        onClick: () => setActiveView(() => CouriersCurrentPosition)
+    },
+    {
+        label: "Assign packages",
+        onClick: () => setActiveView(() => ()=> <div> </div>)
+    },
+    {
+        label: "Pick-up Requests",
         onClick: () => setActiveView(() => ()=> 
         <div>
             Can be "delivery" or "pick-up".
@@ -11,15 +20,15 @@ export const getManagerButtonList = (setActiveView) =>[
         </div>)
     },
     {
-        label: "Track carriers",
-        onClick: () => setActiveView(() => ()=> <div></div>)
-    },
-    {
-        label: "Resolve Complaints",
+        label: "Review Complaints",
         onClick: () => setActiveView(() => ()=> <div></div>)
     },
     {
         label: "Send invoices",
+        onClick: () => setActiveView(() => ()=> <div></div>)
+    },
+    {
+        label: "Add courier account",
         onClick: () => setActiveView(() => ()=> <div></div>)
     },
 ];
