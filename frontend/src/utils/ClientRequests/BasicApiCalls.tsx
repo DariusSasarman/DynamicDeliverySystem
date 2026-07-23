@@ -15,7 +15,7 @@ export async function sendDeliveryConfirmation(packageId,deliveryCode)
   return true;
 }
 
-export async function sendPickupRequest(pickUpDate, receiverEmail : String)
+export async function sendPickupRequest(pickUpDate, receiverEmail : String, senderEmail : string)
 {
   await new Promise((resolve) => setTimeout(resolve, 50));
   return true;

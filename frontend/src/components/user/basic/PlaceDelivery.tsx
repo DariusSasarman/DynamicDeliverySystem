@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { sendPickupRequest } from "../../../utils/ClientRequests/BasicApiCalls";
+import { getStoredEmail } from "../../../utils/InternalUtils";
 
 function PlaceDelivery() {
     const [newRequestDeliveryEmail, setNewRequestDeliveryEmail] = useState("");
@@ -8,7 +9,8 @@ function PlaceDelivery() {
     const handlePickupRequest = async () => {
         const success = await sendPickupRequest(
             pickUpDate,
-            newRequestDeliveryEmail
+            newRequestDeliveryEmail,
+            getStoredEmail()
         );
 
         if (!success) {
