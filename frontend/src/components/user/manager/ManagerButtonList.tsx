@@ -1,5 +1,9 @@
 import AssignPackages from "./AssignPackages";
 import CouriersCurrentPosition from "./CouriersCurrentPosition";
+import CreateOfficialAccounts from "./CreateOfficialAccounts";
+import PickupRequests from "./PickupRequests";
+import ResolveComplaints from "./ResolveComplaints";
+import SendInvoices from "./SendInvoices";
 
 export const getManagerButtonList = (setActiveView) => [
   {
@@ -12,18 +16,18 @@ export const getManagerButtonList = (setActiveView) => [
   },
   {
     label: "Pick-up Requests",
-    onClick: () => setActiveView(() => () => <div></div>),
+    onClick: () => setActiveView(() => PickupRequests),
   },
   {
-    label: "Review Complaints",
-    onClick: () => setActiveView(() => () => <div></div>),
+    label: "Resolve Complaints",
+    onClick: () => setActiveView(() => ResolveComplaints),
   },
   {
     label: "Send invoices",
-    onClick: () => setActiveView(() => () => <div></div>),
+    onClick: () => setActiveView(() => SendInvoices),
   },
   {
     label: "Add courier account",
-    onClick: () => setActiveView(() => () => <div></div>),
+    onClick: () => setActiveView(() => CreateOfficialAccounts),
   },
 ];

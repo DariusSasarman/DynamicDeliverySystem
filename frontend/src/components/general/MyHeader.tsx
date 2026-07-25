@@ -1,7 +1,6 @@
 import "./MyHeader.css";
 import "../../App.css";
 function MyHeader({ goToHome, showSidemenu, invoiceCount, invoiceMenu }) {
-  /// invoices
   return (
     <>
       <div className="header">

@@ -2,24 +2,24 @@ import React, { useEffect, useState } from "react";
 import {
   AssignPackage,
   getAssignedCouriers,
-  getPickedUpPackages,
+  getPickUpRequests,
 } from "../../../utils/ClientRequests/ManagerApiCalls";
 import { getStoredEmail } from "../../../utils/InternalUtils";
 
-function AssignPackages() {
+function PickupRequests() {
   const [courierList, setCourierList] = useState([]);
   const [activeCourier, setActiveCourier] = useState(null);
 
-  const [packageList, setPackageList] = useState([]);
+  const [pickUpList, setPickUpList] = useState([]);
   const [activePackage, setActivePackage] = useState(null);
 
   useEffect(() => {
     const fetchList = async () => {
       try {
         const fetchedCourierList = await getAssignedCouriers(getStoredEmail());
-        const fetchedPackageList = await getPickedUpPackages(getStoredEmail());
+        const fetchedPickUpList = await getPickUpRequests(getStoredEmail());
         setCourierList(fetchedCourierList);
-        setPackageList(fetchedPackageList);
+        setPickUpList(fetchedPickUpList);
       } catch (error) {
         console.error("Failed to fetch list", error);
         alert("Couldn't load list.");
@@ -74,7 +74,7 @@ function AssignPackages() {
                 color: "#222f68",
               }}
             >
-              Stored packages
+              Pick-up requests
             </h2>
 
             <p
@@ -83,7 +83,7 @@ function AssignPackages() {
                 marginBottom: "24px",
               }}
             >
-              Select a package.
+              Select a pick-up request.
             </p>
 
             <div
@@ -93,7 +93,7 @@ function AssignPackages() {
                 gap: "12px",
               }}
             >
-              {packageList.length === 0 ? (
+              {pickUpList.length === 0 ? (
                 <p
                   style={{
                     color: "#222f68",
@@ -103,13 +103,13 @@ function AssignPackages() {
                   No packages available.
                 </p>
               ) : (
-                packageList.map((pkg) => (
+                pickUpList.map((pkg) => (
                   <button
                     key={pkg.id}
                     onClick={() => setActivePackage(pkg)}
                     style={{ ...buttonStyle, color: "#222f68" }}
                   >
-                    📦 Package #{pkg.id}
+                    📍 Pick-up #{pkg.id}
                   </button>
                 ))
               )}
@@ -160,7 +160,7 @@ function AssignPackages() {
                     onClick={() => setActiveCourier(c)}
                     style={{ ...buttonStyle, color: "#222f68" }}
                   >
-                    👤 Courier :{c.email}
+                    👤 Courier : {c.email}
                   </button>
                 ))
               )}
@@ -207,7 +207,7 @@ function AssignPackages() {
               }}
             >
               <div style={{ color: "#222f68" }}>
-                <strong>📦 Package:</strong> #{activePackage.id}
+                <strong>📍 Pick-up:</strong> #{activePackage.id}
               </div>
               <div style={{ color: "#222f68" }}>
                 <strong>👤 Courier:</strong> {activeCourier.email}
@@ -248,4 +248,4 @@ function AssignPackages() {
   );
 }
 
-export default AssignPackages;
+export default PickupRequests;
