@@ -14,7 +14,7 @@ import { getStoredEmail } from "../../utils/InternalUtils";
 
 function GeneralView({accountState})
 {
-    const [invoiceCount, setInvoiceCount] = useState(0);//getInvoiceCount(getStoredEmail());
+    const [invoiceCount, setInvoiceCount] = useState(0);
     const [shownSidebar, setShowSidebar] = useState(false);
     
     useEffect(() => {
@@ -35,6 +35,7 @@ function GeneralView({accountState})
     
     const goToHome = () => {
         setActiveComponent(() => WelcomeView)
+        setShowSidebar(false);
     };
 
     const showSidemenu = () => {
