@@ -4,7 +4,6 @@ import {
     sendComplaint,
 } from "../../../utils/ClientRequests/BasicApiCalls";
 import { getStoredEmail } from "../../../utils/InternalUtils";
-
 function FileComplaint() {
     const [deliveredPackageList, setDeliveredPackageList] = useState([]);
     const [activePackage, setActivePackage] = useState(null);

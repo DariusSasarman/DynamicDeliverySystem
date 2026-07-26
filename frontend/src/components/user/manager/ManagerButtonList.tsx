@@ -1,23 +1,28 @@
-import AssignPackages from "./AssignPackages";
 import CouriersCurrentPosition from "./CouriersCurrentPosition";
 import CreateOfficialAccounts from "./CreateOfficialAccounts";
-import PickupRequests from "./PickupRequests";
 import ResolveComplaints from "./ResolveComplaints";
 import SendInvoices from "./SendInvoices";
-
+import DeliveryRequestAssignments from "./DeliveryRequestAssignments";
+import { getPickedUpPackages, getPickUpRequests } from "../../../utils/ClientRequests/ManagerApiCalls";
 export const getManagerButtonList = (setActiveView) => [
   {
     label: "Track couriers",
     onClick: () => setActiveView(() => CouriersCurrentPosition),
   },
   {
-    label: "Assign packages",
-    onClick: () => setActiveView(() => AssignPackages),
-  },
-  {
-    label: "Pick-up Requests",
-    onClick: () => setActiveView(() => PickupRequests),
-  },
+  label: "Assign packages",
+  onClick: () =>
+    setActiveView(() => () => (
+      <DeliveryRequestAssignments getPackageList={getPickedUpPackages} type="📦 Package #" />
+    )),
+},
+{
+  label: "Pick-up Requests",
+  onClick: () =>
+    setActiveView(() => () => (
+      <DeliveryRequestAssignments getPackageList={getPickUpRequests} type="📍 Pick-up #" />
+    )),
+},
   {
     label: "Resolve Complaints",
     onClick: () => setActiveView(() => ResolveComplaints),

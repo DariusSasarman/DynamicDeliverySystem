@@ -1,15 +1,23 @@
 import React, { useState } from "react";
 import { getStoredEmail } from "../../../utils/InternalUtils";
 import { createOfficialAccount } from "../../../utils/ClientRequests/ManagerApiCalls";
+import "../../general/GeneralView.css";
+
+const radioStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "10px",
+  fontSize: "16px",
+  cursor: "pointer",
+};
 
 function CreateOfficialAccounts() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [type, setType] = useState("manager");
 
-  const handleCreate = () => {
-    
-    createOfficialAccount(getStoredEmail(),email, password, type);
+  const handleCreate = async () => {
+    await createOfficialAccount(getStoredEmail(), email, password, type);
 
     setEmail("");
     setPassword("");
@@ -21,7 +29,7 @@ function CreateOfficialAccounts() {
       style={{
         width: "60vw",
         margin: "80px auto",
-        marginTop : "100px",
+        marginTop: "100px",
         padding: "32px",
         background: "#ffffff",
         borderRadius: "16px",
@@ -54,7 +62,15 @@ function CreateOfficialAccounts() {
           placeholder="employee@company.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={inputStyle}
+          style={{
+            width: "100%",
+            padding: "12px",
+            borderRadius: "8px",
+            border: "1px solid #d1d5db",
+            fontSize: "15px",
+            outline: "none",
+            boxSizing: "border-box",
+          }}
         />
       </div>
 
@@ -71,7 +87,15 @@ function CreateOfficialAccounts() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          style={inputStyle}
+          style={{
+            width: "100%",
+            padding: "12px",
+            borderRadius: "8px",
+            border: "1px solid #d1d5db",
+            fontSize: "15px",
+            outline: "none",
+            boxSizing: "border-box",
+          }}
         />
       </div>
 
@@ -105,37 +129,12 @@ function CreateOfficialAccounts() {
 
       <button
         onClick={handleCreate}
-        style={{
-          padding: "14px",
-          border: "none",
-          borderRadius: "10px",
-          background: "#2563eb",
-          color: "white",
-          fontWeight: "bold",
-          fontSize: "16px",
-          cursor: "pointer",
-        }}
+        className="buttonStyle"
       >
-        ➕ Create Account
+        Create Account
       </button>
     </div>
   );
 }
-
-const inputStyle = {
-  padding: "12px",
-  borderRadius: "8px",
-  border: "1px solid #d1d5db",
-  fontSize: "15px",
-  outline: "none",
-};
-
-const radioStyle = {
-  display: "flex",
-  alignItems: "center",
-  gap: "10px",
-  fontSize: "16px",
-  cursor: "pointer",
-};
 
 export default CreateOfficialAccounts;

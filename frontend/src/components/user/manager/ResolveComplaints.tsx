@@ -4,7 +4,7 @@ import {
   getComplaintsList,
   resolveComplaint,
 } from "../../../utils/ClientRequests/ManagerApiCalls";
-
+import "../../general/GeneralView.css"
 function ResolveComplaints() {
   const [complaintList, setComplaintList] = useState([]);
   const [replyDrafts, setReplyDrafts] = useState({});
@@ -275,25 +275,9 @@ function ResolveComplaints() {
                   <button
                     onClick={() => handleSend(complaint.id)}
                     disabled={!canSend || isSending}
-                    onMouseEnter={(e) => {
-                      if (canSend && !isSending)
-                        e.currentTarget.style.background = "#30408d";
-                    }}
-                    onMouseLeave={(e) => {
-                      if (canSend && !isSending)
-                        e.currentTarget.style.background = "#222f68";
-                    }}
+                    className="buttonStyle"
                     style={{
-                      alignSelf: "flex-end",
-                      padding: "11px 22px",
-                      borderRadius: "8px",
-                      border: "none",
-                      fontSize: "15px",
-                      fontWeight: "bold",
-                      color: "white",
-                      background: canSend ? "#222f68" : "#aab0c8",
-                      cursor: canSend && !isSending ? "pointer" : "not-allowed",
-                      transition: "0.2s",
+                      cursor: canSend && !isSending ? "pointer" : "not-allowed"
                     }}
                   >
                     {isSending ? "Sending..." : "✓ Resolve Complaint"}

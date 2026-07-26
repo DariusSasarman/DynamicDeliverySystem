@@ -2,24 +2,24 @@ import React, { useEffect, useState } from "react";
 import {
   AssignPackage,
   getAssignedCouriers,
-  getPickedUpPackages,
 } from "../../../utils/ClientRequests/ManagerApiCalls";
 import { getStoredEmail } from "../../../utils/InternalUtils";
+import "../../general/GeneralView.css"
 
-function AssignPackages() {
+function DeliveryRequestAssignments( {getPackageList,type}) {
   const [courierList, setCourierList] = useState([]);
   const [activeCourier, setActiveCourier] = useState(null);
 
-  const [packageList, setPackageList] = useState([]);
+  const [pickUpList, setPickUpList] = useState([]);
   const [activePackage, setActivePackage] = useState(null);
 
   useEffect(() => {
     const fetchList = async () => {
       try {
         const fetchedCourierList = await getAssignedCouriers(getStoredEmail());
-        const fetchedPackageList = await getPickedUpPackages(getStoredEmail());
+        const fetchedPickUpList = await getPackageList(getStoredEmail());
         setCourierList(fetchedCourierList);
-        setPackageList(fetchedPackageList);
+        setPickUpList(fetchedPickUpList);
       } catch (error) {
         console.error("Failed to fetch list", error);
         alert("Couldn't load list.");
@@ -29,18 +29,10 @@ function AssignPackages() {
     fetchList();
   }, []);
 
-  const buttonStyle = {
-    width: "100%",
-    padding: "12px",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontSize: "15px",
-  };
-
+  
   const postAssignment = async () => {
     try {
-      AssignPackage(activePackage.id, activeCourier.email);
+      await AssignPackage(activePackage.id, activeCourier.email);
     } catch (error) {
       console.error("Failed to execute assignment", error);
       alert("Couldn't assign package");
@@ -74,7 +66,7 @@ function AssignPackages() {
                 color: "#222f68",
               }}
             >
-              Stored packages
+              Pick-up requests
             </h2>
 
             <p
@@ -83,7 +75,7 @@ function AssignPackages() {
                 marginBottom: "24px",
               }}
             >
-              Select a package.
+              Select a pick-up request.
             </p>
 
             <div
@@ -93,7 +85,7 @@ function AssignPackages() {
                 gap: "12px",
               }}
             >
-              {packageList.length === 0 ? (
+              {pickUpList.length === 0 ? (
                 <p
                   style={{
                     color: "#222f68",
@@ -103,13 +95,13 @@ function AssignPackages() {
                   No packages available.
                 </p>
               ) : (
-                packageList.map((pkg) => (
+                pickUpList.map((pkg) => (
                   <button
                     key={pkg.id}
                     onClick={() => setActivePackage(pkg)}
-                    style={{ ...buttonStyle, color: "#222f68" }}
+                    className="buttonStyle"
                   >
-                    📦 Package #{pkg.id}
+                    {type} {pkg.id}
                   </button>
                 ))
               )}
@@ -158,14 +150,14 @@ function AssignPackages() {
                   <button
                     key={c.email}
                     onClick={() => setActiveCourier(c)}
-                    style={{ ...buttonStyle, color: "#222f68" }}
+                    className="buttonStyle"
                   >
-                    👤 Courier :{c.email}
+                    👤 Courier : {c.email}
                   </button>
                 ))
               )}
               <button
-                style={{ ...buttonStyle, color: "#222f68" }}
+                className="buttonStyle"
                 onClick={() => setActivePackage(null)}
               >
                 {" "}
@@ -207,7 +199,7 @@ function AssignPackages() {
               }}
             >
               <div style={{ color: "#222f68" }}>
-                <strong>📦 Package:</strong> #{activePackage.id}
+                <strong> {type}</strong> {activePackage.id}
               </div>
               <div style={{ color: "#222f68" }}>
                 <strong>👤 Courier:</strong> {activeCourier.email}
@@ -222,20 +214,16 @@ function AssignPackages() {
               }}
             >
               <button
-                style={{
-                  ...buttonStyle,
-                  background: "#222f68",
-                  color: "white",
-                }}
-                onClick={() => {
-                  postAssignment();
+                className="buttonStyle"
+                onClick={async () => {
+                  await postAssignment();
                   window.location.reload();
                 }}
               >
                 Confirm
               </button>
               <button
-                style={{ ...buttonStyle, color: "#222f68" }}
+                className="buttonStyle"
                 onClick={() => setActiveCourier(null)}
               >
                 Back
@@ -248,4 +236,4 @@ function AssignPackages() {
   );
 }
 
-export default AssignPackages;
+export default DeliveryRequestAssignments;

@@ -25,7 +25,8 @@ function ViewNearestDelivery() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
+    try{
+      navigator.geolocation.getCurrentPosition(
       async (position) => {
         const currentPos = [
           position.coords.latitude,
@@ -49,6 +50,10 @@ function ViewNearestDelivery() {
         setLoading(false);
       },
     );
+    }
+    catch(error){
+      alert("Couldn't obtain location: " + error);
+    }
   }, []);
 
   if (loading) {

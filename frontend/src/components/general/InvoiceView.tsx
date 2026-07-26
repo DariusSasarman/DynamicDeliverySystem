@@ -27,7 +27,12 @@ function InvoiceView() {
             setInvoicesList((prev) =>
                 prev.filter((invoice) => invoice.id !== invoiceId)
             );
-        } finally {
+            
+        }
+        catch(error){
+            alert("Couldn't load invoices!");
+        }
+        finally {
             setLoadingId(null);
         }
     }

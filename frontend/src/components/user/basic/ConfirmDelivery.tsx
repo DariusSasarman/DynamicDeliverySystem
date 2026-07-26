@@ -4,6 +4,7 @@ import {
     sendDeliveryConfirmation,
 } from "../../../utils/ClientRequests/BasicApiCalls";
 import { getStoredEmail } from "../../../utils/InternalUtils";
+import "../../general/GeneralView.css"
 
 function ConfirmDelivery() {
     const [targetDelivery, setTargetDelivery] = useState(null);
@@ -35,15 +36,6 @@ function ConfirmDelivery() {
         } else {
             alert("Invalid delivery code.");
         }
-    };
-
-    const buttonStyle = {
-        width: "100%",
-        padding: "12px",
-        border: "none",
-        borderRadius: "8px",
-        cursor: "pointer",
-        fontSize: "15px",
     };
 
     return (
@@ -106,7 +98,7 @@ function ConfirmDelivery() {
                                     <button
                                         key={pkg.id}
                                         onClick={() => setTargetDelivery(pkg)}
-                                        style={{...buttonStyle, color:"#222f68"}}
+                                        className="buttonStyle"
                                     >
                                         📦 Package #{pkg.id}
                                     </button>
@@ -164,8 +156,8 @@ function ConfirmDelivery() {
                                     setTargetDelivery(null);
                                     setDeliveryCode("");
                                 }}
+                                className="buttonStyle"
                                 style={{
-                                    ...buttonStyle,
                                     background: "#eee",
                                     color: "#333",
                                 }}
@@ -175,9 +167,7 @@ function ConfirmDelivery() {
 
                             <button
                                 onClick={handleConfirm}
-                                style={{
-                                    ...buttonStyle
-                                }}
+                                className="buttonStyle"
                             >
                                 Confirm
                             </button>
@@ -215,8 +205,9 @@ function ConfirmDelivery() {
                             onClick={() => {
                                 window.location.reload();
                             }}
+                            className="buttonStyle"
                             style={{
-                                ...buttonStyle,
+                                
                                 marginTop: "24px",
                             }}
                         >

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { sendInvoice } from "../../../utils/ClientRequests/ManagerApiCalls";
+import "../../general/GeneralView.css"
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -130,15 +131,9 @@ function SendInvoices() {
         <button
           onClick={handleSend}
           disabled={sending}
+          className="buttonStyle"
           style={{
-            padding: "0.9rem",
-            background: sending ? "#999" : "#1976d2",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
             cursor: sending ? "not-allowed" : "pointer",
-            fontSize: "1rem",
-            fontWeight: "bold",
           }}
         >
           {sending ? "Sending..." : "📨 Send Invoice"}

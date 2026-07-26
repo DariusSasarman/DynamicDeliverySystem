@@ -56,7 +56,7 @@ function NoneView() {
   };
 
   const registerAccountOnclick = async () => {
-    if (password.valueOf !== password2.valueOf) {
+    if (password !== password2) {
       setErrorMessage("Passwords don't match!");
     } else if (!emailRegex.test(email)) {
       setErrorMessage("Invalid email!");

@@ -4,7 +4,7 @@ import {
     getAssignedPackageList,
     getDeliveryCode,
 } from "../../../utils/ClientRequests/DeliveryApiCalls";
-
+import "../../general/GeneralView.css"
 function FinishDelivery() {
     const [targetDelivery, setTargetDelivery] = useState(null);
     const [packageList, setPackageList] = useState([]);
@@ -34,15 +34,6 @@ function FinishDelivery() {
             console.error(err);
             alert("Couldn't retrieve delivery code.");
         }
-    };
-
-    const buttonStyle = {
-        width: "100%",
-        padding: "12px",
-        border: "none",
-        borderRadius: "8px",
-        cursor: "pointer",
-        fontSize: "15px",
     };
 
     return (
@@ -105,8 +96,8 @@ function FinishDelivery() {
                                     <button
                                         key={pkg.id}
                                         onClick={() => handleSelectPackage(pkg)}
+                                        className="buttonStyle"
                                         style={{
-                                            ...buttonStyle,
                                             color: "#222f68",
                                         }}
                                     >
@@ -180,8 +171,8 @@ function FinishDelivery() {
                                     setTargetDelivery(null);
                                     setDeliveryCode("");
                                 }}
+                                className="buttonStyle"
                                 style={{
-                                    ...buttonStyle,
                                     background: "#eee",
                                     color: "#333",
                                 }}
@@ -190,11 +181,11 @@ function FinishDelivery() {
                             </button>
 
                             <button
-                                onClick={() => {
+                                onClick={async () => {
                                     setConfirmationStatus(true);
                                     window.location.reload();
                                 }}
-                                style={buttonStyle}
+                                className="buttonStyle"
                             >
                                 Done
                             </button>
