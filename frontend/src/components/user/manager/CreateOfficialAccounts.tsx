@@ -17,11 +17,18 @@ function CreateOfficialAccounts() {
   const [type, setType] = useState("manager");
 
   const handleCreate = async () => {
-    await createOfficialAccount(getStoredEmail(), email, password, type);
-
-    setEmail("");
-    setPassword("");
-    setType("manager");
+    try{
+      await createOfficialAccount(getStoredEmail(), email, password, type);
+    }
+    catch(error)
+    {
+      alert("Couldn't create account:" + error);
+    }
+    finally{
+      setEmail("");
+      setPassword("");
+      setType("manager");
+    }
   };
 
   return (

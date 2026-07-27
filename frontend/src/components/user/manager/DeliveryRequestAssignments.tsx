@@ -33,6 +33,7 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
   const postAssignment = async () => {
     try {
       await AssignPackage(activePackage.id, activeCourier.email);
+      window.location.reload();
     } catch (error) {
       console.error("Failed to execute assignment", error);
       alert("Couldn't assign package");
@@ -217,7 +218,6 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
                 className="buttonStyle"
                 onClick={async () => {
                   await postAssignment();
-                  window.location.reload();
                 }}
               >
                 Confirm

@@ -26,15 +26,20 @@ function ConfirmDelivery() {
     }, []);
 
     const handleConfirm = async () => {
-        const success = await sendDeliveryConfirmation(
-            targetDelivery.id,
-            deliveryCode
-        );
-
-        if (success) {
-            setConfirmationStatus(true);
-        } else {
-            alert("Invalid delivery code.");
+        try{
+            const success = await sendDeliveryConfirmation(
+                targetDelivery.id,
+                deliveryCode
+            );
+            if (success) {
+                setConfirmationStatus(true);
+            } else {
+                alert("Invalid delivery code.");
+            }
+        }
+        catch(error)
+        {
+            alert("Couldn't process confirmation");
         }
     };
 

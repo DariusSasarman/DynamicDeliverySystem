@@ -32,19 +32,24 @@ function ResolveComplaints() {
 
     setSendingId(complaintId);
 
-    await resolveComplaint(getStoredEmail(), complaintId, replyText);
+    try{
+        await resolveComplaint(getStoredEmail(), complaintId, replyText);
+        setComplaintList((prev) =>
+            prev.filter((complaint) => complaint.id !== complaintId)
+        );
 
-    setComplaintList((prev) =>
-      prev.filter((complaint) => complaint.id !== complaintId)
-    );
+        setReplyDrafts((prev) => {
+          const next = { ...prev };
+          delete next[complaintId];
+          return next;
+        });
 
-    setReplyDrafts((prev) => {
-      const next = { ...prev };
-      delete next[complaintId];
-      return next;
-    });
-
-    setSendingId(null);
+        setSendingId(null);
+    }
+    catch(error)
+    {
+        alert("Couldn't execute resolve: " + error);
+    }
   }
 
   return (

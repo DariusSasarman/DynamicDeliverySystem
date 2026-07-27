@@ -7,19 +7,25 @@ function PlaceDelivery() {
     const [pickUpDate, setNewPickUpDate] = useState("");
 
     const handlePickupRequest = async () => {
-        const success = await sendPickupRequest(
-            pickUpDate,
-            newRequestDeliveryEmail,
-            getStoredEmail()
-        );
+        try{
+            const success = await sendPickupRequest(
+                pickUpDate,
+                newRequestDeliveryEmail,
+                getStoredEmail()
+            );
 
-        if (!success) {
-            alert("Couldn't handle delivery.");
-            return;
+            if (!success) {
+                alert("Couldn't handle delivery.");
+                return;
+            }
+
+            alert("Pickup request sent!");
+            window.location.reload();
         }
-
-        alert("Pickup request sent!");
-        window.location.reload();
+        catch(error)
+        {
+            alert("Couldn't execute request: " + error);
+        }
     };
 
     return (
