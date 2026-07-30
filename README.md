@@ -7,8 +7,7 @@ It's meant to be a system that supports a delivery service where the user can de
 
 Basically, for each day of the week, the user can **define the time periods and the locations** where they're found at.
 
-Using this schedule (*without knowing ahead of time*), the courier can now do their job, at the **right place and at the right time - 
-not just** "Leave it at the entrance" or "It's been placed in an easybox where you can pick it up".
+Using this schedule (*without needing to know ahead of time*), the courier can now do their job, at the **right place and at the right time ** - not just "Leave it at the entrance" or "It's been placed in an easybox where you can pick it up".
 
 ## Roadmap : 
   - [x] Define the use-cases 
@@ -16,10 +15,8 @@ not just** "Leave it at the entrance" or "It's been placed in an easybox where y
   - [x] Design the classes this system relies upon, in a class diagram 
   - [ ] Translate the class diagram into a back-end implementation
   - [x] Provide a user-friendly front-end web interface
-  - [ ] Have said implementation talk to an nginx reverse proxy
+  - [x] Have said implementation talk to an nginx reverse proxy
   - [x] Tie it all up with a docker-compose.yml file so it builds nicely and not only "Works on my machine"
-  - [ ] Extend said interface to a mobile-native application
-
 
 ## Use case diagram
 
@@ -42,12 +39,10 @@ erDiagram
 
     BASIC_USER {
         string PHONE_NUMBER
-        string ROLE
     }
 
     MANAGER {
         long ID PK
-        string ROLE
         long ACCOUNT_MADE_BY_ID
         string CITY
         long CITY_ID
@@ -55,7 +50,6 @@ erDiagram
 
     DELIVERY {
         long ACCOUNT_MADE_BY
-        string ROLE
         long MANAGER_ID
     }
 
