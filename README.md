@@ -27,6 +27,10 @@ That's about it for now. I'm sure I'll add more intermediate steps to this roadm
 
 <img width="879" height="622" alt="Untitled Diagram drawio(1)" src="https://github.com/user-attachments/assets/1977eafb-48e5-4be5-ad63-d0d7408315bc" />
 
+
+## ER diagram
+
+
 ```mermaid
 erDiagram
 
