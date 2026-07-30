@@ -4,7 +4,7 @@ import ResolveComplaints from "./ResolveComplaints";
 import SendInvoices from "./SendInvoices";
 import DeliveryRequestAssignments from "./DeliveryRequestAssignments";
 import { getPickedUpPackages, getPickUpRequests } from "../../../utils/ClientRequests/ManagerApiCalls";
-export const getManagerButtonList = (setActiveView) => [
+export const getManagerButtonList = (setActiveView : any) => [
   {
     label: "Track couriers",
     onClick: () => setActiveView(() => CouriersCurrentPosition),
@@ -32,7 +32,7 @@ export const getManagerButtonList = (setActiveView) => [
     onClick: () => setActiveView(() => SendInvoices),
   },
   {
-    label: "Add courier account",
+    label: "Add official account",
     onClick: () => setActiveView(() => CreateOfficialAccounts),
   },
 ];

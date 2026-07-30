@@ -32,11 +32,10 @@ function PlaceDelivery() {
         <div
             style={{
                 minHeight: "60vh",
-                marginTop:"10vh",
+                marginTop: 0,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                background: "#eef2f7",
                 padding: "30px",
             }}
         >

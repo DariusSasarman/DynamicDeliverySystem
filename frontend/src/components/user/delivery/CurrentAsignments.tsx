@@ -37,16 +37,7 @@ function CurrentAssignments() {
   }
 
   return (
-    <div
-      style={{
-        width: "60vw",
-        margin: "30px auto",
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-        color: "#222f68",
-      }}
-    >
+    <div className="active-card" style={{ width: "60vw", margin: "30px auto", display: "flex", flexDirection: "column", gap: "16px", color: "#222f68" }}>
       <h1 style={{ marginBottom: "10px" }}>Current Assignments</h1>
 
       {packageList.length === 0 ? (

@@ -44,19 +44,7 @@ function FileComplaint() {
     };
 
     return (
-        <div
-            style={{
-                width: "300px",
-                minHeight: "500px",
-                overflowY: "auto",
-                overflowX: "hidden",
-                marginTop: "60px",
-                border: "2px solid #ccc",
-                borderRadius: "8px",
-                padding: "15px",
-                background: "#f9f9f9",
-            }}
-        >
+            <div className="active-card" style={{ width: "300px", minHeight: "500px", overflowY: "auto", overflowX: "hidden", margin: "20px auto", padding: "15px" }}>
             
 
             {activePackage === null ? (

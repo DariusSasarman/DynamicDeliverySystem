@@ -1,0 +1,15 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    expose:
+      - "8080"
+
+  nginx:
+    build:
+      context: reverse_proxy/nginx
+    depends_on:
+      - backend
+    ports:
+      - "80:80"

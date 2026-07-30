@@ -13,6 +13,19 @@ button {
   transition: background 0.2s;
 }
 
+:root {
+  --main-text: #222f68;
+}
+
+body, html {
+  color: var(--main-text);
+}
+
+button, input, textarea, select, label { color: var(--main-text); }
+
+/* Ensure headings use the main text color */
+h1, h2, h3, h4, h5, h6 { color: var(--main-text); }
+
 button:hover {
   background: #222f6820;
 }
@@ -48,5 +61,5 @@ input:focus {
 }
 
 input::placeholder {
-  color: #222f6880;
+  color: rgba(34,47,104,0.5);
 }

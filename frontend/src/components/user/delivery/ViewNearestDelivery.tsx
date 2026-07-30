@@ -65,7 +65,7 @@ function ViewNearestDelivery() {
   }
 
   return (
-    <div style={{ marginTop: "80px" }}>
+    <div style={{ marginTop: 0 }}>
       <MapContainer
         center={currentPosition}
         zoom={13}

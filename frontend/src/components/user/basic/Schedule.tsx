@@ -63,12 +63,66 @@ export default function Schedule() {
   }
 
   async function handleSave() {
+    const validation = validateSchedule(schedule);
+    if (!validation.valid) {
+      alert(validation.message);
+      return;
+    }
+
     await saveSchedule(getStoredEmail(), {
       phoneNumber,
       schedule,
     });
 
     alert("Schedule saved.");
+  }
+
+  function validateSchedule(schedule) {
+    // Ensure each row has from < until and no overlapping intervals on same day
+    for (let i = 0; i < schedule.length; i++) {
+      const row = schedule[i];
+      if (Number(row.from) >= Number(row.until)) {
+        return {
+          valid: false,
+          message: `Row ${i + 1}: 'From' must be earlier than 'Until'.`,
+        };
+      }
+    }
+
+    const dayMap = {};
+    const DAYS_LOCAL = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+    for (let i = 0; i < schedule.length; i++) {
+      const row = schedule[i];
+      if (!row.days || row.days.length === 0) continue;
+      const start = Number(row.from);
+      const end = Number(row.until);
+
+      for (const d of row.days) {
+        if (!DAYS_LOCAL.includes(d)) continue;
+        dayMap[d] = dayMap[d] || [];
+        dayMap[d].push({ start, end, rowIndex: i });
+      }
+    }
+
+    for (const d of Object.keys(dayMap)) {
+      const intervals = dayMap[d];
+      // sort by start
+      intervals.sort((a, b) => a.start - b.start);
+      for (let j = 0; j < intervals.length - 1; j++) {
+        const a = intervals[j];
+        const b = intervals[j + 1];
+        // overlap if a.start < b.end && b.start < a.end
+        if (a.start < b.end && b.start < a.end) {
+          return {
+            valid: false,
+            message: `Overlapping schedules on ${d}: row ${a.rowIndex + 1} (${a.start}:00-${a.end}:00) overlaps with row ${b.rowIndex + 1} (${b.start}:00-${b.end}:00).`,
+          };
+        }
+      }
+    }
+
+    return { valid: true };
   }
 
   const isEmptyDefault =
@@ -88,12 +142,11 @@ export default function Schedule() {
     textTransform: "uppercase",
   };
 
-  return (
+    return (
     <div
       style={{
         maxWidth: "1200px",
         margin: "40px auto",
-        marginTop: "130px",
         padding: "30px",
         background: "#fff",
         borderRadius: "16px",

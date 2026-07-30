@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { getStoredEmail } from "../../../utils/InternalUtils";
 import { createOfficialAccount } from "../../../utils/ClientRequests/ManagerApiCalls";
 import "../../general/GeneralView.css";
@@ -15,10 +15,30 @@ function CreateOfficialAccounts() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [type, setType] = useState("manager");
+  const [additionalInformation, setAdditionalInformation] = useState("");
+
+  const handleTypeChange = (newType: string) => {
+    setType(newType);
+    setAdditionalInformation("");
+  };
+
+  const additionalLabel = type === "manager"
+    ? "City"
+    : "Responsible manager email";
+
+  const additionalPlaceholder = type === "manager"
+    ? "Cluj-Napoca"
+    : "manager@company.com";
 
   const handleCreate = async () => {
     try{
-      await createOfficialAccount(getStoredEmail(), email, password, type);
+      await createOfficialAccount(
+        getStoredEmail(),
+        email,
+        password,
+        type,
+        additionalInformation,
+      );
     }
     catch(error)
     {
@@ -28,6 +48,7 @@ function CreateOfficialAccounts() {
       setEmail("");
       setPassword("");
       setType("manager");
+      setAdditionalInformation("");
     }
   };
 
@@ -36,7 +57,6 @@ function CreateOfficialAccounts() {
       style={{
         width: "60vw",
         margin: "80px auto",
-        marginTop: "100px",
         padding: "32px",
         background: "#ffffff",
         borderRadius: "16px",
@@ -119,7 +139,7 @@ function CreateOfficialAccounts() {
           <input
             type="radio"
             checked={type === "manager"}
-            onChange={() => setType("manager")}
+            onChange={() => handleTypeChange("manager")}
           />
           🧑‍💼 Manager
         </label>
@@ -128,10 +148,35 @@ function CreateOfficialAccounts() {
           <input
             type="radio"
             checked={type === "delivery"}
-            onChange={() => setType("delivery")}
+            onChange={() => handleTypeChange("delivery")}
           />
           🚚 Delivery
         </label>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+        }}
+      >
+        <label>{additionalLabel}</label>
+        <input
+          type={type === "manager" ? "text" : "email"}
+          placeholder={additionalPlaceholder}
+          value={additionalInformation}
+          onChange={(e) => setAdditionalInformation(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "12px",
+            borderRadius: "8px",
+            border: "1px solid #d1d5db",
+            fontSize: "15px",
+            outline: "none",
+            boxSizing: "border-box",
+          }}
+        />
       </div>
 
       <button

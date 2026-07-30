@@ -37,23 +37,8 @@ function FinishDelivery() {
     };
 
     return (
-        <div
-            style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                background: "#f5f5f5",
-            }}
-        >
-            <div
-                style={{
-                    width: "380px",
-                    background: "white",
-                    borderRadius: "12px",
-                    border: "1px solid #ddd",
-                    padding: "28px",
-                }}
-            >
+        <div style={{ display: "flex", justifyContent: "center" }}>
+            <div className="active-card" style={{ width: "380px" }}>
                 {!targetDelivery && !confirmationStatus && (
                     <>
                         <h2

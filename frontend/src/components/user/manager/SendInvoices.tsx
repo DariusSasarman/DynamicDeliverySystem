@@ -59,7 +59,6 @@ function SendInvoices() {
       style={{
         width: "60vw",
         margin: "2rem auto",
-        marginTop : "120px",
         background: "#fff",
         borderRadius: "12px",
         padding: "2rem",

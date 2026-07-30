@@ -53,16 +53,7 @@ function ResolveComplaints() {
   }
 
   return (
-    <div
-      style={{
-        width: "60vw",
-        margin: "30px auto",
-        display: "flex",
-        flexDirection: "column",
-        gap: "20px",
-        color: "#222f68",
-      }}
-    >
+    <div className="active-card" style={{ width: "60vw", margin: "30px auto", display: "flex", flexDirection: "column", gap: "20px", color: "#222f68" }}>
       <div
         style={{
           display: "flex",

@@ -56,7 +56,7 @@ export async function sendInvoice(clientEmail, text)
 
 }
 
-export async function createOfficialAccount(managerEmail, newEmail, password, type)
+export async function createOfficialAccount(managerEmail, newEmail, password, type, aditionalInformation)
 {
     
 }
