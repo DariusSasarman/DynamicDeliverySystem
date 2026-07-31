@@ -56,7 +56,8 @@ export async function sendInvoice(clientEmail, text)
 
 }
 
-export async function createOfficialAccount(managerEmail, newEmail, password, type, aditionalInformation)
+export async function createOfficialAccount(managerEmail, newEmail, password, type, aditionalInformation, mainLocation)
 {
-    
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    return { success: true, mainLocation };
 }

@@ -28,24 +28,16 @@ export async function getSchedule(email) {
     phoneNumber: "07yeah",
     schedule: [
       {
-        country : "Country",
-        county : "county",
-        city : "city",
-        street: "street",
-        number : "16",
         from: 8,
         until: 16,
         days: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+        position: [46.770439, 23.589722],
       },
       {
-        country : "Country",
-        county : "county",
-        city : "city",
-        street: "street2",
-        number : "163",
         from: 16,
         until: 20,
         days: ["Mon", "Wed"],
+        position: [46.765, 23.595],
       },
     ],
   };

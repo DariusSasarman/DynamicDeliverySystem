@@ -1,5 +1,6 @@
 package ro.utcluj.cti.dynamic_delivery_system.model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import jakarta.annotation.Generated;
@@ -16,15 +17,16 @@ public abstract class User {
     @Generated(value = "org.hibernate.id.UUIDGenerator")
     private String id;  
 
+    private final String email;
+    private final String hashedPassword;
+    private final LocalDateTime createdAt;
+
+
     protected User(String email, String hashedPassword) {
         this.email = email;
         this.hashedPassword = hashedPassword;
-        this.createdAt = new Date();
+        this.createdAt = LocalDateTime.now();
     }
-
-    private final String email;
-    private final String hashedPassword;
-    private final Date createdAt;
 
     public abstract AccountTypes getAccountType();
 
@@ -36,7 +38,7 @@ public abstract class User {
         return hashedPassword;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 }

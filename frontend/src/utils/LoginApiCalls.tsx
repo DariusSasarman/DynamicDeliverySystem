@@ -10,7 +10,7 @@ export async function submitLogin(email: String, password: String) {
 
 export async function getTargetState(): Promise<AccountTypes> {
   await new Promise((resolve) => setTimeout(resolve, 50));
-  return AccountTypes.BASIC;
+  return AccountTypes.MANAGER;
 
   /// The actual code that will be final is down here
   /// |

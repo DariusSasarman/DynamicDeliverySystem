@@ -2,11 +2,12 @@ package ro.utcluj.cti.dynamic_delivery_system.model;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
 
 @Entity
 @DiscriminatorValue("BASIC")
 public class BasicUser extends User {
+
+    private Schedule schedule;
 
     private String phoneNumber;
 

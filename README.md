@@ -45,7 +45,7 @@ erDiagram
         long ID PK
         long ACCOUNT_MADE_BY_ID
         string CITY
-        long CITY_ID
+        long LOCATION_ID
     }
 
     DELIVERY {
@@ -63,34 +63,14 @@ erDiagram
         long LOCATION_ID
         int FROM
         int UNTIL
-        string DAYS_AVAILABLE
+        string DAYS_VALID
         long SCHEDULE_ID
     }
 
     LOCATION {
-        string NUMBER
-        long STREET_ID
-        string COORDINATES
-    }
-
-    STREET {
-        string NAME
-        long CITY_ID
-    }
-
-    CITY {
-        long ID PK
-        string NAME
-        long COUNTY_ID
-    }
-
-    COUNTY {
-        string NAME
-        long COUNTRY_ID
-    }
-
-    COUNTRY {
-        string NAME
+        long LOCATION_ID
+        long LATITUDE
+        long LONGITUDE
     }
 
     PACKAGE {
@@ -126,18 +106,12 @@ erDiagram
     USER ||--|| DELIVERY : inherits
 
     %% Manager belongs to City
-    CITY ||--o{ MANAGER : contains
+    LOCATION ||--o{ MANAGER : contains
 
     %% Schedule
     BASIC_USER ||--o{ SCHEDULE : owns
     SCHEDULE ||--o{ ENTRY : contains
     ENTRY }o--|| LOCATION : uses
-
-    %% Location hierarchy
-    LOCATION }o--|| STREET : on
-    STREET }o--|| CITY : in
-    CITY }o--|| COUNTY : in
-    COUNTY }o--|| COUNTRY : in
 
     %% Package relations
     BASIC_USER ||--o{ PACKAGE : sender

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import LocationPicker from "../../general/LocationPicker";
 import { getStoredEmail } from "../../../utils/InternalUtils";
 import { createOfficialAccount } from "../../../utils/ClientRequests/ManagerApiCalls";
 import "../../general/GeneralView.css";
@@ -16,10 +17,12 @@ function CreateOfficialAccounts() {
   const [password, setPassword] = useState("");
   const [type, setType] = useState("manager");
   const [additionalInformation, setAdditionalInformation] = useState("");
+  const [mainLocation, setMainLocation] = useState<[number, number] | null>(null);
 
   const handleTypeChange = (newType: string) => {
     setType(newType);
     setAdditionalInformation("");
+    setMainLocation(null);
   };
 
   const additionalLabel = type === "manager"
@@ -38,6 +41,7 @@ function CreateOfficialAccounts() {
         password,
         type,
         additionalInformation,
+        mainLocation,
       );
     }
     catch(error)
@@ -49,6 +53,7 @@ function CreateOfficialAccounts() {
       setPassword("");
       setType("manager");
       setAdditionalInformation("");
+      setMainLocation(null);
     }
   };
 
@@ -178,6 +183,14 @@ function CreateOfficialAccounts() {
           }}
         />
       </div>
+
+      <LocationPicker
+        value={mainLocation}
+        onChange={setMainLocation}
+        label="Main location"
+        helperText="Pick the main location for this manager."
+        height="220px"
+      />
 
       <button
         onClick={handleCreate}
