@@ -44,8 +44,7 @@ erDiagram
     MANAGER {
         long ID PK
         long ACCOUNT_MADE_BY_ID
-        string CITY
-        long LOCATION_ID
+        long MANAGING_LOCATION_ID
     }
 
     DELIVERY {
