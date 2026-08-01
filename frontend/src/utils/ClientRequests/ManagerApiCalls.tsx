@@ -56,8 +56,15 @@ export async function sendInvoice(clientEmail, text)
 
 }
 
-export async function createOfficialAccount(managerEmail, newEmail, password, type, aditionalInformation, mainLocation)
-{
+
+export async function createManagerAccount(ownerEmail, email, password, mainLocation) {
+    console.log("API: create manager account", { ownerEmail, email, password, mainLocation });
     await new Promise((resolve) => setTimeout(resolve, 50));
     return { success: true, mainLocation };
+}
+
+export async function createDeliveryAccount(ownerEmail, email, password, responsibleManagerEmail) {
+    console.log("API: create delivery account", { ownerEmail, email, password, responsibleManagerEmail });
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    return { success: true };
 }

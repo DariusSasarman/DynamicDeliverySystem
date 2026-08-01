@@ -135,3 +135,25 @@ erDiagram
     MANAGER ||--o{ DELIVERY : creates
     MANAGER ||--o{ MANAGER : creates
 ```
+
+## Regarding Security...
+
+Exposing your entire schedule might seem risky.
+
+Here's how information leak issues are avoided:
+
+1. Couriers are never aware about whom the package is 
+delivered to. All they see is a phone number,
+some coordinates and the available time window.
+
+2. On delivery, identity is confirmed by a
+common confirmation code.
+
+3. When someone desires to send a package,
+all they need is an email - no other personal details
+to be specified.
+
+4. Managers can't view the schedules of clients at all.
+
+Unless attacked, this system is safer by design
+than the standard delivery apps.

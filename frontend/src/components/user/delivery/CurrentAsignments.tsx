@@ -5,9 +5,25 @@ import {
   getPackageDetails,
 } from "../../../utils/ClientRequests/DeliveryApiCalls";
 
+type PackageItem = {
+  id: number;
+  pos?: number[];
+};
+
+type PackageDetails = {
+  type: string;
+  phoneNumber: string;
+  coordinates?: {
+    latitude: number;
+    longitude: number;
+  };
+  availableFrom: string;
+  availableUntil: string;
+};
+
 function CurrentAssignments() {
-  const [packageList, setPackageList] = useState([]);
-  const [detailsCache, setDetailsCache] = useState({});
+  const [packageList, setPackageList] = useState<PackageItem[]>([]);
+  const [detailsCache, setDetailsCache] = useState<Record<number, PackageDetails>>({});
 
   useEffect(() => {
     async function loadPackages() {
@@ -22,7 +38,7 @@ function CurrentAssignments() {
     loadPackages();
   }, []);
 
-  async function handleOpen(packageId) {
+  async function handleOpen(packageId: number) {
     if (detailsCache[packageId]) return;
     try {
       const details = await getPackageDetails(getStoredEmail(), packageId);
@@ -107,8 +123,12 @@ function CurrentAssignments() {
                   <strong>📞 Phone</strong>
                   <span>{detailsCache[pkg.id].phoneNumber}</span>
 
-                  <strong>📍 Address</strong>
-                  <span>{detailsCache[pkg.id].location}</span>
+                  <strong>📍 Coordinates</strong>
+                  <span>
+                    {detailsCache[pkg.id].coordinates
+                      ? `${detailsCache[pkg.id].coordinates?.latitude}, ${detailsCache[pkg.id].coordinates?.longitude}`
+                      : "Not available"}
+                  </span>
 
                   <strong>🕒 Available</strong>
                   <span>

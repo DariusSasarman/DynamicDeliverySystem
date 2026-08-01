@@ -1,7 +1,7 @@
 import { useState } from "react";
 import LocationPicker from "../../general/LocationPicker";
 import { getStoredEmail } from "../../../utils/InternalUtils";
-import { createOfficialAccount } from "../../../utils/ClientRequests/ManagerApiCalls";
+import { createManagerAccount, createDeliveryAccount } from "../../../utils/ClientRequests/ManagerApiCalls";
 import "../../general/GeneralView.css";
 
 const radioStyle = {
@@ -25,24 +25,34 @@ function CreateOfficialAccounts() {
     setMainLocation(null);
   };
 
-  const additionalLabel = type === "manager"
-    ? "City"
-    : "Responsible manager email";
+  // Only used for delivery accounts (manager city text removed)
+  const additionalLabel = type === "delivery"
+    ? "Responsible manager email"
+    : "";
 
-  const additionalPlaceholder = type === "manager"
-    ? "Cluj-Napoca"
-    : "manager@company.com";
+  const additionalPlaceholder = type === "delivery"
+    ? "manager@company.com"
+    : "";
+
+  // API calls are exported from ManagerApiCalls.tsx
 
   const handleCreate = async () => {
     try{
-      await createOfficialAccount(
-        getStoredEmail(),
-        email,
-        password,
-        type,
-        additionalInformation,
-        mainLocation,
-      );
+      if (type === "manager") {
+        await createManagerAccount(
+          getStoredEmail(),
+          email,
+          password,
+          mainLocation,
+        );
+      } else {
+        await createDeliveryAccount(
+          getStoredEmail(),
+          email,
+          password,
+          additionalInformation,
+        );
+      }
     }
     catch(error)
     {
@@ -159,38 +169,42 @@ function CreateOfficialAccounts() {
         </label>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "8px",
-        }}
-      >
-        <label>{additionalLabel}</label>
-        <input
-          type={type === "manager" ? "text" : "email"}
-          placeholder={additionalPlaceholder}
-          value={additionalInformation}
-          onChange={(e) => setAdditionalInformation(e.target.value)}
+      {type === "delivery" && (
+        <div
           style={{
-            width: "100%",
-            padding: "12px",
-            borderRadius: "8px",
-            border: "1px solid #d1d5db",
-            fontSize: "15px",
-            outline: "none",
-            boxSizing: "border-box",
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
           }}
-        />
-      </div>
+        >
+          <label>{additionalLabel}</label>
+          <input
+            type="email"
+            placeholder={additionalPlaceholder}
+            value={additionalInformation}
+            onChange={(e) => setAdditionalInformation(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "12px",
+              borderRadius: "8px",
+              border: "1px solid #d1d5db",
+              fontSize: "15px",
+              outline: "none",
+              boxSizing: "border-box",
+            }}
+          />
+        </div>
+      )}
 
-      <LocationPicker
-        value={mainLocation}
-        onChange={setMainLocation}
-        label="Main location"
-        helperText="Pick the main location for this manager."
-        height="220px"
-      />
+      {type === "manager" && (
+        <LocationPicker
+          value={mainLocation}
+          onChange={setMainLocation}
+          label="Main location"
+          helperText="Pick the main location for this manager."
+          height="220px"
+        />
+      )}
 
       <button
         onClick={handleCreate}
