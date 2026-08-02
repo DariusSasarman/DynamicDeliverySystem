@@ -1,29 +1,24 @@
 package ro.utcluj.cti.dynamic_delivery_system.model;
 
-import jakarta.annotation.Generated;
-import jakarta.persistence.Id;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
+@Embeddable
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Location {
-    @Id
-    @Generated(value = "org.hibernate.id.UUIDGenerator")
-    private Long id;
+
+    @Column(name = "latitude")
     private double latitude;
+
+    @Column(name = "longitude")
     private double longitude;
 
     public Location(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
     }
 }

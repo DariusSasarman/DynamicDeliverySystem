@@ -127,7 +127,7 @@ erDiagram
 
     %% Complaints
     BASIC_USER ||--o{ COMPLAINT : files
-    USER ||--o{ COMPLAINT : regarding
+    PACKAGE ||--o{ COMPLAINT : regarding
     INVOICE ||--o{ COMPLAINT : resolves
 
     %% Account creation
@@ -138,7 +138,7 @@ erDiagram
 
 ## Regarding Security...
 
-Exposing your entire schedule might seem risky.
+Exposing your entire schedule might seem risky. It's true!
 
 Here's how information leak issues are avoided:
 

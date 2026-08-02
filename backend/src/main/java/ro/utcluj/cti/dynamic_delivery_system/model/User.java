@@ -1,44 +1,60 @@
 package ro.utcluj.cti.dynamic_delivery_system.model;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
-import jakarta.annotation.Generated;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
-@Inheritance
-@DiscriminatorColumn(name = "ROLE")  
+@Table(name = "app_users")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class User {
+    
     @Id
-    @Generated(value = "org.hibernate.id.UUIDGenerator")
-    private String id;  
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private final String email;
-    private final String hashedPassword;
-    private final LocalDateTime createdAt;
+    @Column(nullable = false)
+    private String name;
 
+    @Column(nullable = false, unique = true)
+    private String email;
 
-    protected User(String email, String hashedPassword) {
+    @Column(nullable = false, name = "hashed_password")
+    private String hashedPassword;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "account_type")
+    private AccountTypes accountType;
+
+    @Column(nullable = false, name = "created_at")
+    private LocalDateTime createdAt;
+
+    protected User(Long id, String name, String email, String password, AccountTypes accountType, LocalDateTime createdAt) {
+        this.id = id;
+        this.name = name;
         this.email = email;
-        this.hashedPassword = hashedPassword;
-        this.createdAt = LocalDateTime.now();
+        this.hashedPassword = password;
+        this.accountType = accountType;
+        this.createdAt = createdAt; 
     }
 
-    public abstract AccountTypes getAccountType();
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getHashedPassword() {
-        return hashedPassword;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public String getRole() {
+        return accountType.name();
     }
 }
