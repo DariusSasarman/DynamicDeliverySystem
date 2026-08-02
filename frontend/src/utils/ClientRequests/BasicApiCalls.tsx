@@ -1,7 +1,18 @@
 
 export async function getPackageClientList(authToken: String) {
-  await new Promise((resolve) => setTimeout(resolve, 50));
-  return [{ id: 123, pos: [10, 3] }, {id : 111, pos: [6,7]}];
+  const response = await fetch("/api/basic/package-client-list", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch package client list");
+  }
+
+  const data = await response.json();
+  return data;
 }
 
 export async function getDeliveredPackageClientList(authToken: String) {
