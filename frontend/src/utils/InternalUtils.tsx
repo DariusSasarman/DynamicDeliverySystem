@@ -7,5 +7,13 @@ export enum AccountTypes {
 
 export function getStoredAuthToken()
 {
-  return "example-auth-token"
+  return localStorage.getItem("dynamic-delivery-auth-token") ?? ""
+}
+
+export function setStoredAuthToken(token: string) {
+  localStorage.setItem("dynamic-delivery-auth-token", token)
+}
+
+export function clearStoredAuthToken() {
+  localStorage.removeItem("dynamic-delivery-auth-token")
 }

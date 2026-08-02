@@ -1,3 +1,9 @@
 spring:
   application:
     name: dynamic-delivery-system
+
+app:
+  security:
+    jwt:
+      secret: "dynamic-delivery-system-development-secret-key-change-me"
+      expiration-minutes: 240

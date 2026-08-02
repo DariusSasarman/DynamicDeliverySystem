@@ -1,25 +1,65 @@
 import { AccountTypes } from "./InternalUtils";
+import { clearStoredAuthToken, getStoredAuthToken, setStoredAuthToken } from "./InternalUtils";
 
-export async function submitRegistration(email: String, password: String) {
-  return null;
+export async function submitRegistration(email: string, password: string) {
+  const response = await fetch("/api/auth/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  });
+
+  if (response.ok) {
+    const payload = await response.json();
+    if (payload?.token) {
+      setStoredAuthToken(payload.token);
+    }
+  }
+
+  return response;
 }
 
-export async function submitLogin(email: String, password: String) {
-  return null;
+export async function submitLogin(email: string, password: string) {
+  const response = await fetch("/api/auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  });
+
+  if (response.ok) {
+    const payload = await response.json();
+    if (payload?.token) {
+      setStoredAuthToken(payload.token);
+    }
+  }
+
+  return response;
 }
 
 export async function getTargetState(): Promise<AccountTypes> {
-  await new Promise((resolve) => setTimeout(resolve, 50));
-  return AccountTypes.MANAGER;
+  const authToken = getStoredAuthToken();
 
-  /// The actual code that will be final is down here
-  /// |
-  /// V
+  if (!authToken) {
+    return AccountTypes.NONE;
+  }
+
   try {
-    const response = await fetch("/api/accountType", {});
+    const response = await fetch("/api/auth/me", {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      clearStoredAuthToken();
+      return AccountTypes.NONE;
+    }
 
     const ret = await response.json();
-    switch (ret?.type) {
+    switch ((ret?.accountType ?? "").toLowerCase()) {
       case "manager":
         return AccountTypes.MANAGER;
       case "basic":
@@ -30,7 +70,8 @@ export async function getTargetState(): Promise<AccountTypes> {
         return AccountTypes.NONE;
     }
   } catch (error) {
-    console.log("Faile to fetch account type.");
+    clearStoredAuthToken();
+    console.log("Failed to fetch account type.");
     return AccountTypes.NONE;
   }
 }

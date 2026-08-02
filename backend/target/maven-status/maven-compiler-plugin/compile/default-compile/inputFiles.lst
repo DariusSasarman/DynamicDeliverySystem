@@ -1,5 +1,13 @@
+/home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/api/BasicUserController.java
+/home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/api/DeliveryUserController.java
 /home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/api/DynamicDeliverySystemApplication.java
 /home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/api/FrontendForwardController.java
+/home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/api/ManagerUserController.java
+/home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/api/NoneUserController.java
+/home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/api/auth/AuthController.java
+/home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/api/auth/AuthDtos.java
+/home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/config/JwtAuthenticationFilter.java
+/home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/config/SecurityConfig.java
 /home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/model/AccountTypes.java
 /home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/model/BasicUser.java
 /home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/model/Complaint.java
@@ -12,3 +20,6 @@
 /home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/model/PackageStatus.java
 /home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/model/Schedule.java
 /home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/model/User.java
+/home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/repos/UserRepository.java
+/home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/service/AuthService.java
+/home/sasarmandarius/Projects/DynamicDeliverySystem/backend/src/main/java/ro/utcluj/cti/dynamic_delivery_system/service/JwtService.java
