@@ -3,7 +3,7 @@ import {
     getDeliveredPackageClientList,
     sendComplaint,
 } from "../../../utils/ClientRequests/BasicApiCalls";
-import { getStoredEmail } from "../../../utils/InternalUtils";
+import { getStoredAuthToken } from "../../../utils/InternalUtils";
 function FileComplaint() {
     const [deliveredPackageList, setDeliveredPackageList] = useState([]);
     const [activePackage, setActivePackage] = useState(null);
@@ -12,7 +12,7 @@ function FileComplaint() {
     useEffect(() => {
         const fetchPackageList = async () => {
             try {
-                const list = await getDeliveredPackageClientList(getStoredEmail());
+                const list = await getDeliveredPackageClientList(getStoredAuthToken());
                 setDeliveredPackageList(list);
             } catch (error) {
                 console.error("Failed to fetch package list:", error);
@@ -30,7 +30,7 @@ function FileComplaint() {
 
         try {
             await sendComplaint(
-                getStoredEmail(),
+                getStoredAuthToken(),
                 activePackage.id,
                 complaint
             );

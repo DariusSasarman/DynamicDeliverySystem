@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { sendPickupRequest } from "../../../utils/ClientRequests/BasicApiCalls";
-import { getStoredEmail } from "../../../utils/InternalUtils";
+import { getStoredAuthToken } from "../../../utils/InternalUtils";
 
 function PlaceDelivery() {
     const [newRequestDeliveryEmail, setNewRequestDeliveryEmail] = useState("");
@@ -11,7 +11,7 @@ function PlaceDelivery() {
             const success = await sendPickupRequest(
                 pickUpDate,
                 newRequestDeliveryEmail,
-                getStoredEmail()
+                getStoredAuthToken()
             );
 
             if (!success) {

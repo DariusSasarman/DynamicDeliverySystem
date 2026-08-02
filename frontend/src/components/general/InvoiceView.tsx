@@ -3,7 +3,7 @@ import {
     confirmInvoice,
     getInvoiceList,
 } from "../../utils/ClientRequests/HeaderApiCalls";
-import { getStoredEmail } from "../../utils/InternalUtils";
+import { getStoredAuthToken } from "../../utils/InternalUtils";
 
 function InvoiceView() {
     const [invoicesList, setInvoicesList] = useState([]);
@@ -11,7 +11,7 @@ function InvoiceView() {
 
     useEffect(() => {
         async function loadInvoices() {
-            const invoiceList = await getInvoiceList(getStoredEmail());
+            const invoiceList = await getInvoiceList(getStoredAuthToken());
             setInvoicesList(invoiceList);
         }
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getStoredEmail } from "../../../utils/InternalUtils";
+import { getStoredAuthToken } from "../../../utils/InternalUtils";
 import {
   getComplaintsList,
   resolveComplaint,
@@ -12,7 +12,7 @@ function ResolveComplaints() {
 
   useEffect(() => {
     async function loadComplaints() {
-      const list = await getComplaintsList(getStoredEmail());
+      const list = await getComplaintsList(getStoredAuthToken());
       setComplaintList(list);
     }
 
@@ -33,7 +33,7 @@ function ResolveComplaints() {
     setSendingId(complaintId);
 
     try{
-        await resolveComplaint(getStoredEmail(), complaintId, replyText);
+        await resolveComplaint(getStoredAuthToken(), complaintId, replyText);
         setComplaintList((prev) =>
             prev.filter((complaint) => complaint.id !== complaintId)
         );

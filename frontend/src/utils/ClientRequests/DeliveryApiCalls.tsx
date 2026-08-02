@@ -1,4 +1,4 @@
-export async function getNearestPackage(currentPos, email) {
+export async function getNearestPackage(currentPos, authToken) {
   // Sends the location and the back-end saves it
   return {
     id: 15,
@@ -6,13 +6,13 @@ export async function getNearestPackage(currentPos, email) {
   };
 }
 
-export async function getAssignedPackageList(email)
+export async function getAssignedPackageList(authToken)
 {
   await new Promise((resolve) => setTimeout(resolve, 50));
   return [{ id: 124, pos: [9, 3] }, {id : 121, pos: [9,8]}];
 }
 
-export async function getPackageDetails(email, packageId) {
+export async function getPackageDetails(authToken, packageId) {
   await new Promise((resolve) => setTimeout(resolve, 300));
 
   return {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getStoredEmail } from "../../../utils/InternalUtils";
+import { getStoredAuthToken } from "../../../utils/InternalUtils";
 import {
     getAssignedPackageList,
     getDeliveryCode,
@@ -13,7 +13,7 @@ function FinishDelivery() {
 
     const fetchPackages = async () => {
         try {
-            const list = await getAssignedPackageList(getStoredEmail());
+            const list = await getAssignedPackageList(getStoredAuthToken());
             setPackageList(list || []);
         } catch (err) {
             console.error(err);

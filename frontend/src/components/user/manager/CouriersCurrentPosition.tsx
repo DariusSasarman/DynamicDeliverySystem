@@ -1,12 +1,12 @@
 import React from "react";
 import { getAssignedCouriers } from "../../../utils/ClientRequests/ManagerApiCalls";
-import { getStoredEmail } from "../../../utils/InternalUtils";
+import { getStoredAuthToken } from "../../../utils/InternalUtils";
 import MapWithPins from "../../general/MapWithPins";
 
 function CouriersCurrentPosition() {
   return (
     <MapWithPins
-      fetchItems={() => getAssignedCouriers(getStoredEmail())}
+      fetchItems={() => getAssignedCouriers(getStoredAuthToken())}
       posAccessor={(c: any) => c.pos}
       buttonLabel={(c: any) => c.email}
       title="Couriers"

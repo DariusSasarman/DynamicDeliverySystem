@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getStoredEmail } from "../../../utils/InternalUtils";
+import { getStoredAuthToken } from "../../../utils/InternalUtils";
 import {
   getAssignedPackageList,
   getPackageDetails,
@@ -28,7 +28,7 @@ function CurrentAssignments() {
   useEffect(() => {
     async function loadPackages() {
       try {
-        const list = await getAssignedPackageList(getStoredEmail());
+        const list = await getAssignedPackageList(getStoredAuthToken());
         setPackageList(list);
       } catch (error) {
         alert("Couldn't load assigned packages!");
@@ -41,7 +41,7 @@ function CurrentAssignments() {
   async function handleOpen(packageId: number) {
     if (detailsCache[packageId]) return;
     try {
-      const details = await getPackageDetails(getStoredEmail(), packageId);
+      const details = await getPackageDetails(getStoredAuthToken(), packageId);
 
       setDetailsCache((prev) => ({
         ...prev,

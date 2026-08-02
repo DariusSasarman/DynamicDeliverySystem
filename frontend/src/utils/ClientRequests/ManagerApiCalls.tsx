@@ -1,5 +1,5 @@
 
-export async function getAssignedCouriers(managerEmail)
+export async function getAssignedCouriers(authToken)
 {
     await new Promise((resolve) => setTimeout(resolve, 50));
     return [
@@ -8,13 +8,13 @@ export async function getAssignedCouriers(managerEmail)
     ];
 }
 
-export async function getPickedUpPackages(managerEmail)
+export async function getPickedUpPackages(authToken)
 {
     await new Promise((resolve) => setTimeout(resolve, 50));
     return [ {id : 124}, {id : 123}];
 }
 
-export async function getPickUpRequests(managerEmail)
+export async function getPickUpRequests(authToken)
 {
     await new Promise((resolve) => setTimeout(resolve, 50));
     return [ {id : 125}, {id : 126}];
@@ -24,7 +24,7 @@ export async function AssignPackage(packageId, courierEmail) {
     await new Promise((resolve) => setTimeout(resolve, 50));
 }
 
-export async function getComplaintsList(managerEmail)
+export async function getComplaintsList(authToken)
 {
     await new Promise((resolve) => setTimeout(resolve, 50));
       return [
@@ -46,7 +46,7 @@ export async function getComplaintsList(managerEmail)
     },];
 }
 
-export async function resolveComplaint(managerEmail, complaintId, replyText)
+export async function resolveComplaint(authToken, complaintId, replyText)
 {
 
 }
@@ -57,14 +57,14 @@ export async function sendInvoice(clientEmail, text)
 }
 
 
-export async function createManagerAccount(ownerEmail, email, password, mainLocation) {
-    console.log("API: create manager account", { ownerEmail, email, password, mainLocation });
+export async function createManagerAccount(ownerAuthToken, email, password, mainLocation) {
+    console.log("API: create manager account", { ownerAuthToken, email, password, mainLocation });
     await new Promise((resolve) => setTimeout(resolve, 50));
     return { success: true, mainLocation };
 }
 
-export async function createDeliveryAccount(ownerEmail, email, password, responsibleManagerEmail) {
-    console.log("API: create delivery account", { ownerEmail, email, password, responsibleManagerEmail });
+export async function createDeliveryAccount(ownerAuthToken, email, password, responsibleManagerEmail) {
+    console.log("API: create delivery account", { ownerAuthToken, email, password, responsibleManagerEmail });
     await new Promise((resolve) => setTimeout(resolve, 50));
     return { success: true };
 }

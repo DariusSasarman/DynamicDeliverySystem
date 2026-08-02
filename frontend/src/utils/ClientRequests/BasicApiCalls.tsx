@@ -1,10 +1,10 @@
 
-export async function getPackageClientList(email: String) {
+export async function getPackageClientList(authToken: String) {
   await new Promise((resolve) => setTimeout(resolve, 50));
   return [{ id: 123, pos: [10, 3] }, {id : 111, pos: [6,7]}];
 }
 
-export async function getDeliveredPackageClientList(email: String) {
+export async function getDeliveredPackageClientList(authToken: String) {
   await new Promise((resolve) => setTimeout(resolve, 50));
   return [{ id: 124, pos: [9, 3] }, {id : 121, pos: [6,9]}];
 }
@@ -21,7 +21,7 @@ export async function sendPickupRequest(pickUpDate, receiverEmail : String, send
   return true;
 }
 
-export async function getSchedule(email) {
+export async function getSchedule(authToken) {
   await new Promise((resolve) => setTimeout(resolve, 50));
 
   return {
@@ -43,12 +43,12 @@ export async function getSchedule(email) {
   };
 }
 
-export async function saveSchedule(email,schedule)
+export async function saveSchedule(authToken,schedule)
 {
 
 }
 
-export async function sendComplaint(email, deliveryID, text)
+export async function sendComplaint(authToken, deliveryID, text)
 {
 
 }

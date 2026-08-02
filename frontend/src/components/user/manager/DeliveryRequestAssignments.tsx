@@ -3,7 +3,7 @@ import {
   AssignPackage,
   getAssignedCouriers,
 } from "../../../utils/ClientRequests/ManagerApiCalls";
-import { getStoredEmail } from "../../../utils/InternalUtils";
+import { getStoredAuthToken } from "../../../utils/InternalUtils";
 import "../../general/GeneralView.css"
 
 function DeliveryRequestAssignments( {getPackageList,type}) {
@@ -16,8 +16,8 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
   useEffect(() => {
     const fetchList = async () => {
       try {
-        const fetchedCourierList = await getAssignedCouriers(getStoredEmail());
-        const fetchedPickUpList = await getPackageList(getStoredEmail());
+        const fetchedCourierList = await getAssignedCouriers(getStoredAuthToken());
+        const fetchedPickUpList = await getPackageList(getStoredAuthToken());
         setCourierList(fetchedCourierList);
         setPickUpList(fetchedPickUpList);
       } catch (error) {

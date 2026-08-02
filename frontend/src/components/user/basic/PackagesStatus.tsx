@@ -1,12 +1,12 @@
 import React from "react";
 import { getPackageClientList } from "../../../utils/ClientRequests/BasicApiCalls";
-import { getStoredEmail } from "../../../utils/InternalUtils";
+import { getStoredAuthToken } from "../../../utils/InternalUtils";
 import MapWithPins from "../../general/MapWithPins";
 
 function PackagesStatus() {
   return (
     <MapWithPins
-      fetchItems={() => getPackageClientList(getStoredEmail())}
+      fetchItems={() => getPackageClientList(getStoredAuthToken())}
       posAccessor={(p: any) => p.pos}
       buttonLabel={(p: any) => `Package #${p.id}`}
       title="Last known location:"

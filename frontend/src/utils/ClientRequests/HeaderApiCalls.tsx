@@ -1,9 +1,9 @@
-export async function getInvoiceCount(email: String) {
+export async function getInvoiceCount(authToken: String) {
   await new Promise((resolve) => setTimeout(resolve, 50));
   return 2;
 }
 
-export async function getInvoiceList(email: string) {
+export async function getInvoiceList(authToken: string) {
   await new Promise((resolve) => setTimeout(resolve, 50));
   return [
     { id: 123, text: "Please define your schedule" }, 

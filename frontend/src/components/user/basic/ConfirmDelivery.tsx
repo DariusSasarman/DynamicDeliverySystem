@@ -3,7 +3,7 @@ import {
     getPackageClientList,
     sendDeliveryConfirmation,
 } from "../../../utils/ClientRequests/BasicApiCalls";
-import { getStoredEmail } from "../../../utils/InternalUtils";
+import { getStoredAuthToken } from "../../../utils/InternalUtils";
 import "../../general/GeneralView.css"
 
 function ConfirmDelivery() {
@@ -14,7 +14,7 @@ function ConfirmDelivery() {
 
     const fetchPackages = async () => {
             try {
-                const list = await getPackageClientList(getStoredEmail());
+                const list = await getPackageClientList(getStoredAuthToken());
                 setPackageList(list || []);
             } catch (err) {
                 console.error(err);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
-import { getStoredEmail } from "../../../utils/InternalUtils";
+import { getStoredAuthToken } from "../../../utils/InternalUtils";
 import { getNearestPackage } from "../../../utils/ClientRequests/DeliveryApiCalls";
 
 function FitBounds({ currentPosition, packagePosition }) {
@@ -36,7 +36,7 @@ function ViewNearestDelivery() {
         setCurrentPosition(currentPos);
 
         try {
-          const nearest = await getNearestPackage(currentPos, getStoredEmail());
+          const nearest = await getNearestPackage(currentPos, getStoredAuthToken());
 
           setNearestPackage(nearest);
         } catch (err) {

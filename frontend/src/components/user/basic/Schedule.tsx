@@ -4,7 +4,7 @@ import {
   getSchedule,
   saveSchedule,
 } from "../../../utils/ClientRequests/BasicApiCalls";
-import { getStoredEmail } from "../../../utils/InternalUtils";
+import { getStoredAuthToken } from "../../../utils/InternalUtils";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const HOURS = Array.from({ length: 13 }, (_, i) => i + 8);
@@ -22,7 +22,7 @@ export default function Schedule() {
 
   useEffect(() => {
     async function loadSchedule() {
-      const result = await getSchedule(getStoredEmail());
+      const result = await getSchedule(getStoredAuthToken());
 
       if (result) {
         setPhoneNumber(result.phoneNumber ?? "");
@@ -69,7 +69,7 @@ export default function Schedule() {
       return;
     }
 
-    await saveSchedule(getStoredEmail(), {
+    await saveSchedule(getStoredAuthToken(), {
       phoneNumber,
       schedule,
     });

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import LocationPicker from "../../general/LocationPicker";
-import { getStoredEmail } from "../../../utils/InternalUtils";
+import { getStoredAuthToken } from "../../../utils/InternalUtils";
 import { createManagerAccount, createDeliveryAccount } from "../../../utils/ClientRequests/ManagerApiCalls";
 import "../../general/GeneralView.css";
 
@@ -40,14 +40,14 @@ function CreateOfficialAccounts() {
     try{
       if (type === "manager") {
         await createManagerAccount(
-          getStoredEmail(),
+          getStoredAuthToken(),
           email,
           password,
           mainLocation,
         );
       } else {
         await createDeliveryAccount(
-          getStoredEmail(),
+          getStoredAuthToken(),
           email,
           password,
           additionalInformation,

@@ -10,7 +10,7 @@ import NoneView from "../user/none/NoneView";
 import WelcomeView from "./WelcomeView";
 import InvoiceView from "./InvoiceView";
 import { getInvoiceCount } from "../../utils/ClientRequests/HeaderApiCalls";
-import { getStoredEmail } from "../../utils/InternalUtils";
+import { getStoredAuthToken } from "../../utils/InternalUtils";
 
 function GeneralView({accountState})
 {
@@ -20,7 +20,7 @@ function GeneralView({accountState})
     useEffect(() => {
         const fetchInvoiceCount = async () => {
             try {
-                const count = await getInvoiceCount(getStoredEmail());
+                const count = await getInvoiceCount(getStoredAuthToken());
                 setInvoiceCount(count);
             } catch (error) {
                 console.error("Failed to fetch invoice count", error);
