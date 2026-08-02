@@ -8,8 +8,8 @@ public class FrontendForwardController {
 
     @GetMapping(value = {
             "/",
-            "/{path:^(?!api$)[^\\.]*}",
-            "/{path:^(?!api$)[^\\.]*}/**/{nestedPath:[^\\.]*}"
+            "/{path:^(?!api$)(?!api/)[^\\.]*}",
+            "/{path:^(?!api$)(?!api/)[^\\.]*}/**/{nestedPath:[^\\.]*}"
     })
     public String forwardSpaRoutes() {
         return "forward:/index.html";
