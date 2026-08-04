@@ -1,15 +1,20 @@
 package ro.utcluj.cti.dynamic_delivery_system.api;
 
 import ro.utcluj.cti.dynamic_delivery_system.model.BasicUser;
+import ro.utcluj.cti.dynamic_delivery_system.model.Complaint;
 import ro.utcluj.cti.dynamic_delivery_system.model.Invoice;
 import ro.utcluj.cti.dynamic_delivery_system.model.Manager;
 import ro.utcluj.cti.dynamic_delivery_system.model.Package;
+import ro.utcluj.cti.dynamic_delivery_system.model.PackageStatus;
+import ro.utcluj.cti.dynamic_delivery_system.model.Schedule.ScheduleSummary;
+import ro.utcluj.cti.dynamic_delivery_system.model.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,16 +22,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import ro.utcluj.cti.dynamic_delivery_system.model.PackageStatus;
-import ro.utcluj.cti.dynamic_delivery_system.model.User;
 import ro.utcluj.cti.dynamic_delivery_system.repos.InvoiceRepository;
 import ro.utcluj.cti.dynamic_delivery_system.repos.PackageRepository;
 import ro.utcluj.cti.dynamic_delivery_system.repos.ComplaintRepository;
 import ro.utcluj.cti.dynamic_delivery_system.repos.UserRepository;
-import ro.utcluj.cti.dynamic_delivery_system.service.JwtService;
 
 @RestController
 @RequestMapping("/api/basic")
@@ -236,7 +240,7 @@ public class BasicUserController {
             throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "You are not the recipient of this package" );
         }
 
-        Complaint complaint = new Complaint(pkg.getManagedBy(), user, text);
+        Complaint complaint = new Complaint(user,pkg, text);
         complaintRepository.save(complaint);
 
         return Map.of("success", true);

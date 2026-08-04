@@ -3,6 +3,7 @@ package ro.utcluj.cti.dynamic_delivery_system.model;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ro.utcluj.cti.dynamic_delivery_system.model.Entry.EntrySummary;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +23,7 @@ import java.util.List;
 public class Schedule {
     
     public record ScheduleSummary( String phoneNumber, List<EntrySummary> schedule) {
-        public toSchedule() {
+        public Schedule toSchedule() {
             List<Entry> entries = new ArrayList<>();
             for (EntrySummary entrySummary : schedule) {
                 entries.add(entrySummary.toEntry());

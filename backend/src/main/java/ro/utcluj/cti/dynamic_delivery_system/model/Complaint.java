@@ -3,6 +3,7 @@ package ro.utcluj.cti.dynamic_delivery_system.model;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,8 +39,7 @@ public class Complaint {
     @JoinColumn(name = "solution_invoice_id")
     private Invoice solutionInvoice;
 
-    public Complaint(Long id, BasicUser filedBy, Package regardingPackage, String description) {
-        this.id = id;
+    public Complaint( BasicUser filedBy, Package regardingPackage, String description) {
         this.filedBy = filedBy;
         this.regardingPackage = regardingPackage;
         this.description = description;
