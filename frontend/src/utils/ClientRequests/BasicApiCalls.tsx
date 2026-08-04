@@ -77,34 +77,60 @@ export async function sendPickupRequest(pickUpDate : Date, receiverEmail : Strin
     return data;
 }
 
-export async function getSchedule(authToken) {
-  await new Promise((resolve) => setTimeout(resolve, 50));
+export async function getSchedule(authToken: string) {
+  const response = await fetch("/api/basic/get-schedule", {
+      method: "GET",
+      headers: {
+          Authorization: `Bearer ${authToken}`,
+      },
+  });
 
-  return {
-    phoneNumber: "07yeah",
-    schedule: [
-      {
-        from: 8,
-        until: 16,
-        days: ["Mon", "Tue", "Wed", "Thu", "Fri"],
-        position: [46.770439, 23.589722],
-      },
-      {
-        from: 16,
-        until: 20,
-        days: ["Mon", "Wed"],
-        position: [46.765, 23.595],
-      },
-    ],
-  };
+  if (!response.ok) {
+      throw new Error("Failed to fetch schedule");
+  }
+  
+  const data = await response.json();
+  return data;
 }
 
-export async function saveSchedule(authToken,schedule)
+export async function saveSchedule(authToken: string, schedule: any)
 {
+  const response = await fetch("/api/basic/save-schedule", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+      },
+      body: JSON.stringify(schedule),
+  });
+  const data = await response.json();
 
+  if (!response.ok || !data.success) {
+      throw new Error("Failed to save schedule");
+  }
+
+  return data;
 }
 
-export async function sendComplaint(authToken, deliveryID, text)
+export async function sendComplaint(authToken: string, deliveryID: number, text: string)
 {
+  const response = await fetch("/api/basic/send-complaint", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+      },
+      body: JSON.stringify({
+        deliveryID,
+        text
+      }),
+  });
 
+  const data = await response.json();
+  
+  if (!response.ok || !data.success) {
+      throw new Error("Failed to send complaint");
+  }
+
+  return data;
 }

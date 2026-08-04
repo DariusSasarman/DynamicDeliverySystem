@@ -27,6 +27,30 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Entry {
 
+    public record EntrySummary(int from, int until, List<String> days, List<Double> position) {
+        public Entry toEntry() {
+            Location location = new Location(position.get(0), position.get(1));
+            Set<DayOfWeek> validDays = EnumSet.noneOf(DayOfWeek.class);
+            
+            for (String day : days) {
+                validDays.add(parseDay(day.toUpperCase()));
+            }
+            return new Entry(from, until, validDays, location);
+        }
+        private static DayOfWeek parseDay(String day) {
+            return switch (day.toUpperCase()) {
+                case "MON" -> DayOfWeek.MONDAY;
+                case "TUE" -> DayOfWeek.TUESDAY;
+                case "WED" -> DayOfWeek.WEDNESDAY;
+                case "THU" -> DayOfWeek.THURSDAY;
+                case "FRI" -> DayOfWeek.FRIDAY;
+                case "SAT" -> DayOfWeek.SATURDAY;
+                case "SUN" -> DayOfWeek.SUNDAY;
+                default -> throw new IllegalArgumentException("Invalid day: " + day);
+            };
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -83,6 +107,23 @@ public class Entry {
         }
 
         return EnumSet.copyOf(validDays);
+    }
+
+    public EntrySummary toSummary() {
+        return new EntrySummary(
+            from,
+            to, 
+            validDays.stream()
+                .map(DayOfWeek::name)
+                .map(s -> s.substring(0, Math.min(s.length(), 3)))
+                .toList(), 
+            new ArrayList<>(
+                List.of(
+                    location.getLatitude(), 
+                    location.getLongitude()
+                )
+            )
+        );
     }
 
 }

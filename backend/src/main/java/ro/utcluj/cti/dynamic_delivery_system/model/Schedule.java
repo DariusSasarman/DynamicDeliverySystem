@@ -21,6 +21,18 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Schedule {
     
+    public record ScheduleSummary( String phoneNumber, List<EntrySummary> schedule) {
+        public toSchedule() {
+            List<Entry> entries = new ArrayList<>();
+            for (EntrySummary entrySummary : schedule) {
+                entries.add(entrySummary.toEntry());
+            }
+            Schedule schedule = new Schedule();
+            schedule.scheduleEntries = entries;
+            return schedule;
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -77,5 +89,13 @@ public class Schedule {
             count++;
         }
         return new Location(latitude / count, longitude / count);
+    }
+
+    public ScheduleSummary toSummary(String phoneNumber) {
+        List<Entry.EntrySummary> entrySummaries = new ArrayList<>();
+        for (Entry entry : scheduleEntries) {
+            entrySummaries.add(entry.toSummary());
+        }
+        return new ScheduleSummary(phoneNumber, entrySummaries);
     }
 }
