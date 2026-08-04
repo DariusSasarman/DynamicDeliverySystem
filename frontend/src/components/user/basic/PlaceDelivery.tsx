@@ -10,8 +10,7 @@ function PlaceDelivery() {
         try{
             const success = await sendPickupRequest(
                 pickUpDate,
-                newRequestDeliveryEmail,
-                getStoredAuthToken()
+                newRequestDeliveryEmail
             );
 
             if (!success) {

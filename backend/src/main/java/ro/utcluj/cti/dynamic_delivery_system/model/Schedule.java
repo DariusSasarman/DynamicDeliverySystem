@@ -62,4 +62,20 @@ public class Schedule {
         return firstEntry.getFrom() < secondEntry.getTo() && secondEntry.getFrom() < firstEntry.getTo();
     }
 
+    public Location getAverageLocation()
+    {
+        if(scheduleEntries.isEmpty()) {
+            return null;
+        }
+        
+        double latitude = 0.0;
+        double longitude = 0.0;
+        double count = 0.0;
+        for (Entry entry : scheduleEntries) {
+            latitude += entry.getLocation().getLatitude();
+            longitude += entry.getLocation().getLongitude();
+            count++;
+        }
+        return new Location(latitude / count, longitude / count);
+    }
 }

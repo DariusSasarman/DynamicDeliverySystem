@@ -98,4 +98,9 @@ public class Package {
         this.deliveryDate = deliveryDate;
     }
 
+    public Object getConfirmationCode() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getConfirmationCode'");
+    }
+
 }
