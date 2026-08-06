@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -211,6 +210,22 @@ public class BasicUserController {
 
         user.setSchedule(scheduleSummary.toSchedule());
         userRepository.save(user);
+
+        packageRepository.findByIssuedToEmail(email)
+                .stream()
+                .filter(pkg -> pkg.getStatus().equals(PackageStatus.OUT_FOR_DELIVERY))
+                .forEach(pkg -> {
+                    Invoice invoice = new Invoice(pkg.getManagedBy(), pkg.getDeliveredBy(), "The recipient has updated their schedule. Please check the new schedule for delivery.");
+                    invoiceRepository.save(invoice);
+                });
+                
+        packageRepository.findByIssuedByEmail(email)
+                .stream()
+                .filter(pkg -> pkg.getStatus().equals(PackageStatus.PENDING))
+                .forEach(pkg -> {
+                    Invoice invoice = new Invoice(pkg.getManagedBy(), pkg.getDeliveredBy(), "The sender has updated their schedule. Please check the new schedule for pick-up.");
+                    invoiceRepository.save(invoice);
+                });
         return Map.of("success", true);
     }
 

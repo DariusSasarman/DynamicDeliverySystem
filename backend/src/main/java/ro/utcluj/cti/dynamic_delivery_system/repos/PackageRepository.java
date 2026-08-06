@@ -8,4 +8,6 @@ public interface PackageRepository extends JpaRepository<Package, Long> {
     Optional<Package> findById(Long id);
     
     List<Package> findByIssuedToEmail(String email);
+    List<Package> findByDeliveredByEmail(String email);
+    List<Package> findByIssuedByEmail(String email);
 }
