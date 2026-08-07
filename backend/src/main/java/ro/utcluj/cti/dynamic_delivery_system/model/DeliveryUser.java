@@ -32,5 +32,14 @@ public class DeliveryUser extends User {
         this.lastKnownLocation = lastKnownLocation;
     }
 
+    @Override
+    public String getRole() {
+        return "DELIVERY";
+    }
+
+    @Override
+    public Location getLocation() {
+        return lastKnownLocation;  
+    }
 
 }

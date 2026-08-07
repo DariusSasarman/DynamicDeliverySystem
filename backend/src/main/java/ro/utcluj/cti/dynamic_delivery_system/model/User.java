@@ -45,6 +45,7 @@ public abstract class User {
     @Column(nullable = false, name = "created_at")
     private LocalDateTime createdAt;
 
+
     protected User(Long id, String name, String email, String password, AccountTypes accountType, LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
@@ -54,7 +55,6 @@ public abstract class User {
         this.createdAt = createdAt; 
     }
 
-    public String getRole() {
-        return accountType.name();
-    }
+    public abstract String getRole();
+    public abstract Location getLocation();
 }

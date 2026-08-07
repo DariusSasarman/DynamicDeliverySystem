@@ -28,4 +28,13 @@ public class Manager extends User {
         this.managingLocation = managingLocation;
     }
 
+    @Override
+    public String getRole() {
+        return "MANAGER";
+    }
+
+    @Override
+    public Location getLocation() {
+        return managingLocation;
+    }
 }

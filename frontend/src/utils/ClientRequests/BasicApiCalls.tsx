@@ -1,5 +1,5 @@
 
-export async function getPackageClientList(authToken: String) {
+export async function getPackageClientList(authToken: string) {
   const response = await fetch("/api/basic/package-client-list", {
     method: "GET",
     headers: {
@@ -15,7 +15,7 @@ export async function getPackageClientList(authToken: String) {
   return data;
 }
 
-export async function getDeliveredPackageClientList(authToken: String) {
+export async function getDeliveredPackageClientList(authToken: string) {
   const response = await fetch("/api/basic/delivered-package-client-list", {
     method: "GET",
     headers: {
@@ -32,6 +32,7 @@ export async function getDeliveredPackageClientList(authToken: String) {
 }
 
 export async function sendDeliveryConfirmation(
+    authToken: string,
     packageId: number,
     deliveryCode: string
 ) {
@@ -39,6 +40,7 @@ export async function sendDeliveryConfirmation(
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
         },
         body: JSON.stringify({
             packageId,
@@ -46,31 +48,43 @@ export async function sendDeliveryConfirmation(
         }),
     });
 
+    if (!response.ok) {
+        throw new Error("Failed to send delivery confirmation");
+    }
+
     const data = await response.json();
 
-    if (!response.ok || !data.confirmation) {
+    if (!data.confirmation) {
         throw new Error("Failed to send delivery confirmation");
     }
 
     return data;
 }
 
-export async function sendPickupRequest(pickUpDate : Date, receiverEmail : String)
+export async function sendPickupRequest(authToken: string, pickUpDate: string, receiverEmail: string)
 {
+    // Append time if missing to match backend LocalDateTime expectation
+    const formattedDate = pickUpDate.includes("T") ? pickUpDate : `${pickUpDate}T00:00:00`;
+
     const response = await fetch("/api/basic/pickup-request", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
         },
         body: JSON.stringify({
-            pickUpDate,
+            pickUpDate: formattedDate,
             receiverEmail
         }),
     });
 
+    if (!response.ok) {
+        throw new Error("Failed to send pickup request");
+    }
+
     const data = await response.json();
 
-    if (!response.ok || !data.success) {
+    if (!data.success) {
         throw new Error("Failed to send pickup request");
     }
 
@@ -88,7 +102,7 @@ export async function getSchedule(authToken: string) {
   if (!response.ok) {
       throw new Error("Failed to fetch schedule");
   }
-  
+
   const data = await response.json();
   return data;
 }
@@ -103,9 +117,14 @@ export async function saveSchedule(authToken: string, schedule: any)
       },
       body: JSON.stringify(schedule),
   });
+
+  if (!response.ok) {
+      throw new Error("Failed to save schedule");
+  }
+
   const data = await response.json();
 
-  if (!response.ok || !data.success) {
+  if (!data.success) {
       throw new Error("Failed to save schedule");
   }
 
@@ -121,14 +140,18 @@ export async function sendComplaint(authToken: string, deliveryID: number, text:
           Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
-        deliveryID,
+        deliveryID: deliveryID.toString(),
         text
       }),
   });
 
+  if (!response.ok) {
+      throw new Error("Failed to send complaint");
+  }
+
   const data = await response.json();
-  
-  if (!response.ok || !data.success) {
+
+  if (!data.success) {
       throw new Error("Failed to send complaint");
   }
 

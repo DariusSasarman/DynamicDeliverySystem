@@ -98,9 +98,38 @@ public class Package {
         this.deliveryDate = deliveryDate;
     }
 
-    public Object getConfirmationCode() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getConfirmationCode'");
+    public String getConfirmationCode() {
+        if(status != PackageStatus.OUT_FOR_DELIVERY) {
+            throw new IllegalStateException("Package is not out for delivery");
+        }
+        if(deliveredBy == null) {
+            throw new IllegalStateException("Package does not have a delivery user assigned");
+        }
+        String str = issuedBy.getEmail() + issuedTo.getEmail() + id;
+        return String.format("%08X", str.hashCode());
+    }
+
+    public Location getLocation() {
+        if(this.status == PackageStatus.PENDING)
+        {
+            return issuedBy.getLocation();
+        }
+        else if(this.status == PackageStatus.PICKED_UP)
+        {
+            return pickUpBy.getLocation();
+        }
+        else if(this.status == PackageStatus.IN_STORAGE)
+        {
+            return managedBy.getLocation();
+        }
+        else if(this.status == PackageStatus.OUT_FOR_DELIVERY)
+        {
+            return deliveredBy.getLocation();
+        }
+        else
+        {
+            return issuedTo.getLocation();
+        }
     }
 
 }

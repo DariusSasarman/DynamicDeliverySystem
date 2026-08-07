@@ -12,6 +12,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -98,5 +100,33 @@ public class Schedule {
             entrySummaries.add(entry.toSummary());
         }
         return new ScheduleSummary(phoneNumber, entrySummaries);
+    }
+
+    public Location getLocation() {
+        DayOfWeek currentDay = LocalDateTime.now().getDayOfWeek();
+        int currentHour = LocalDateTime.now().getHour();
+        List<Entry> validEntries = new ArrayList<>(scheduleEntries);
+        validEntries.removeIf(entry -> !entry.getValidDays().contains(currentDay));
+        validEntries.removeIf(entry -> currentHour < entry.getFrom() || currentHour >= entry.getTo());
+
+        if (validEntries.isEmpty()) {
+            return null;
+        }
+
+        if(validEntries.size() != 1) {
+            throw new IllegalStateException("There should be exactly one valid entry for the current time, but found: " + validEntries.size());
+        }
+
+        return validEntries.get(0).getLocation();
+    }
+
+    public Object getAvailableFrom() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAvailableFrom'");
+    }
+
+    public String getAvailableUntil() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAvailableUntil'");
     }
 }

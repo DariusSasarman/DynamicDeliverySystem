@@ -34,6 +34,7 @@ function ConfirmDelivery() {
 
         try {
             const success = await sendDeliveryConfirmation(
+                getStoredAuthToken(),
                 targetDelivery.id,
                 deliveryCode
             );

@@ -32,4 +32,22 @@ public class BasicUser extends User {
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
     }
+
+    @Override
+    public String getRole() {
+        return "BASIC";
+    }
+
+    @Override
+    public Location getLocation() {
+        return schedule.getLocation();
+    }
+
+    public String getAvailableFrom() {
+        return schedule.getAvailableFrom().toString() +":00";
+    }
+
+    public String getAvailableUntil() {
+        return schedule.getAvailableUntil().toString() +":00";
+    }
 }

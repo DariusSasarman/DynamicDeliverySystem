@@ -1,33 +1,80 @@
-export async function getNearestPackage(currentPos, authToken) {
-  // Sends the location and the back-end saves it
-  return {
-    id: 15,
-    pos: [57.12, 43.9],
-  };
+export async function getNearestPackage(
+  currentPos: number[],
+  authToken: string
+) {
+  const response = await fetch(
+    `/api/delivery/nearest-package?longitude=${currentPos[0]}&latitude=${currentPos[1]}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch nearest package");
+  }
+
+  return await response.json();
 }
 
-export async function getAssignedPackageList(authToken)
-{
-  await new Promise((resolve) => setTimeout(resolve, 50));
-  return [{ id: 124, pos: [9, 3] }, {id : 121, pos: [9,8]}];
+export async function getAssignedPackageList(authToken: string) {
+  const response = await fetch(
+    "/api/delivery/get-assigned-packages",
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch assigned package list");
+  }
+
+  return await response.json();
 }
 
-export async function getPackageDetails(authToken, packageId) {
-  await new Promise((resolve) => setTimeout(resolve, 300));
+export async function getPackageDetails(
+  authToken: string,
+  packageId: number
+) {
+  const response = await fetch(
+    `/api/delivery/get-package-details?packageId=${packageId}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    }
+  );
 
-  return {
-    type: "Drop-off",
-    phoneNumber: "0712 345 678",
-    coordinates: {
-      latitude: 46.7712,
-      longitude: 23.6236,
-    },
-    availableFrom: "09:00",
-    availableUntil: "17:00",
-  };
+  if (!response.ok) {
+    throw new Error("Failed to fetch package details");
+  }
+
+  return await response.json();
 }
 
-export async function getDeliveryCode(packageId)
-{
-  return "Placeholder";
+export async function getDeliveryCode(
+  packageId: number,
+  authToken: string
+) {
+  const response = await fetch(
+    `/api/delivery/get-delivery-code?packageId=${packageId}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch delivery code");
+  }
+
+  return await response.text();
 }

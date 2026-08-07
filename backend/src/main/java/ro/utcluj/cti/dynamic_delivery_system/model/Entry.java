@@ -117,7 +117,7 @@ public class Entry {
             to, 
             validDays.stream()
                 .map(DayOfWeek::name)
-                .map(s -> s.substring(0, Math.min(s.length(), 3)))
+                .map(s -> s.substring(0, 1).toUpperCase() + s.substring(1, Math.min(s.length(), 3)).toLowerCase())
                 .toList(), 
             new ArrayList<>(
                 List.of(

@@ -30,6 +30,7 @@ import ro.utcluj.cti.dynamic_delivery_system.repos.InvoiceRepository;
 import ro.utcluj.cti.dynamic_delivery_system.repos.PackageRepository;
 import ro.utcluj.cti.dynamic_delivery_system.repos.ComplaintRepository;
 import ro.utcluj.cti.dynamic_delivery_system.repos.UserRepository;
+import ro.utcluj.cti.dynamic_delivery_system.model.PointOnMap;
 
 @RestController
 @RequestMapping("/api/basic")
@@ -41,14 +42,6 @@ public class BasicUserController {
     private final InvoiceRepository invoiceRepository;
     private final ComplaintRepository complaintRepository;
 
-    public record PointOnMap(
-            Long id,
-            Double[] pos
-    ) {
-        public PointOnMap(Long id, Double longitude, Double latitude) {
-            this(id, new Double[]{longitude, latitude});
-        }
-    }
 
     @GetMapping("/package-client-list")
     public List<PointOnMap> getPackageClientList(Authentication authentication) {
@@ -190,7 +183,7 @@ public class BasicUserController {
         if(user.getSchedule() == null) {
             throw new ResponseStatusException( HttpStatus.NOT_FOUND, "Schedule not found" );
         }
-        return user.getSchedule().toSummary(email);
+        return user.getSchedule().toSummary(user.getPhoneNumber());
     }
 
     @PostMapping("/save-schedule")

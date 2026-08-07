@@ -31,7 +31,7 @@ function FileComplaint() {
         try {
             await sendComplaint(
                 getStoredAuthToken(),
-                activePackage.id,
+                activePackage,
                 complaint
             );
 
@@ -51,10 +51,10 @@ function FileComplaint() {
                 <>
                 <h3>Here are your last delivered packages</h3>
                 {deliveredPackageList.length > 0 ? (
-                    deliveredPackageList.map((pkg) => (
+                    deliveredPackageList.map((pkgId) => (
                         <button
-                            key={pkg.id}
-                            onClick={() => setActivePackage(pkg)}
+                            key={pkgId}
+                            onClick={() => setActivePackage(pkgId)}
                             style={{
                                 display: "block",
                                 width: "90%",
@@ -63,7 +63,7 @@ function FileComplaint() {
                                 cursor: "pointer",
                             }}
                         >
-                            Package #{pkg.id}
+                            Package #{pkgId}
                         </button>
                     )
                     )
@@ -73,7 +73,7 @@ function FileComplaint() {
                 </>
             ) : (
                 <>
-                    <h4>Package #{activePackage.id}</h4>
+                    <h4>Package #{activePackage}</h4>
 
                     <textarea
                         value={complaint}
