@@ -22,10 +22,15 @@ public class DeliveryUser extends User {
     @Embedded
     private Location lastKnownLocation;
 
-    public DeliveryUser(Long id, String name, String email, String password, Manager madeBy, LocalDateTime createdAt) {
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private Manager manager;
+
+    public DeliveryUser(Long id, String name, String email, String password, Manager madeBy, LocalDateTime createdAt, Manager manager) {
         super(id, name, email, password, AccountTypes.DELIVERY, createdAt);
         this.madeBy = madeBy;
         this.lastKnownLocation = null;
+        this.manager = manager;
     }
 
     public void setLastKnownLocation(Location lastKnownLocation) {

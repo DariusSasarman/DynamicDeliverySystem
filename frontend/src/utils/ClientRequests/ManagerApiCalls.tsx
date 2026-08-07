@@ -1,11 +1,19 @@
 
 export async function getAssignedCouriers(_authToken: string)
 {
-    await new Promise((resolve) => setTimeout(resolve, 50));
-    return [
-        {email : "gigel@gmail.com", pos:[15,15]},
-        {email : "marcel@gmail.com", pos:[15.2,15.2]},
-    ];
+    const response = await fetch("/api/manager/get-assigned-couriers", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${_authToken}`,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch assigned couriers");
+    }
+
+    return response.json();
 }
 
 export async function getPickedUpPackages(_authToken: string)
