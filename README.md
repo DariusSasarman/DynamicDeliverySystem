@@ -9,15 +9,6 @@ Basically, for each day of the week, the user can **define the time periods and 
 
 Using this schedule (*without needing to know ahead of time*), the courier can now do their job, at the **right place and at the right time ** - not just "Leave it at the entrance" or "It's been placed in an easybox where you can pick it up".
 
-## Roadmap : 
-  - [x] Define the use-cases 
-  - [x] Determine the general architecture of the project
-  - [x] Design the classes this system relies upon, in a class diagram 
-  - [ ] Translate the class diagram into a back-end implementation
-  - [x] Provide a user-friendly front-end web interface
-  - [x] Have said implementation talk to an nginx reverse proxy
-  - [x] Tie it all up with a docker-compose.yml file so it builds nicely and not only "Works on my machine"
-
 ## Use case diagram
 
 <img width="879" height="622" alt="Untitled Diagram drawio(1)" src="https://github.com/user-attachments/assets/1977eafb-48e5-4be5-ad63-d0d7408315bc" />

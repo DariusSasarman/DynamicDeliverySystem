@@ -1,16 +1,29 @@
 export async function getInvoiceCount(authToken: String) {
-  await new Promise((resolve) => setTimeout(resolve, 50));
-  return 2;
+  const response = await fetch("/api/invoice/count", {
+    headers: {
+      "Authorization": `Bearer ${authToken}`
+    }
+  });
+  return response.json();
 }
 
 export async function getInvoiceList(authToken: string) {
-  await new Promise((resolve) => setTimeout(resolve, 50));
-  return [
-    { id: 123, text: "Please define your schedule" }, 
-    { id: 145, text: "A new package coming towards you" },
-  ];
+  const response = await fetch("/api/invoice/list", {
+    headers: {
+      "Authorization": `Bearer ${authToken}`
+    }
+  });
+  return response.json();
 }
 
-export async function confirmInvoice(invoiceId) {
-  await new Promise((resolve) => setTimeout(resolve, 50));
+export async function confirmInvoice(authToken: string, invoiceId: number) {
+  const response = await fetch("/api/invoice/confirm", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${authToken}`,
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: `invoiceId=${invoiceId}`
+  });
+  return response.json();
 }

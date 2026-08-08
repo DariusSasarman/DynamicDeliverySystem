@@ -10,9 +10,7 @@ import ro.utcluj.cti.dynamic_delivery_system.model.Schedule.ScheduleSummary;
 import ro.utcluj.cti.dynamic_delivery_system.model.User;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.security.core.Authentication;
@@ -45,33 +43,25 @@ public class BasicUserController {
 
     @GetMapping("/package-client-list")
     public List<PointOnMap> getPackageClientList(Authentication authentication) {
-        String email = authentication.getName();
-        List<PointOnMap> points = new ArrayList<>();
-        packageRepository.findByIssuedToEmail(email)
+        return packageRepository.findByIssuedToEmail(authentication.getName())
                 .stream()
                 .filter(pkg -> pkg.getStatus().equals(PackageStatus.OUT_FOR_DELIVERY))
                 .filter(pkg -> pkg.getDeliveredBy() != null && pkg.getDeliveredBy().getLastKnownLocation() != null)
-                .forEach(pkg -> {
-                    points.add(new PointOnMap(
-                            pkg.getId(),
-                            pkg.getDeliveredBy().getLastKnownLocation().getLongitude(),
-                            pkg.getDeliveredBy().getLastKnownLocation().getLatitude()));
-                });
-        return points;
+                .map(pkg -> new PointOnMap(
+                        pkg.getId(),
+                        pkg.getDeliveredBy().getLastKnownLocation().getLongitude(),
+                        pkg.getDeliveredBy().getLastKnownLocation().getLatitude()))
+                .toList();
     }
 
     @GetMapping("/delivered-package-client-list")
     public List<Long> getDeliveredPackageClientList(Authentication authentication) {
-        String email = authentication.getName();
-        List<Long> packageIds = new ArrayList<>();
-        packageRepository.findByIssuedToEmail(email)
+        return packageRepository.findByIssuedToEmail(authentication.getName())
                 .stream()
                 .filter(pkg -> pkg.getStatus().equals(PackageStatus.DELIVERED))
                 .filter(pkg -> pkg.getDeliveredBy() != null)
-                .forEach(pkg -> {
-                    packageIds.add(pkg.getId());
-                });
-        return packageIds;
+                .map(pkg -> pkg.getId())
+                .toList();
     }
 
     public record DeliveryConfirmationRequest(
@@ -79,29 +69,29 @@ public class BasicUserController {
             String deliveryCode) {
     }
 
+    public record ConfirmationResponse(
+            boolean confirmation) {
+    }
+
     @PostMapping("/delivery-confirmation")
-    public Map<String, Boolean> getDeliveryConfirmation(
+    public ConfirmationResponse getDeliveryConfirmation(
             Authentication authentication,
             @RequestBody DeliveryConfirmationRequest request) {
-        String email = authentication.getName();
 
-        Long packageId = request.packageId();
-        String deliveryCode = request.deliveryCode();
-
-        boolean valid = packageRepository.findByIssuedToEmail(email)
+        boolean valid = packageRepository.findByIssuedToEmail(authentication.getName())
                 .stream()
-                .anyMatch(pkg -> pkg.getId().equals(packageId) &&
+                .anyMatch(pkg -> pkg.getId().equals(request.packageId()) &&
                         pkg.getStatus().equals(PackageStatus.OUT_FOR_DELIVERY) &&
-                        pkg.getConfirmationCode().equals(deliveryCode));
+                        pkg.getConfirmationCode().equals(request.deliveryCode()));
 
         if (valid) {
-            packageRepository.findById(packageId).ifPresent(pkg -> {
+            packageRepository.findById(request.packageId()).ifPresent(pkg -> {
                 pkg.hasBeenDelivered(java.time.LocalDateTime.now());
                 packageRepository.save(pkg);
             });
         }
 
-        return Map.of("confirmation", valid);
+        return new ConfirmationResponse(valid);
     }
 
     public record PickupRequest(
@@ -111,33 +101,24 @@ public class BasicUserController {
     
     @PostMapping("/pickup-request")
     @Transactional
-    public Map<String, Boolean> sendPickupRequest(
+    public ConfirmationResponse sendPickupRequest(
             Authentication authentication,
             @RequestBody PickupRequest request) {
-        String email = authentication.getName();
         
-        if(email.equalsIgnoreCase(request.receiverEmail()) || request.pickUpDate().isBefore(LocalDateTime.now())) {
-            
-            throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Invalid pickup request" );
-            
+        if(request.pickUpDate() == null || request.receiverEmail() == null || request.receiverEmail().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid request data");
         }
 
-        Optional<User> issuedByRetrieval = userRepository.findByEmailIgnoreCase(email);
-        if(issuedByRetrieval.isEmpty()) {
-            throw new ResponseStatusException( HttpStatus.NOT_FOUND, "User not found" );
+        if(request.pickUpDate().isBefore(LocalDateTime.now())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pick-up date cannot be in the past");
         }
 
-        if(!(issuedByRetrieval.get() instanceof BasicUser issuedBy)) {
-            throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Invalid user type" );
+        if(request.receiverEmail().equalsIgnoreCase(authentication.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot send a package to yourself");
         }
-
-        Optional<User> issuedToRetrieval = userRepository.findByEmailIgnoreCase(request.receiverEmail());
-        if(issuedToRetrieval.isEmpty()) {
-            throw new ResponseStatusException( HttpStatus.NOT_FOUND, "User not found" );
-        }
-        if(!(issuedToRetrieval.get() instanceof BasicUser issuedTo)) {
-            throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Invalid user type" );
-        }
+        
+        BasicUser issuedBy = findBasicUserByEmail(authentication.getName());
+        BasicUser issuedTo = findBasicUserByEmail(request.receiverEmail());
 
         if(issuedBy.getSchedule() == null || issuedBy.getSchedule().getAverageLocation() == null) {
             throw new ResponseStatusException( HttpStatus.NOT_FOUND, "Schedule not found" );
@@ -165,44 +146,30 @@ public class BasicUserController {
         invoiceRepository.save(invoice);
         invoiceRepository.save(invoice2);
 
-        return Map.of("success", true);
+        return new ConfirmationResponse(true);
     }
 
 
     @GetMapping("/get-schedule")
     @Transactional
     public ScheduleSummary getSchedule(Authentication authentication) {
-        String email = authentication.getName();
-        Optional<User> userRetrieval = userRepository.findByEmailIgnoreCase(email);
-        if(userRetrieval.isEmpty()) {
-            throw new ResponseStatusException( HttpStatus.NOT_FOUND, "User not found" );
-        }
-        if(!(userRetrieval.get() instanceof BasicUser user)) {
-            throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Invalid user type" );
-        }
+        BasicUser user = findBasicUserByEmail(authentication.getName());
         if(user.getSchedule() == null) {
-            throw new ResponseStatusException( HttpStatus.NOT_FOUND, "Schedule not found" );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found");
         }
         return user.getSchedule().toSummary(user.getPhoneNumber());
     }
 
     @PostMapping("/save-schedule")
     @Transactional
-    public Map<String, Boolean> saveSchedule(Authentication authentication, @RequestBody ScheduleSummary scheduleSummary) {
+    public ConfirmationResponse saveSchedule(Authentication authentication, @RequestBody ScheduleSummary scheduleSummary) {
         String email = authentication.getName();
-        Optional<User> userRetrieval = userRepository.findByEmailIgnoreCase(email);
-        if(userRetrieval.isEmpty()) {
-            throw new ResponseStatusException( HttpStatus.NOT_FOUND, "User not found" );
-        }
-        if(!(userRetrieval.get() instanceof BasicUser user)) {
-            throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Invalid user type" );
-        }
-        if(user.getSchedule() == null) {
-            throw new ResponseStatusException( HttpStatus.NOT_FOUND, "Schedule not found" );
-        }
+
+        BasicUser user = findBasicUserByEmail(email);
 
         user.setSchedule(scheduleSummary.toSchedule());
         userRepository.save(user);
+
 
         packageRepository.findByIssuedToEmail(email)
                 .stream()
@@ -219,38 +186,48 @@ public class BasicUserController {
                     Invoice invoice = new Invoice(pkg.getManagedBy(), pkg.getDeliveredBy(), "The sender has updated their schedule. Please check the new schedule for pick-up.");
                     invoiceRepository.save(invoice);
                 });
-        return Map.of("success", true);
+        return new ConfirmationResponse(true);
+    }
+
+    private record ComplaintInitiationRequest(Long deliveryID, String text) {
     }
 
     @PostMapping("/send-complaint")
     @Transactional
-    public Map<String, Boolean> sendComplaint(Authentication authentication, @RequestBody Map<String, String> request) {
+    public ConfirmationResponse sendComplaint(Authentication authentication, @RequestBody ComplaintInitiationRequest request) {
         String email = authentication.getName();
-        Long deliveryID = Long.parseLong(request.get("deliveryID"));
-        String text = request.get("text");
 
-        Optional<User> userRetrieval = userRepository.findByEmailIgnoreCase(email);
-        if(userRetrieval.isEmpty()) {
-            throw new ResponseStatusException( HttpStatus.NOT_FOUND, "User not found" );   
+        Long deliveryID = request.deliveryID();
+        if(deliveryID == null || deliveryID <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid delivery ID");
         }
 
-        if(!(userRetrieval.get() instanceof BasicUser user)) {
-            throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Invalid user type" );
+        String text = request.text();
+        if(text == null || text.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Complaint text cannot be empty");
         }
 
-        Optional<Package> packageRetrieval = packageRepository.findById(deliveryID);
-        if(packageRetrieval.isEmpty()) {
-            throw new ResponseStatusException( HttpStatus.NOT_FOUND, "Package not found" );
-        }
+        BasicUser user = findBasicUserByEmail(email);
 
-        Package pkg = packageRetrieval.get();
-        if(!pkg.getIssuedTo().getEmail().equalsIgnoreCase(email)) {
-            throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "You are not the recipient of this package" );
+        Package pkg = packageRepository.findById(deliveryID)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Package not found"));
+
+        if(pkg.getIssuedTo() == null || !pkg.getIssuedTo().getEmail().equalsIgnoreCase(user.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can only file complaints for packages issued to you");
         }
 
         Complaint complaint = new Complaint(user,pkg, text);
         complaintRepository.save(complaint);
 
-        return Map.of("success", true);
+        return new ConfirmationResponse(true);
+    }
+
+    private BasicUser findBasicUserByEmail(String email) {
+        User user = userRepository.findByEmailIgnoreCase(email)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        if (!(user instanceof BasicUser basicUser)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user type");
+        }
+        return basicUser;
     }
 }

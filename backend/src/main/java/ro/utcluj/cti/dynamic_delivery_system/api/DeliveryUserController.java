@@ -20,7 +20,6 @@ import ro.utcluj.cti.dynamic_delivery_system.model.BasicUser;
 import ro.utcluj.cti.dynamic_delivery_system.model.DeliveryUser;
 import ro.utcluj.cti.dynamic_delivery_system.model.Location;
 import ro.utcluj.cti.dynamic_delivery_system.model.PointOnMap;
-import ro.utcluj.cti.dynamic_delivery_system.model.User;
 import ro.utcluj.cti.dynamic_delivery_system.repos.PackageRepository;
 import ro.utcluj.cti.dynamic_delivery_system.repos.UserRepository;
 import ro.utcluj.cti.dynamic_delivery_system.model.Package;
@@ -99,8 +98,8 @@ public class DeliveryUserController {
         Package pkg = packageRepository.findById(packageId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Package not found"));
         
-        boolean isDelivery = deliveryUser.equals(pkg.getDeliveredBy());
-        boolean isPickup = deliveryUser.equals(pkg.getPickUpBy());
+        boolean isDelivery = pkg.getDeliveredBy() != null && deliveryUser.getEmail().equalsIgnoreCase(pkg.getDeliveredBy().getEmail());
+        boolean isPickup = pkg.getPickUpBy() != null && deliveryUser.getEmail().equalsIgnoreCase(pkg.getPickUpBy().getEmail());
 
         if (!isDelivery && !isPickup) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Package is not assigned to the delivery user");
@@ -124,7 +123,7 @@ public class DeliveryUserController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Package not found"));
         
 
-        if (!deliveryUser.equals(pkg.getDeliveredBy())) {
+        if (pkg.getDeliveredBy() == null || !deliveryUser.getEmail().equalsIgnoreCase(pkg.getDeliveredBy().getEmail())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Package is not assigned to the delivery user");
         }
 
@@ -132,12 +131,11 @@ public class DeliveryUserController {
     }
 
     private DeliveryUser getDeliveryUserFromAuthentication(Authentication authentication) {
-        String email = authentication.getName();
-        User user = userRepository.findByEmailIgnoreCase(email)
+        return userRepository.findByEmailIgnoreCase(authentication.getName())
+                .filter(DeliveryUser.class::isInstance)
+                .map(DeliveryUser.class::cast)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found."));
-        if (!(user instanceof DeliveryUser)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not a delivery user");
-        }
-        return (DeliveryUser) user;
     }
+
+    
 }

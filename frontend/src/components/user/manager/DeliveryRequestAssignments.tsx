@@ -32,7 +32,7 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
   
   const postAssignment = async () => {
     try {
-      await AssignPackage(activePackage.id, activeCourier.email);
+      await AssignPackage(getStoredAuthToken(),activePackage.id, activeCourier.email);
       window.location.reload();
     } catch (error) {
       console.error("Failed to execute assignment", error);

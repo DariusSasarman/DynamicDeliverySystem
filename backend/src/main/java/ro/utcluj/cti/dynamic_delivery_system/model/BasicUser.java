@@ -50,4 +50,12 @@ public class BasicUser extends User {
     public String getAvailableUntil() {
         return schedule.getAvailableUntil().toString() +":00";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof BasicUser)) return false;
+        BasicUser other = (BasicUser) obj;
+        return this.getId().equals(other.getId());
+    }
 }

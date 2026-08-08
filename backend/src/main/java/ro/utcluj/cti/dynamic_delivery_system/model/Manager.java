@@ -37,4 +37,12 @@ public class Manager extends User {
     public Location getLocation() {
         return managingLocation;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Manager)) return false;
+        Manager other = (Manager) obj;
+        return this.getId() != null && this.getId().equals(other.getId());
+    }
 }

@@ -22,7 +22,7 @@ function InvoiceView() {
         setLoadingId(invoiceId);
 
         try {
-            await confirmInvoice(invoiceId);
+            await confirmInvoice(getStoredAuthToken(), invoiceId);
 
             setInvoicesList((prev) =>
                 prev.filter((invoice) => invoice.id !== invoiceId)

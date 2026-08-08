@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import ro.utcluj.cti.dynamic_delivery_system.model.DeliveryUser;
 import ro.utcluj.cti.dynamic_delivery_system.model.Location;
+import ro.utcluj.cti.dynamic_delivery_system.model.Manager;
 import ro.utcluj.cti.dynamic_delivery_system.model.Package;
 import ro.utcluj.cti.dynamic_delivery_system.model.PackageStatus;
 
@@ -16,6 +17,7 @@ public interface PackageRepository extends JpaRepository<Package, Long> {
     List<Package> findByIssuedToEmail(String email);
     List<Package> findByDeliveredByEmail(String email);
     List<Package> findByIssuedByEmail(String email);
+    List<Package> findByManagedBy(Manager manager);
     List<Package> findByPickUpBy(DeliveryUser deliveryUser);
     List<Package> findByDeliveredBy(DeliveryUser deliveryUser);
 

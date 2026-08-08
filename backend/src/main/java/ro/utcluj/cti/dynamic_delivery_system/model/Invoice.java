@@ -35,6 +35,8 @@ public class Invoice {
     @Column(nullable = false)
     private boolean confirmed;
 
+    public record InvoiceSummary(Long id, String text) {}
+
     public Invoice(Manager issuedBy, User issuedTo, String invoiceDetails) {
         this.issuedBy = issuedBy;
         this.issuedTo = issuedTo;
@@ -46,4 +48,7 @@ public class Invoice {
         this.confirmed = true;
     }
     
+    public InvoiceSummary toInvoiceSummary() {
+        return new InvoiceSummary(this.id, this.invoiceDetails);
+    }
 }

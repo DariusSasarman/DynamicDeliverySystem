@@ -32,8 +32,8 @@ function SendInvoices() {
     try {
       setSending(true);
       setStatus(null);
-      await sendInvoice(trimmedEmail, trimmedMessage);
-
+      await sendInvoice(getStoredAuthToken(),trimmedEmail, trimmedMessage);
+      
       setStatus({ type: "success", text: "Invoice sent successfully!" });
       setEmail("");
       setMessage("");

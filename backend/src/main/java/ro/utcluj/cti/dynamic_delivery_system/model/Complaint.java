@@ -4,6 +4,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,6 +22,9 @@ import jakarta.persistence.Table;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Complaint {
+
+    public record ComplaintSummary(Long id, Long packageId, String deliveredOn, String courierEmail, String complaintText) {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,4 +56,13 @@ public class Complaint {
         this.solutionInvoice = solutionInvoice;
     }
     
+    public ComplaintSummary toSummary() {
+        return new ComplaintSummary(
+            this.id,
+            this.regardingPackage.getId(),
+            this.regardingPackage.getDeliveryDate().toString(),
+            this.regardingPackage.getDeliveredBy().getEmail(),
+            this.description
+        );
+    }
 }

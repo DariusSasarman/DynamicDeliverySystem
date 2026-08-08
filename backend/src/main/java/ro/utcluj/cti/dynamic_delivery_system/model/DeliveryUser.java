@@ -47,4 +47,11 @@ public class DeliveryUser extends User {
         return lastKnownLocation;  
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof DeliveryUser)) return false;
+        DeliveryUser other = (DeliveryUser) obj;
+        return this.getId().equals(other.getId());
+    }
 }

@@ -18,50 +18,110 @@ export async function getAssignedCouriers(_authToken: string)
 
 export async function getPickedUpPackages(_authToken: string)
 {
-    await new Promise((resolve) => setTimeout(resolve, 50));
-    return [ {id : 124}, {id : 123}];
+    const response = await fetch("/api/manager/picked-up-packages", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${_authToken}`,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch picked up packages");
+    }
+    
+    const ids: number[] = await response.json();
+
+    return ids.map(id => ({ id }));
 }
 
 export async function getPickUpRequests(_authToken: string)
 {
-    await new Promise((resolve) => setTimeout(resolve, 50));
-    return [ {id : 125}, {id : 126}];
+    const response = await fetch("/api/manager/pick-up-requests", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${_authToken}`,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch pickup requests");
+    }
+    
+    const ids: number[] = await response.json();
+
+    return ids.map(id => ({ id }));
 }
 
-export async function AssignPackage(_packageId: number, _courierEmail: string) {
-    await new Promise((resolve) => setTimeout(resolve, 50));
+export async function AssignPackage(_authToken: string, _packageId: number, _courierEmail: string) {
+    const response = await fetch("/api/manager/assign-package", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${_authToken}`,
+        },
+        body: JSON.stringify({ packageId: _packageId, courierEmail: _courierEmail }),
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to assign package");
+    }
+
+    return response.json();
 }
 
 export async function getComplaintsList(_authToken: string)
 {
-    await new Promise((resolve) => setTimeout(resolve, 50));
-      return [
-    {
-      id: 1,
-      packageId: 1042,
-      deliveredOn: "2026-07-18",
-      courierEmail: "andrei.pop@delivery.com",
-      complaintText:
-        "Package was left outside the building instead of handed to the recipient as requested.",
-    },
-    {
-      id: 2,
-      packageId: 987,
-      deliveredOn: "2026-07-19",
-      courierEmail: "maria.ionescu@delivery.com",
-      complaintText:
-        "Box arrived visibly damaged on one corner; contents (ceramic mug) were broken.",
-    },];
+    const response = await fetch("/api/manager/get-complaints", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${_authToken}`,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch complaints list");
+    }
+
+    return response.json();
 }
 
 export async function resolveComplaint(_authToken: string, _complaintId: number, _replyText: string)
 {
+    const response = await fetch("/api/manager/resolve-complaint", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${_authToken}`,
+        },
+        body: JSON.stringify({ complaintId: _complaintId, replyText: _replyText }),
+    });
 
+    if (!response.ok) {
+        throw new Error("Failed to resolve complaint");
+    }
+
+    return response.json();
 }
 
-export async function sendInvoice(_clientEmail: string, _text: string)
+export async function sendInvoice(_authToken: string, _clientEmail: string, _text: string)
 {
+    const response = await fetch("/api/manager/send-invoice", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${_authToken}`,
+        },
+        body: JSON.stringify({ clientEmail: _clientEmail, text: _text }),
+    });
 
+    if (!response.ok) {
+        throw new Error("Failed to send invoice");
+    }
+
+    return response.json();
 }
 
 

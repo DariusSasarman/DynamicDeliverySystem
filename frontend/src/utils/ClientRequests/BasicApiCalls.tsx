@@ -84,7 +84,7 @@ export async function sendPickupRequest(authToken: string, pickUpDate: string, r
 
     const data = await response.json();
 
-    if (!data.success) {
+    if (!data.confirmation) {
         throw new Error("Failed to send pickup request");
     }
 
@@ -124,7 +124,7 @@ export async function saveSchedule(authToken: string, schedule: any)
 
   const data = await response.json();
 
-  if (!data.success) {
+  if (!data.confirmation) {
       throw new Error("Failed to save schedule");
   }
 
@@ -151,7 +151,7 @@ export async function sendComplaint(authToken: string, deliveryID: number, text:
 
   const data = await response.json();
 
-  if (!data.success) {
+  if (!data.confirmation) {
       throw new Error("Failed to send complaint");
   }
 

@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import ro.utcluj.cti.dynamic_delivery_system.api.PackageRepository;
+import ro.utcluj.cti.dynamic_delivery_system.repos.PackageRepository;
 import ro.utcluj.cti.dynamic_delivery_system.model.User;
 
 @Service
@@ -61,8 +61,5 @@ public class JwtService {
         return claims.getSubject() != null && claims.getExpiration() != null && claims.getExpiration().after(new Date());
     }
 
-    public PackageRepository getPackageRepositoryFromAuthentication(Authentication authentication) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPackageRepositoryFromAuthentication'");
-    }
+    
 }

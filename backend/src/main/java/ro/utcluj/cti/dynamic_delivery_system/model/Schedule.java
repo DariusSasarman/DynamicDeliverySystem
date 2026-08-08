@@ -120,13 +120,19 @@ public class Schedule {
         return validEntries.get(0).getLocation();
     }
 
-    public Object getAvailableFrom() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAvailableFrom'");
+    public Integer getAvailableFrom() {
+        return scheduleEntries.stream()
+                .filter(entry -> entry.getValidDays().contains(LocalDateTime.now().getDayOfWeek()))
+                .min((e1, e2) -> Integer.compare(e1.getFrom(), e2.getFrom()))
+                .map(Entry::getFrom)
+                .orElse(null);
     }
 
-    public String getAvailableUntil() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAvailableUntil'");
+    public Integer getAvailableUntil() {
+        return scheduleEntries.stream()
+                .filter(entry -> entry.getValidDays().contains(LocalDateTime.now().getDayOfWeek()))
+                .max((e1, e2) -> Integer.compare(e1.getTo(), e2.getTo()))
+                .map(Entry::getTo)
+                .orElse(null);  
     }
 }

@@ -1,7 +1,18 @@
 spring:
   application:
     name: dynamic-delivery-system
-
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/${DB_NAME:delivery_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    username: ${DB_USER:delivery_user}
+    password: ${DB_PASSWORD:delivery_password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
 app:
   security:
     jwt:
