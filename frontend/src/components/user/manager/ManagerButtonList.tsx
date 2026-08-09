@@ -4,6 +4,7 @@ import ResolveComplaints from "./ResolveComplaints";
 import SendInvoices from "./SendInvoices";
 import DeliveryRequestAssignments from "./DeliveryRequestAssignments";
 import { getPickedUpPackages, getPickUpRequests } from "../../../utils/ClientRequests/ManagerApiCalls";
+import TransferPackage from "./TransferPackage";
 export const getManagerButtonList = (setActiveView : any) => [
   {
     label: "Track couriers",
@@ -35,4 +36,8 @@ export const getManagerButtonList = (setActiveView : any) => [
     label: "Add official account",
     onClick: () => setActiveView(() => CreateOfficialAccounts),
   },
+  {
+    label: "Transfer Package to an other station",
+    onClick: () => setActiveView(() => TransferPackage),
+  }
 ];
