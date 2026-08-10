@@ -1,25 +1,32 @@
 import React, { useEffect, useState } from "react";
-import {
-  AssignPackage,
-  getAssignedCouriers,
-} from "../../../utils/ClientRequests/ManagerApiCalls";
 import { getStoredAuthToken } from "../../../utils/InternalUtils";
-import "../../general/GeneralView.css"
+import "../../general/GeneralView.css";
 
-function DeliveryRequestAssignments( {getPackageList,type}) {
-  const [courierList, setCourierList] = useState([]);
-  const [activeCourier, setActiveCourier] = useState(null);
+function DeliveryRequestAssignments({
+  getPackageList,
+  getRecipientList,
+  assignFunction,
+  recipientLabel,
+  type,
+}) {
+  const [recipientList, setRecipientList] = useState([]);
+  const [activeRecipient, setActiveRecipient] = useState(null);
 
-  const [pickUpList, setPickUpList] = useState([]);
+  const [packageList, setPackageList] = useState([]);
   const [activePackage, setActivePackage] = useState(null);
 
   useEffect(() => {
     const fetchList = async () => {
       try {
-        const fetchedCourierList = await getAssignedCouriers(getStoredAuthToken());
-        const fetchedPickUpList = await getPackageList(getStoredAuthToken());
-        setCourierList(fetchedCourierList);
-        setPickUpList(fetchedPickUpList);
+        const fetchedRecipientList = await getRecipientList(
+          getStoredAuthToken()
+        );
+        const fetchedPackageList = await getPackageList(
+          getStoredAuthToken()
+        );
+
+        setRecipientList(fetchedRecipientList);
+        setPackageList(fetchedPackageList);
       } catch (error) {
         console.error("Failed to fetch list", error);
         alert("Couldn't load list.");
@@ -27,20 +34,24 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
     };
 
     fetchList();
-  }, []);
+  }, [getPackageList, getRecipientList]);
 
-  
   const postAssignment = async () => {
     try {
-      await AssignPackage(getStoredAuthToken(),activePackage.id, activeCourier.email);
+      await assignFunction(
+        getStoredAuthToken(),
+        activePackage.id,
+        activeRecipient.email
+      );
+
       window.location.reload();
     } catch (error) {
       console.error("Failed to execute assignment", error);
-      alert("Couldn't assign package");
+      alert("Couldn't complete operation.");
     }
   };
 
-    return (
+  return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <div className="active-card" style={{ width: "380px" }}>
         {!activePackage && (
@@ -52,7 +63,7 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
                 color: "#222f68",
               }}
             >
-              Pick-up requests
+              Available packages
             </h2>
 
             <p
@@ -61,7 +72,7 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
                 marginBottom: "24px",
               }}
             >
-              Select a pick-up request.
+              Select a package.
             </p>
 
             <div
@@ -71,7 +82,7 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
                 gap: "12px",
               }}
             >
-              {pickUpList.length === 0 ? (
+              {packageList.length === 0 ? (
                 <p
                   style={{
                     color: "#222f68",
@@ -81,7 +92,7 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
                   No packages available.
                 </p>
               ) : (
-                pickUpList.map((pkg) => (
+                packageList.map((pkg) => (
                   <button
                     key={pkg.id}
                     onClick={() => setActivePackage(pkg)}
@@ -94,7 +105,8 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
             </div>
           </>
         )}
-        {activePackage && !activeCourier && (
+
+        {activePackage && !activeRecipient && (
           <>
             <h2
               style={{
@@ -103,7 +115,7 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
                 color: "#222f68",
               }}
             >
-              Courier list
+              Recipient list
             </h2>
 
             <p
@@ -112,7 +124,7 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
                 marginBottom: "24px",
               }}
             >
-              Assign a deliverer
+              Select a recipient.
             </p>
 
             <div
@@ -122,37 +134,38 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
                 gap: "12px",
               }}
             >
-              {courierList.length === 0 ? (
+              {recipientList.length === 0 ? (
                 <p
                   style={{
                     color: "#222f68",
                     textAlign: "center",
                   }}
                 >
-                  No couriers available.
+                  No recipients available.
                 </p>
               ) : (
-                courierList.map((c) => (
+                recipientList.map((recipient) => (
                   <button
-                    key={c.email}
-                    onClick={() => setActiveCourier(c)}
+                    key={recipient.email}
+                    onClick={() => setActiveRecipient(recipient)}
                     className="buttonStyle"
                   >
-                    👤 Courier : {c.email}
+                    {recipientLabel}: {recipient.email}
                   </button>
                 ))
               )}
+
               <button
                 className="buttonStyle"
                 onClick={() => setActivePackage(null)}
               >
-                {" "}
                 Back
               </button>
             </div>
           </>
         )}
-        {activeCourier && activePackage && (
+
+        {activePackage && activeRecipient && (
           <>
             <h2
               style={{
@@ -170,7 +183,7 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
                 marginBottom: "24px",
               }}
             >
-              Review the assignment before confirming.
+              Review before confirming.
             </p>
 
             <div
@@ -185,10 +198,12 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
               }}
             >
               <div style={{ color: "#222f68" }}>
-                <strong> {type}</strong> {activePackage.id}
+                <strong>{type}</strong> {activePackage.id}
               </div>
+
               <div style={{ color: "#222f68" }}>
-                <strong>👤 Courier:</strong> {activeCourier.email}
+                <strong>{recipientLabel}:</strong>{" "}
+                {activeRecipient.email}
               </div>
             </div>
 
@@ -201,15 +216,14 @@ function DeliveryRequestAssignments( {getPackageList,type}) {
             >
               <button
                 className="buttonStyle"
-                onClick={async () => {
-                  await postAssignment();
-                }}
+                onClick={postAssignment}
               >
                 Confirm
               </button>
+
               <button
                 className="buttonStyle"
-                onClick={() => setActiveCourier(null)}
+                onClick={() => setActiveRecipient(null)}
               >
                 Back
               </button>

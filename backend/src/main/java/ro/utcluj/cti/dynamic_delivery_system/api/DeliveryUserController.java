@@ -50,7 +50,7 @@ public class DeliveryUserController {
     }
 
     @PostMapping("/nearest-package")
-    @PreAuthorize("hasRole('DELIVERY_USER')")
+    @PreAuthorize("hasRole('DELIVERY')")
     public PointOnMap getNearestPackage(Authentication authentication,
                                         @RequestParam Double longitude,
                                         @RequestParam Double latitude) {
@@ -69,7 +69,7 @@ public class DeliveryUserController {
     }
 
     @GetMapping("/get-assigned-packages")
-    @PreAuthorize("hasRole('DELIVERY_USER')")
+    @PreAuthorize("hasRole('DELIVERY')")
     public List<PointOnMap> getAssignedPackages(Authentication authentication) {
         DeliveryUser deliveryUser = getDeliveryUserFromAuthentication(authentication);
         List<Package> assignedPackages = packageRepository.findByPickUpBy(deliveryUser).stream()
@@ -91,7 +91,7 @@ public class DeliveryUserController {
     }
 
     @GetMapping("/get-package-details")
-    @PreAuthorize("hasRole('DELIVERY_USER')")
+    @PreAuthorize("hasRole('DELIVERY')")
     @Transactional
     public PackageDetails getPackageDetails(Authentication authentication, @RequestParam Long packageId) {
         DeliveryUser deliveryUser = getDeliveryUserFromAuthentication(authentication);
@@ -115,7 +115,7 @@ public class DeliveryUserController {
     }
 
     @GetMapping("/get-delivery-code")
-    @PreAuthorize("hasRole('DELIVERY_USER')")
+    @PreAuthorize("hasRole('DELIVERY')")
     @Transactional
     public String getDeliveryCode(Authentication authentication, @RequestParam Long packageId) {
         DeliveryUser deliveryUser = getDeliveryUserFromAuthentication(authentication);

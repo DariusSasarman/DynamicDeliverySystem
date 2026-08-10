@@ -51,6 +51,10 @@ public class BasicUser extends User {
         return schedule.getAvailableUntil().toString() +":00";
     }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

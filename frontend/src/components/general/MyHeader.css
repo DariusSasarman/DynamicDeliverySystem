@@ -21,9 +21,9 @@
 }
 
 .menuButton {
+  margin-left: auto;
   height: 36px;
   width: 36px;
-  margin-left: 8px;
   margin-right: 8px;
   cursor: pointer;
   background: transparent;
@@ -48,7 +48,6 @@
   font-weight: 700;
   border: 2px solid #ffffff;
   box-shadow: 0 2px 6px rgba(16,24,40,0.08);
-  margin-left: auto;
   margin-right: 8px;
 }
 

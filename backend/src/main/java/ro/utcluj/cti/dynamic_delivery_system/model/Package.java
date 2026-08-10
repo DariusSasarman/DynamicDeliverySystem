@@ -3,6 +3,7 @@ package ro.utcluj.cti.dynamic_delivery_system.model;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,8 +14,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "packages")
@@ -46,6 +51,14 @@ public class Package {
     @JoinColumn(name = "issued_to_id", nullable = false)
     private BasicUser issuedTo;
 
+    @OneToMany(
+        mappedBy = "pkg",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    @OrderBy("timestamp ASC")
+    private List<ChainOfOwnership> chainOfOwnership = new ArrayList<>();
+    
     @Column(name = "pickup_date")
     private LocalDateTime pickUpDate;
 
@@ -67,6 +80,8 @@ public class Package {
         deliveredBy = null;
         pickUpDate = null;
         deliveryDate = null;
+
+        chainOfOwnership.add(new ChainOfOwnership(this, issuedBy, LocalDateTime.now()));
     }
 
     public void setPickUpBy(DeliveryUser pickUpBy, LocalDateTime pickUpDate) {
@@ -77,6 +92,7 @@ public class Package {
     public void hasBeenPickedUp(LocalDateTime pickUpDate) {
         status = PackageStatus.PICKED_UP;
         this.pickUpDate = pickUpDate;
+        chainOfOwnership.add(new ChainOfOwnership(this, pickUpBy, LocalDateTime.now()));
     }
 
     public void setManagedBy(Manager managedBy) {
@@ -85,7 +101,14 @@ public class Package {
 
     public void arrivedAtDeposit(LocalDateTime arrivalDate) {
         status = PackageStatus.IN_STORAGE;
-        this.deliveryDate = arrivalDate;
+        chainOfOwnership.add(new ChainOfOwnership(this, managedBy, LocalDateTime.now()));
+    }
+
+    public void initiateManagerTransfer(Manager newManager) {
+        status = PackageStatus.PENDING;
+        this.managedBy = newManager;
+        this.pickUpBy = null;
+        this.pickUpDate = null;
     }
 
     public void setDeliveredBy(DeliveryUser deliveredBy, LocalDateTime deliveryDate) {
@@ -96,6 +119,8 @@ public class Package {
     public void hasBeenDelivered(LocalDateTime deliveryDate) {
         status = PackageStatus.DELIVERED;
         this.deliveryDate = deliveryDate;
+        chainOfOwnership.add(new ChainOfOwnership(this, deliveredBy, LocalDateTime.now()));
+        chainOfOwnership.add(new ChainOfOwnership(this, issuedTo, LocalDateTime.now()));
     }
 
     public String getConfirmationCode() {
@@ -109,27 +134,9 @@ public class Package {
         return String.format("%08X", str.hashCode());
     }
 
+
     public Location getLocation() {
-        if(this.status == PackageStatus.PENDING)
-        {
-            return issuedBy.getLocation();
-        }
-        else if(this.status == PackageStatus.PICKED_UP)
-        {
-            return pickUpBy.getLocation();
-        }
-        else if(this.status == PackageStatus.IN_STORAGE)
-        {
-            return managedBy.getLocation();
-        }
-        else if(this.status == PackageStatus.OUT_FOR_DELIVERY)
-        {
-            return deliveredBy.getLocation();
-        }
-        else
-        {
-            return issuedTo.getLocation();
-        }
+        return chainOfOwnership.getLast().getOwner().getLocation();
     }
 
 }

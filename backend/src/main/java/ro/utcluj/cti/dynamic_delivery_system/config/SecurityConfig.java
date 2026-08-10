@@ -29,7 +29,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/basic/**").hasRole("BASIC")
                         .requestMatchers("/api/delivery/**").hasRole("DELIVERY")
                         .requestMatchers("/api/manager/**").hasRole("MANAGER")
-                        .requestMatchers("/api/none/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

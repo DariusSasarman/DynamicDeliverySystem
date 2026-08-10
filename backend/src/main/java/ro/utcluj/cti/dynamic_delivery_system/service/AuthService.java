@@ -44,7 +44,7 @@ public class AuthService {
                 deriveDisplayName(normalizedEmail),
                 normalizedEmail,
                 passwordEncoder.encode(password),
-                normalizedEmail,
+                "Phone number not provided",
                 now);
         userRepository.save(user);
         return new AuthResponse(jwtService.generateToken(user), user.getAccountType().name(), user.getEmail());
@@ -106,7 +106,7 @@ public class AuthService {
                 normalizedEmail,
                 passwordEncoder.encode(request.password()),
                 Objects.requireNonNullElse(responsibleManager, creator),
-                LocalDateTime.now());
+                LocalDateTime.now(), responsibleManager);
         userRepository.save(deliveryUser);
         return summarize(deliveryUser);
     }

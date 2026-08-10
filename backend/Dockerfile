@@ -12,7 +12,7 @@ WORKDIR /workspace/backend
 
 COPY backend/pom.xml ./
 COPY backend/src ./src
-COPY --from=frontend-build /workspace/frontend/dist ./src/main/resources/static
+COPY --from=frontend-build /workspace/backend/src/main/resources/static ./src/main/resources/static
 RUN mvn -q -DskipTests package
 
 FROM eclipse-temurin:21-jre

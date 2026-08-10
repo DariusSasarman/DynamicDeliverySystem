@@ -37,11 +37,18 @@ public class ManagerUserController {
     private final InvoiceRepository invoiceRepository;
     private final ComplaintRepository complaintRepository;
     
-    public record CourierLocation(String email, Location pos) {
+    public record CourierLocation(String email, Double[] pos) {
         public CourierLocation(DeliveryUser courier) {
-            this(courier.getEmail(), courier.getLocation());
+            this(courier.getEmail(), toPos(courier.getLocation()));
         }
+
+        private static Double[] toPos(Location location) {
+            if (location == null) {
+                return null;
+            }
+            return new Double[]{location.getLatitude(), location.getLongitude()};
     }
+}
 
     @GetMapping("/get-assigned-couriers")
     @PreAuthorize("hasRole('MANAGER')")
@@ -75,34 +82,48 @@ public class ManagerUserController {
                 .collect(Collectors.toList());
     }
 
-    private record PackageAssignmentRequest(Long packageId, String courierEmail) {}
+    private record PackageAssignmentRequest(Long packageId, String email) {}
     @PostMapping("/assign-package")
     @PreAuthorize("hasRole('MANAGER')")
     public void assignPackageToCourier(Authentication authentication, @RequestBody PackageAssignmentRequest request) {
 
         Manager manager = getManagerFromAuthentication(authentication);
 
-        DeliveryUser courier = userRepository.findByEmailIgnoreCase(request.courierEmail())
-            .filter(DeliveryUser.class::isInstance).map(DeliveryUser.class::cast)
-            .orElseThrow(() -> new IllegalArgumentException("Courier not found"));
-
+        User user = userRepository.findByEmailIgnoreCase(request.email())
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
         Package pkg = packageRepository.findById(request.packageId())
             .orElseThrow(() -> new IllegalArgumentException("Package not found"));
-
         if (pkg.getManagedBy() == null || !pkg.getManagedBy().getEmail().equalsIgnoreCase(manager.getEmail())) {
             throw new IllegalArgumentException("Package is not managed by the current manager");
         }
 
-        if(pkg.getStatus() == PackageStatus.PENDING) {
-            pkg.setPickUpBy(courier, LocalDateTime.now());
-            invoiceRepository.save(new Invoice(manager, courier, "You have been assigned to pick up package with ID: " + pkg.getId()));
-            packageRepository.save(pkg);
-        } else if(pkg.getStatus() == PackageStatus.IN_STORAGE) {
-            pkg.setDeliveredBy(courier, LocalDateTime.now());
-            invoiceRepository.save(new Invoice(manager, courier, "You have been assigned to deliver package with ID: " + pkg.getId()));
-            packageRepository.save(pkg);
-        } else {
-            throw new IllegalArgumentException("Package is not in a state that can be assigned");
+        if (user instanceof Manager) {
+            Manager transferManager = (Manager) user;
+            if(pkg.getStatus() == PackageStatus.IN_STORAGE) {
+                pkg.initiateManagerTransfer(transferManager);
+                invoiceRepository.save(new Invoice(manager, transferManager, "You have been assigned to manage package with ID: " + pkg.getId()));
+                packageRepository.save(pkg);
+            } else {
+                throw new IllegalArgumentException("Package is not in a state that can be transferred");
+            }
+        }
+        else if(user instanceof DeliveryUser) {
+            DeliveryUser courier = (DeliveryUser) user;
+
+            if(pkg.getStatus() == PackageStatus.PENDING) {
+                pkg.setPickUpBy(courier, LocalDateTime.now());
+                invoiceRepository.save(new Invoice(manager, courier, "You have been assigned to pick up package with ID: " + pkg.getId()));
+                packageRepository.save(pkg);
+            } else if(pkg.getStatus() == PackageStatus.IN_STORAGE) {
+                pkg.setDeliveredBy(courier, LocalDateTime.now());
+                invoiceRepository.save(new Invoice(manager, courier, "You have been assigned to deliver package with ID: " + pkg.getId()));
+                packageRepository.save(pkg);
+            } else {
+                throw new IllegalArgumentException("Package is not in a state that can be assigned");
+            }
+        }
+        else {
+            throw new IllegalArgumentException("User is not a courier or manager");
         }
     }
 
@@ -151,6 +172,16 @@ public class ManagerUserController {
 
         Invoice invoice = new Invoice(manager, client, request.text());
         invoiceRepository.save(invoice);
+    }
+
+    @GetMapping("/get-managers")
+    @PreAuthorize("hasRole('MANAGER')")
+    public List<String> getManagers(Authentication authentication) {
+        return userRepository.findAll()
+                .stream()
+                .filter(user -> user instanceof Manager)
+                .map(User::getEmail)
+                .collect(Collectors.toList());
     }
 
     private Manager getManagerFromAuthentication(Authentication authentication) {

@@ -54,6 +54,7 @@ export default function MapWithPins({
         if (!mounted) return;
         setItems(list);
         if (list.length > 0) setActive(list[0]);
+        if(list.length === 0) alert("No items found.");
       } catch (err) {
         console.error("MapWithPins fetch failed", err);
       }

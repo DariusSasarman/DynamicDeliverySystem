@@ -1,5 +1,5 @@
 import '../../App.css';
-
+import animation from '/src/assets/delivery-truck-animation.gif';
 function WelcomeView() {
     return (
         <div style={{
@@ -13,7 +13,7 @@ function WelcomeView() {
             padding: '20px'
         }}>
             <img 
-                src="/src/assets/delivery-truck-animation.gif"
+                src={animation}
                 alt="Delivery" 
                 style={{ width: '300px', borderRadius: '10px' }} 
             />

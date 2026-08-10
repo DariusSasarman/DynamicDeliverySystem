@@ -2,7 +2,7 @@ spring:
   application:
     name: dynamic-delivery-system
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:3306/${DB_NAME:delivery_db}?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/${DB_NAME:delivery_db}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: ${DB_USER:delivery_user}
     password: ${DB_PASSWORD:delivery_password}
     driver-class-name: com.mysql.cj.jdbc.Driver

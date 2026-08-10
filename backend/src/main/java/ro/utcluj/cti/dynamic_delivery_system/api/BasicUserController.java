@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import org.springframework.http.HttpStatus;
 
 import jakarta.transaction.Transactional;
@@ -95,6 +98,7 @@ public class BasicUserController {
     }
 
     public record PickupRequest(
+            @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
             LocalDateTime pickUpDate,
             String receiverEmail) {
     }
@@ -157,7 +161,9 @@ public class BasicUserController {
         if(user.getSchedule() == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found");
         }
-        return user.getSchedule().toSummary(user.getPhoneNumber());
+        
+        ScheduleSummary scheduleSummary = user.getSchedule().toSummary(user.getPhoneNumber());
+        return scheduleSummary;
     }
 
     @PostMapping("/save-schedule")
@@ -167,6 +173,7 @@ public class BasicUserController {
 
         BasicUser user = findBasicUserByEmail(email);
 
+        user.setPhoneNumber(scheduleSummary.phoneNumber());
         user.setSchedule(scheduleSummary.toSchedule());
         userRepository.save(user);
 

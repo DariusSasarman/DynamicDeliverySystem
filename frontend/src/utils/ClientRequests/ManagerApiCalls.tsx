@@ -61,7 +61,7 @@ export async function AssignPackage(_authToken: string, _packageId: number, _cou
             "Content-Type": "application/json",
             Authorization: `Bearer ${_authToken}`,
         },
-        body: JSON.stringify({ packageId: _packageId, courierEmail: _courierEmail }),
+        body: JSON.stringify({ packageId: _packageId, email: _courierEmail }),
     });
 
     if (!response.ok) {
@@ -157,4 +157,23 @@ export async function createDeliveryAccount(ownerAuthToken: string, email: strin
     }
 
     return response.json();
+}
+
+export async function getManagers(_authToken: string)
+{
+    const response = await fetch("/api/manager/get-managers", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${_authToken}`,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch managers");
+    }  
+
+    const managers: string[] = await response.json();
+
+    return  managers.map(email => ({ email }));
 }

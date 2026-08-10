@@ -3,7 +3,7 @@ export async function getNearestPackage(
   authToken: string
 ) {
   const response = await fetch(
-    `/api/delivery/nearest-package?longitude=${currentPos[0]}&latitude=${currentPos[1]}`,
+    `/api/delivery/nearest-package?longitude=${currentPos[1]}&latitude=${currentPos[0]}`,
     {
       method: "POST",
       headers: {

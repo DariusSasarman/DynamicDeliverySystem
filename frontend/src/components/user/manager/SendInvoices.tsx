@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { sendInvoice } from "../../../utils/ClientRequests/ManagerApiCalls";
 import "../../general/GeneralView.css"
+import { getStoredAuthToken } from "../../../utils/InternalUtils";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

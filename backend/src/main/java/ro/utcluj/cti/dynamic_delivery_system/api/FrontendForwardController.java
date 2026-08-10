@@ -6,11 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class FrontendForwardController {
 
-    @GetMapping(value = {
-            "/",
-            "/{path:^(?!api$)(?!api/)[^\\.]*}",
-            "/{path:^(?!api$)(?!api/)[^\\.]*}/**/{nestedPath:[^\\.]*}"
-    })
+    @GetMapping("/")
     public String forwardSpaRoutes() {
         return "forward:/index.html";
     }

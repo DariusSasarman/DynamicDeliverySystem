@@ -26,7 +26,7 @@ function FinishDelivery() {
 
     const handleSelectPackage = async (pkg) => {
         try {
-            const code = await getDeliveryCode(pkg.id);
+            const code = await getDeliveryCode(pkg.id,getStoredAuthToken());
 
             setTargetDelivery(pkg);
             setDeliveryCode(code);

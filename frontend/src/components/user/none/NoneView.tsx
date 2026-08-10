@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../../../App.css";
 import "./NoneView.css";
 import { submitLogin, submitRegistration } from "../../../utils/LoginApiCalls";
+import logo from "/src/assets/logo.png";
 
 function NoneView() {
   const [email, setEmail] = useState("");
@@ -119,7 +120,7 @@ function NoneView() {
       {shouldRegister ? (
         <div className="loginForm">
           <img
-            src="/src/assets/logo.png"
+            src={logo}
             style={{
               alignSelf: "center",
               minHeight: "200px",
@@ -153,7 +154,7 @@ function NoneView() {
       ) : (
         <div className="loginForm">
           <img
-            src="/src/assets/logo.png"
+            src={logo}
             style={{
               alignSelf: "center",
               minHeight: "200px",
