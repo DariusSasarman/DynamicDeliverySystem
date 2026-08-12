@@ -37,33 +37,51 @@ function CreateOfficialAccounts() {
   // API calls are exported from ManagerApiCalls.tsx
 
   const handleCreate = async () => {
-    try{
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email.trim())) {
+      alert("Please enter a valid email.");
+      return;
+    }
+    if (!password.trim()) {
+      alert("Please enter a password.");
+      return;
+    }
+    if (type === "manager" && !mainLocation) {
+      alert("Please pick a main location for the manager.");
+      return;
+    }
+    if (type === "delivery" && !additionalInformation.trim()) {
+      alert("Please enter the responsible manager email.");
+      return;
+    }
+
+    try {
       if (type === "manager") {
         await createManagerAccount(
           getStoredAuthToken(),
-          email,
+          email.trim(),
           password,
           mainLocation,
         );
       } else {
         await createDeliveryAccount(
           getStoredAuthToken(),
-          email,
+          email.trim(),
           password,
-          additionalInformation,
+          additionalInformation.trim(),
         );
       }
-    }
-    catch(error)
-    {
-      alert("Couldn't create account:" + error);
-    }
-    finally{
+      alert("Account created successfully.");
       setEmail("");
       setPassword("");
       setType("manager");
       setAdditionalInformation("");
       setMainLocation(null);
+    } catch (error) {
+      alert(
+        "Couldn't create account: " +
+          (error instanceof Error ? error.message : error)
+      );
     }
   };
 

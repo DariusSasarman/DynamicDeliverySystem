@@ -12,6 +12,11 @@ export default defineConfig({
     outDir: resolve(frontendRoot, '../backend/src/main/resources/static'),
     emptyOutDir: true,
   },
+  server: {
+    proxy: {
+      '/api': 'http://localhost:8080',
+    },
+  },
   plugins: [
     react(),
     babel({ presets: [reactCompilerPreset()] })

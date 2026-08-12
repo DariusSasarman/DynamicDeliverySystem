@@ -9,10 +9,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import ro.utcluj.cti.dynamic_delivery_system.repos.PackageRepository;
 import ro.utcluj.cti.dynamic_delivery_system.model.User;
 
 @Service

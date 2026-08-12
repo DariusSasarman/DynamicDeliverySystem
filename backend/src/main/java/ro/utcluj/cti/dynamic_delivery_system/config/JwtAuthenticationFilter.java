@@ -36,10 +36,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = authorizationHeader.substring(7);
             try {
                 String email = jwtService.extractEmail(token);
-                String role = jwtService.extractRole(token);
 
                 if (jwtService.isTokenValid(token)) {
-                    userRepository.findByEmailIgnoreCase(email).ifPresent(user -> authenticateRequest(request, role, user));
+                    userRepository.findByEmailIgnoreCase(email).ifPresent(user -> authenticateRequest(request, user));
                 }
             } catch (RuntimeException ignored) {
                 SecurityContextHolder.clearContext();
@@ -49,7 +48,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void authenticateRequest(HttpServletRequest request, String role, User user) {
+    private void authenticateRequest(HttpServletRequest request, User user) {
+        String role = user.getAccountType().name();
         if (role == null || role.isBlank()) {
             return;
         }

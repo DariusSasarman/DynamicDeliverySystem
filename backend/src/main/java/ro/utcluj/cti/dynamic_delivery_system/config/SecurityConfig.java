@@ -24,12 +24,12 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
                 .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/", "/index.html", "/error", "/assets/**", "/**/*.js", "/**/*.css", "/**/*.ico", "/**/*.png", "/**/*.svg", "/api/auth/login", "/api/auth/register").permitAll()
+                    .requestMatchers("/actuator/health").permitAll()
                     .requestMatchers("/api/auth/me").authenticated()
                         .requestMatchers("/api/auth/manager", "/api/auth/delivery").hasRole("MANAGER")
                         .requestMatchers("/api/basic/**").hasRole("BASIC")
                         .requestMatchers("/api/delivery/**").hasRole("DELIVERY")
                         .requestMatchers("/api/manager/**").hasRole("MANAGER")
-                        .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

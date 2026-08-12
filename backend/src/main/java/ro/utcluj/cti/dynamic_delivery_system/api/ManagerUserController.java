@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -85,7 +86,12 @@ public class ManagerUserController {
     private record PackageAssignmentRequest(Long packageId, String email) {}
     @PostMapping("/assign-package")
     @PreAuthorize("hasRole('MANAGER')")
+    @Transactional
     public void assignPackageToCourier(Authentication authentication, @RequestBody PackageAssignmentRequest request) {
+
+        if (request.packageId() == null || request.email() == null || request.email().isBlank()) {
+            throw new IllegalArgumentException("Package ID and courier email are required");
+        }
 
         Manager manager = getManagerFromAuthentication(authentication);
 
@@ -109,6 +115,11 @@ public class ManagerUserController {
         }
         else if(user instanceof DeliveryUser) {
             DeliveryUser courier = (DeliveryUser) user;
+
+            if (courier.getManager() == null
+                    || !courier.getManager().getEmail().equalsIgnoreCase(manager.getEmail())) {
+                throw new IllegalArgumentException("Courier is not assigned to the current manager");
+            }
 
             if(pkg.getStatus() == PackageStatus.PENDING) {
                 pkg.setPickUpBy(courier, LocalDateTime.now());
@@ -141,7 +152,12 @@ public class ManagerUserController {
     
     @PostMapping("/resolve-complaint")
     @PreAuthorize("hasRole('MANAGER')")
+    @Transactional
     public void resolveComplaint(Authentication authentication, @RequestBody ComplaintResolutionRequest request) {
+
+        if (request.complaintId() == null || request.replyText() == null || request.replyText().isBlank()) {
+            throw new IllegalArgumentException("Complaint ID and reply text are required");
+        }
 
         Manager manager = getManagerFromAuthentication(authentication);
 

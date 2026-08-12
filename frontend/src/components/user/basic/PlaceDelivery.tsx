@@ -7,24 +7,44 @@ function PlaceDelivery() {
     const [pickUpDate, setNewPickUpDate] = useState("");
 
     const handlePickupRequest = async () => {
-        try{
-            const success = await sendPickupRequest(
+        if (!newRequestDeliveryEmail.trim()) {
+            alert("Please enter a recipient email.");
+            return;
+        }
+
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(newRequestDeliveryEmail.trim())) {
+            alert("Please enter a valid recipient email.");
+            return;
+        }
+
+        if (!pickUpDate) {
+            alert("Please select a pickup date.");
+            return;
+        }
+
+        const selectedDate = new Date(`${pickUpDate}T00:00:00`);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (selectedDate < today) {
+            alert("Pickup date cannot be in the past.");
+            return;
+        }
+
+        try {
+            await sendPickupRequest(
                 getStoredAuthToken(),
                 pickUpDate,
-                newRequestDeliveryEmail
+                newRequestDeliveryEmail.trim()
             );
-
-            if (!success) {
-                alert("Couldn't handle delivery.");
-                return;
-            }
 
             alert("Pickup request sent!");
             window.location.reload();
-        }
-        catch(error)
-        {
-            alert("Couldn't execute request: " + error);
+        } catch (error) {
+            alert(
+                "Couldn't execute request: " +
+                    (error instanceof Error ? error.message : error)
+            );
         }
     };
 
@@ -124,9 +144,7 @@ function PlaceDelivery() {
                     />
                 </div>
 
-                <button
-                    onClick={handlePickupRequest}
-                >
+                <button onClick={handlePickupRequest}>
                     Send Pickup Request
                 </button>
             </div>

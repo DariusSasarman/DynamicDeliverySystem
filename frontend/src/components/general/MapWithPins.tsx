@@ -50,11 +50,13 @@ export default function MapWithPins({
     let mounted = true;
     (async () => {
       try {
-        const list = (await fetchItems()) || [];
+        const list = ((await fetchItems()) || []).filter((item) => {
+          const pos = posAccessor(item);
+          return Array.isArray(pos) && pos.length >= 2 && pos[0] != null && pos[1] != null;
+        });
         if (!mounted) return;
         setItems(list);
         if (list.length > 0) setActive(list[0]);
-        if(list.length === 0) alert("No items found.");
       } catch (err) {
         console.error("MapWithPins fetch failed", err);
       }

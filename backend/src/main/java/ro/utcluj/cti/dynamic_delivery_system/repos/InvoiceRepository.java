@@ -10,7 +10,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
     default List<Invoice> findByIssuedToEmail(String email) {
         return findAll().stream()
-                .filter(invoice -> invoice.getIssuedTo().getEmail().equals(email))
+                .filter(invoice -> invoice.getIssuedTo().getEmail().equalsIgnoreCase(email))
                 .toList();
     }
 

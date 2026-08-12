@@ -1,12 +1,16 @@
 package ro.utcluj.cti.dynamic_delivery_system.api.auth;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 public final class AuthDtos {
     private AuthDtos() {
     }
 
-    public record Credentials(String email, String password) {
+    public record Credentials(
+            @NotBlank @Email String email,
+            @NotBlank String password) {
     }
 
     public record ManagerCreationRequest(String email, String password, List<Double> mainLocation) {

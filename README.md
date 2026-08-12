@@ -9,6 +9,62 @@ Basically, for each day of the week, the user can **define the time periods and 
 
 Using this schedule (*without needing to know ahead of time*), the courier can now do their job, at the **right place and at the right time ** - not just "Leave it at the entrance" or "It's been placed in an easybox where you can pick it up".
 
+## Quick start (Docker)
+
+**Prerequisites:** Docker 24+, Docker Compose v2
+
+```bash
+docker compose up --build
+```
+
+Open **http://localhost** once all services are healthy.
+
+### Seed manager account
+
+On first startup, a root manager is created automatically:
+
+| Field | Value |
+|-------|-------|
+| Email | `manager@delivery.local` |
+| Password | `Manager123!` |
+
+### Typical demo flow
+
+1. Register two **basic** users (sender and recipient).
+2. As sender: open **My account (schedule)**, add map locations, and save.
+3. As sender: **Place an order** with the recipient's email and a pickup date (today or later).
+4. Log in as the seed manager and create a **delivery** courier account.
+5. Assign the pending package to the courier for pickup, then delivery.
+6. As courier: confirm pickup and deposit under **Review Current Assignments**.
+7. As manager: assign the package for final delivery once it is in storage.
+8. As courier: use **Finish delivery** to get the confirmation code.
+9. As recipient: **Confirm Delivery** with that code.
+
+### Local development (without Docker)
+
+**Backend:** Java 21, Maven 3.9+, MySQL 8
+
+```bash
+cd frontend && npm ci && npm run build
+cd ../backend && mvn package
+java -jar target/*.jar
+```
+
+**Frontend dev server** (proxies `/api` to port 8080):
+
+```bash
+cd frontend && npm run dev
+```
+
+Copy `.env.example` to `.env` and adjust `DB_*` / `JWT_SECRET` as needed.
+
+If the backend fails on startup with a `phone_number` constraint error after upgrading, reset the database volume:
+
+```bash
+docker compose down -v
+docker compose up --build
+```
+
 ## Use case diagram
 
 <img width="879" height="622" alt="Untitled Diagram drawio(1)" src="https://github.com/user-attachments/assets/1977eafb-48e5-4be5-ad63-d0d7408315bc" />

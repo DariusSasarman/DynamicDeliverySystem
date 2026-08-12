@@ -25,14 +25,16 @@ import java.util.List;
 public class Schedule {
     
     public record ScheduleSummary( String phoneNumber, List<EntrySummary> schedule) {
-        public Schedule toSchedule() {
-            List<Entry> entries = new ArrayList<>();
-            for (EntrySummary entrySummary : schedule) {
-                entries.add(entrySummary.toEntry());
+        public Schedule toValidatedSchedule() {
+            Schedule validatedSchedule = new Schedule();
+            for (EntrySummary entrySummary : schedule()) {
+                validatedSchedule.addEntry(entrySummary.toEntry());
             }
-            Schedule schedule = new Schedule();
-            schedule.scheduleEntries = entries;
-            return schedule;
+            return validatedSchedule;
+        }
+
+        public Schedule toSchedule() {
+            return toValidatedSchedule();
         }
     }
 

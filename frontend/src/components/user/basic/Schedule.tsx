@@ -69,12 +69,18 @@ export default function Schedule() {
       return;
     }
 
-    await saveSchedule(getStoredAuthToken(), {
-      phoneNumber,
-      schedule,
-    });
-
-    alert("Schedule saved.");
+    try {
+      await saveSchedule(getStoredAuthToken(), {
+        phoneNumber,
+        schedule,
+      });
+      alert("Schedule saved.");
+    } catch (error) {
+      alert(
+        "Couldn't save schedule: " +
+          (error instanceof Error ? error.message : error)
+      );
+    }
   }
 
   function validateSchedule(scheduleRows) {
@@ -91,6 +97,13 @@ export default function Schedule() {
         return {
           valid: false,
           message: `Row ${i + 1}: choose a point on the map for this address.`,
+        };
+      }
+
+      if (!row.days || row.days.length === 0) {
+        return {
+          valid: false,
+          message: `Row ${i + 1}: select at least one day of the week.`,
         };
       }
     }

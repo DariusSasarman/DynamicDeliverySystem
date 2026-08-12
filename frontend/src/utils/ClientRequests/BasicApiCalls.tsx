@@ -1,3 +1,4 @@
+import { throwIfNotOk } from "./apiError";
 
 export async function getPackageClientList(authToken: string) {
   const response = await fetch("/api/basic/package-client-list", {
@@ -7,12 +8,8 @@ export async function getPackageClientList(authToken: string) {
     },
   });
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch package client list");
-  }
-
-  const data = await response.json();
-  return data;
+  await throwIfNotOk(response, "Failed to fetch package client list");
+  return response.json();
 }
 
 export async function getDeliveredPackageClientList(authToken: string) {
@@ -23,137 +20,100 @@ export async function getDeliveredPackageClientList(authToken: string) {
     },
   });
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch delivered package client list");
-  }
-
-  const data = await response.json();
-  return data;
+  await throwIfNotOk(response, "Failed to fetch delivered package client list");
+  return response.json();
 }
 
 export async function sendDeliveryConfirmation(
-    authToken: string,
-    packageId: number,
-    deliveryCode: string
-) {
-    const response = await fetch("/api/basic/delivery-confirmation", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
-        },
-        body: JSON.stringify({
-            packageId,
-            deliveryCode,
-        }),
-    });
+  authToken: string,
+  packageId: number,
+  deliveryCode: string
+): Promise<boolean> {
+  const response = await fetch("/api/basic/delivery-confirmation", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: JSON.stringify({
+      packageId,
+      deliveryCode,
+    }),
+  });
 
-    if (!response.ok) {
-        throw new Error("Failed to send delivery confirmation");
-    }
-
-    const data = await response.json();
-
-    if (!data.confirmation) {
-        throw new Error("Failed to send delivery confirmation");
-    }
-
-    return data;
+  await throwIfNotOk(response, "Failed to send delivery confirmation");
+  const data = await response.json();
+  return Boolean(data.confirmation);
 }
 
-export async function sendPickupRequest(authToken: string, pickUpDate: string, receiverEmail: string)
-{
-    // Append time if missing to match backend LocalDateTime expectation
-    const formattedDate = pickUpDate.includes("T") ? pickUpDate : `${pickUpDate}T00:00:00`;
+export async function sendPickupRequest(
+  authToken: string,
+  pickUpDate: string,
+  receiverEmail: string
+) {
+  const formattedDate = pickUpDate.includes("T")
+    ? pickUpDate
+    : `${pickUpDate}T00:00:00`;
 
-    const response = await fetch("/api/basic/pickup-request", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
-        },
-        body: JSON.stringify({
-            pickUpDate: formattedDate,
-            receiverEmail
-        }),
-    });
+  const response = await fetch("/api/basic/pickup-request", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: JSON.stringify({
+      pickUpDate: formattedDate,
+      receiverEmail,
+    }),
+  });
 
-    if (!response.ok) {
-        throw new Error("Failed to send pickup request");
-    }
-
-    const data = await response.json();
-
-    if (!data.confirmation) {
-        throw new Error("Failed to send pickup request");
-    }
-
-    return data;
+  await throwIfNotOk(response, "Failed to send pickup request");
+  return response.json();
 }
 
 export async function getSchedule(authToken: string) {
   const response = await fetch("/api/basic/get-schedule", {
-      method: "GET",
-      headers: {
-          Authorization: `Bearer ${authToken}`,
-      },
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
   });
 
-  if (!response.ok) {
-      throw new Error("Failed to fetch schedule");
-  }
-
-  const data = await response.json();
-  return data;
+  await throwIfNotOk(response, "Failed to fetch schedule");
+  return response.json();
 }
 
-export async function saveSchedule(authToken: string, schedule: any)
-{
+export async function saveSchedule(authToken: string, schedule: unknown) {
   const response = await fetch("/api/basic/save-schedule", {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-      },
-      body: JSON.stringify(schedule),
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: JSON.stringify(schedule),
   });
 
-  if (!response.ok) {
-      throw new Error("Failed to save schedule");
-  }
-
-  const data = await response.json();
-
-  if (!data.confirmation) {
-      throw new Error("Failed to save schedule");
-  }
-
-  return data;
+  await throwIfNotOk(response, "Failed to save schedule");
+  return response.json();
 }
 
-export async function sendComplaint(authToken: string, deliveryID: number, text: string)
-{
+export async function sendComplaint(
+  authToken: string,
+  deliveryID: number,
+  text: string
+) {
   const response = await fetch("/api/basic/send-complaint", {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-      },
-      body: JSON.stringify({
-        deliveryID: deliveryID.toString(),
-        text
-      }),
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: JSON.stringify({
+      deliveryID,
+      text,
+    }),
   });
 
-  if (!response.ok) {
-      throw new Error("Failed to send complaint");
-  }
-
-  const data = await response.json();
-
-  if (!data.confirmation) {
-      throw new Error("Failed to send complaint");
-  }
-
-  return data;
+  await throwIfNotOk(response, "Failed to send complaint");
+  return response.json();
 }

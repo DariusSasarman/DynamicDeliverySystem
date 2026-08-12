@@ -9,6 +9,7 @@ import ro.utcluj.cti.dynamic_delivery_system.model.PackageStatus;
 import ro.utcluj.cti.dynamic_delivery_system.model.Schedule.ScheduleSummary;
 import ro.utcluj.cti.dynamic_delivery_system.model.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -77,6 +78,7 @@ public class BasicUserController {
     }
 
     @PostMapping("/delivery-confirmation")
+    @Transactional
     public ConfirmationResponse getDeliveryConfirmation(
             Authentication authentication,
             @RequestBody DeliveryConfirmationRequest request) {
@@ -113,7 +115,7 @@ public class BasicUserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid request data");
         }
 
-        if(request.pickUpDate().isBefore(LocalDateTime.now())) {
+        if (request.pickUpDate().toLocalDate().isBefore(LocalDate.now())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pick-up date cannot be in the past");
         }
 
@@ -124,8 +126,8 @@ public class BasicUserController {
         BasicUser issuedBy = findBasicUserByEmail(authentication.getName());
         BasicUser issuedTo = findBasicUserByEmail(request.receiverEmail());
 
-        if(issuedBy.getSchedule() == null || issuedBy.getSchedule().getAverageLocation() == null) {
-            throw new ResponseStatusException( HttpStatus.NOT_FOUND, "Schedule not found" );
+        if (issuedBy.getSchedule() == null || issuedBy.getSchedule().getAverageLocation() == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule has no locations configured");
         }
 
         Optional<Manager> manager = userRepository.findNearestManagerByLocation(issuedBy.getSchedule().getAverageLocation().getLongitude(), issuedBy.getSchedule().getAverageLocation().getLatitude());
@@ -136,6 +138,7 @@ public class BasicUserController {
         Manager nearestManager = manager.get();
 
         Package pkg = new Package(null, issuedBy, issuedTo);
+        pkg.setRequestedPickUpDate(request.pickUpDate());
 
         // Assign someone to handle the pick-up and delivery of the package
         // For simplicity, we are assigning the nearest manager to handle the package
@@ -174,7 +177,7 @@ public class BasicUserController {
         BasicUser user = findBasicUserByEmail(email);
 
         user.setPhoneNumber(scheduleSummary.phoneNumber());
-        user.setSchedule(scheduleSummary.toSchedule());
+        user.setSchedule(scheduleSummary.toValidatedSchedule());
         userRepository.save(user);
 
 
@@ -189,8 +192,12 @@ public class BasicUserController {
         packageRepository.findByIssuedByEmail(email)
                 .stream()
                 .filter(pkg -> pkg.getStatus().equals(PackageStatus.PENDING))
+                .filter(pkg -> pkg.getPickUpBy() != null && pkg.getManagedBy() != null)
                 .forEach(pkg -> {
-                    Invoice invoice = new Invoice(pkg.getManagedBy(), pkg.getDeliveredBy(), "The sender has updated their schedule. Please check the new schedule for pick-up.");
+                    Invoice invoice = new Invoice(
+                            pkg.getManagedBy(),
+                            pkg.getPickUpBy(),
+                            "The sender has updated their schedule. Please check the new schedule for pick-up.");
                     invoiceRepository.save(invoice);
                 });
         return new ConfirmationResponse(true);

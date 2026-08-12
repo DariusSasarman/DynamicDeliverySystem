@@ -33,18 +33,21 @@ function ConfirmDelivery() {
         }
 
         try {
-            const success = await sendDeliveryConfirmation(
+            const confirmed = await sendDeliveryConfirmation(
                 getStoredAuthToken(),
                 targetDelivery.id,
                 deliveryCode
             );
-            if (success) {
+            if (confirmed) {
                 setConfirmationStatus(true);
             } else {
                 alert("Invalid delivery code.");
             }
         } catch (error) {
-            alert("Couldn't process confirmation");
+            alert(
+                "Couldn't process confirmation: " +
+                    (error instanceof Error ? error.message : error)
+            );
         }
     };
 

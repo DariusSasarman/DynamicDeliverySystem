@@ -5,14 +5,21 @@ import {
 } from "../../utils/ClientRequests/HeaderApiCalls";
 import { getStoredAuthToken } from "../../utils/InternalUtils";
 
-function InvoiceView() {
+function InvoiceView({ onInvoiceConfirmed }: { onInvoiceConfirmed?: () => void }) {
     const [invoicesList, setInvoicesList] = useState([]);
     const [loadingId, setLoadingId] = useState(null);
 
     useEffect(() => {
         async function loadInvoices() {
-            const invoiceList = await getInvoiceList(getStoredAuthToken());
-            setInvoicesList(invoiceList);
+            try {
+                const invoiceList = await getInvoiceList(getStoredAuthToken());
+                setInvoicesList(invoiceList);
+            } catch (error) {
+                alert(
+                    "Couldn't load invoices: " +
+                        (error instanceof Error ? error.message : error)
+                );
+            }
         }
 
         loadInvoices();
@@ -27,10 +34,13 @@ function InvoiceView() {
             setInvoicesList((prev) =>
                 prev.filter((invoice) => invoice.id !== invoiceId)
             );
-            
+            onInvoiceConfirmed?.();
         }
         catch(error){
-            alert("Couldn't load invoices!");
+            alert(
+                "Couldn't confirm invoice: " +
+                    (error instanceof Error ? error.message : error)
+            );
         }
         finally {
             setLoadingId(null);

@@ -20,6 +20,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import ro.utcluj.cti.dynamic_delivery_system.model.User;
 
 @Entity
 @Table(name = "packages")
@@ -84,6 +85,10 @@ public class Package {
         chainOfOwnership.add(new ChainOfOwnership(this, issuedBy, LocalDateTime.now()));
     }
 
+    public void setRequestedPickUpDate(LocalDateTime pickUpDate) {
+        this.pickUpDate = pickUpDate;
+    }
+
     public void setPickUpBy(DeliveryUser pickUpBy, LocalDateTime pickUpDate) {
         this.pickUpBy = pickUpBy;
         this.pickUpDate = pickUpDate;
@@ -114,6 +119,8 @@ public class Package {
     public void setDeliveredBy(DeliveryUser deliveredBy, LocalDateTime deliveryDate) {
         this.deliveredBy = deliveredBy;
         this.deliveryDate = deliveryDate;
+        this.status = PackageStatus.OUT_FOR_DELIVERY;
+        chainOfOwnership.add(new ChainOfOwnership(this, deliveredBy, LocalDateTime.now()));
     }
 
     public void hasBeenDelivered(LocalDateTime deliveryDate) {
@@ -136,7 +143,44 @@ public class Package {
 
 
     public Location getLocation() {
-        return chainOfOwnership.getLast().getOwner().getLocation();
+        if (chainOfOwnership.isEmpty()) {
+            return null;
+        }
+        User owner = chainOfOwnership.getLast().getOwner();
+        if (owner == null) {
+            return null;
+        }
+        return owner.getLocation();
+    }
+
+    public Location getPickupTargetLocation() {
+        if (issuedBy == null || issuedBy.getSchedule() == null) {
+            return null;
+        }
+        Location averageLocation = issuedBy.getSchedule().getAverageLocation();
+        if (averageLocation != null) {
+            return averageLocation;
+        }
+        return issuedBy.getLocation();
+    }
+
+    public Location getDeliveryTargetLocation() {
+        if (issuedTo == null || issuedTo.getSchedule() == null) {
+            return null;
+        }
+        Location averageLocation = issuedTo.getSchedule().getAverageLocation();
+        if (averageLocation != null) {
+            return averageLocation;
+        }
+        return issuedTo.getLocation();
+    }
+
+    public Location getResolvedLocation(boolean pickupAssignment) {
+        Location location = getLocation();
+        if (location != null) {
+            return location;
+        }
+        return pickupAssignment ? getPickupTargetLocation() : getDeliveryTargetLocation();
     }
 
 }

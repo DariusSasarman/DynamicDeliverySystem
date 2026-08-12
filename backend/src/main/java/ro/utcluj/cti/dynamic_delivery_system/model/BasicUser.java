@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BasicUser extends User {
     
-    @Column(nullable = false, name = "phone_number")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
-    @JoinColumn(name = "schedule_id", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
     public BasicUser(Long id, String name, String email, String password, String phoneNumber, LocalDateTime createdAt) {
@@ -44,11 +44,13 @@ public class BasicUser extends User {
     }
 
     public String getAvailableFrom() {
-        return schedule.getAvailableFrom().toString() +":00";
+        Integer from = schedule.getAvailableFrom();
+        return from != null ? from + ":00" : "N/A";
     }
 
     public String getAvailableUntil() {
-        return schedule.getAvailableUntil().toString() +":00";
+        Integer until = schedule.getAvailableUntil();
+        return until != null ? until + ":00" : "N/A";
     }
 
     public void setPhoneNumber(String phoneNumber) {

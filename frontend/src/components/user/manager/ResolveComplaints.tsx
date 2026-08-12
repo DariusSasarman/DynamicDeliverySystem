@@ -12,8 +12,15 @@ function ResolveComplaints() {
 
   useEffect(() => {
     async function loadComplaints() {
-      const list = await getComplaintsList(getStoredAuthToken());
-      setComplaintList(list);
+      try {
+        const list = await getComplaintsList(getStoredAuthToken());
+        setComplaintList(list);
+      } catch (error) {
+        alert(
+          "Couldn't load complaints: " +
+            (error instanceof Error ? error.message : error)
+        );
+      }
     }
 
     loadComplaints();

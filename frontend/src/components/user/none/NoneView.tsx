@@ -26,24 +26,21 @@ function NoneView() {
   const loginOnClick = async () => {
     if (!emailRegex.test(email)) {
       setErrorMessage("Invalid email!");
-    } else if (!passwordRegex.test(password)) {
-      setErrorMessage("Invalid password!");
+    } else if (!password) {
+      setErrorMessage("Password is required!");
     } else {
-      try{
-      setErrorMessage("");
-      const result = await submitLogin(email,password);
-      if(!result.ok)
-      {
-        setErrorMessage("Couldn't process request");
+      try {
+        setErrorMessage("");
+        const result = await submitLogin(email, password);
+        if (!result.ok) {
+          const payload = await result.json().catch(() => null);
+          setErrorMessage(payload?.message ?? "Couldn't process request");
+        } else {
+          window.location.reload();
+        }
+      } catch (error) {
+        setErrorMessage("A network error occurred. Please try again.");
       }
-      else
-      {
-        setErrorMessage("Request processed successfully");
-        window.location.reload();
-      }
-    } catch(error){
-      setErrorMessage("A network error occurred. Please try again.");
-    }
     }
   };
 
@@ -66,21 +63,18 @@ function NoneView() {
         "Password should : \n 1. Have at least 8 characters. \n 2. Contain at least an uppercase and lowercase character \n 3. At least one digit \n 4. At least one special character @$!%*?&\n",
       );
     } else {
-      try{
-      setErrorMessage("");
-      const result = await submitRegistration(email,password);
-      if(!result.ok)
-      {
-        setErrorMessage("Couldn't process request");
+      try {
+        setErrorMessage("");
+        const result = await submitRegistration(email, password);
+        if (!result.ok) {
+          const payload = await result.json().catch(() => null);
+          setErrorMessage(payload?.message ?? "Couldn't process request");
+        } else {
+          window.location.reload();
+        }
+      } catch (error) {
+        setErrorMessage("A network error occurred. Please try again.");
       }
-      else
-      {
-        setErrorMessage("Request processed successfully");
-        window.location.reload();
-      }
-    } catch(error){
-      setErrorMessage("A network error occurred. Please try again.");
-    }
     }
   };
 

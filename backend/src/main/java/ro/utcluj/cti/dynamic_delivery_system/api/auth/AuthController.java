@@ -1,6 +1,7 @@
 package ro.utcluj.cti.dynamic_delivery_system.api.auth;
 
 import java.security.Principal;
+import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,12 +27,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public AuthResponse register(@RequestBody Credentials credentials) {
+    public AuthResponse register(@Valid @RequestBody Credentials credentials) {
         return authService.registerBasic(credentials.email(), credentials.password());
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody Credentials credentials) {
+    public AuthResponse login(@Valid @RequestBody Credentials credentials) {
         return authService.login(credentials.email(), credentials.password());
     }
 

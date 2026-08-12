@@ -17,19 +17,20 @@ function GeneralView({accountState})
     const [invoiceCount, setInvoiceCount] = useState(0);
     const [shownSidebar, setShowSidebar] = useState(false);
     
-    useEffect(() => {
-        const fetchInvoiceCount = async () => {
-            try {
-                const count = await getInvoiceCount(getStoredAuthToken());
-                setInvoiceCount(count);
-            } catch (error) {
-                console.error("Failed to fetch invoice count", error);
-            }
-        };
-        if (accountState !== AccountTypes.NONE) {
-            fetchInvoiceCount();
+    const refreshInvoiceCount = async () => {
+        try {
+            const count = await getInvoiceCount(getStoredAuthToken());
+            setInvoiceCount(count);
+        } catch (error) {
+            console.error("Failed to fetch invoice count", error);
         }
-    }, [accountState]); 
+    };
+
+    useEffect(() => {
+        if (accountState !== AccountTypes.NONE) {
+            refreshInvoiceCount();
+        }
+    }, [accountState]);
 
     const [ActiveComponent, setActiveComponent] = useState(() => WelcomeView);
     
@@ -65,7 +66,12 @@ function GeneralView({accountState})
             goToHome={goToHome}
             showSidemenu={() => showSidemenu()}
             invoiceCount={invoiceCount}
-            invoiceMenu={()=> setActiveComponent(() => InvoiceView)}
+            invoiceMenu={() =>
+                setActiveComponent(
+                    () => () =>
+                        <InvoiceView onInvoiceConfirmed={refreshInvoiceCount} />
+                )
+            }
         ></MyHeader>
         <div className="main-content">
             <ActiveComponent />

@@ -1,19 +1,23 @@
-import CurrentAssignments from "./CurrentAsignments";
+import PickupAssignments from "./PickupAssignments";
+import DropoffAssignments from "./DropoffAssignments";
 import FinishDelivery from "./FinishDelivery";
 import ViewNearestDelivery from "./ViewNearestDelivery";
 
-export const getDeliveryButtonList = (setActiveView ) =>[
-    {
-        label: "Next destination",
-        onClick: () => setActiveView(() => ViewNearestDelivery)
-    },
-    {
-        label: "Finish delivery",
-        onClick: () => setActiveView(() => FinishDelivery)
-    },
-    {
-        label: "Review Current Assignments",
-        onClick: () => setActiveView(() => CurrentAssignments)
-    },
-    
+export const getDeliveryButtonList = (setActiveView) => [
+  {
+    label: "Next destination",
+    onClick: () => setActiveView(() => ViewNearestDelivery),
+  },
+  {
+    label: "Pick-ups",
+    onClick: () => setActiveView(() => PickupAssignments),
+  },
+  {
+    label: "Drop-offs",
+    onClick: () => setActiveView(() => DropoffAssignments),
+  },
+  {
+    label: "Finish delivery",
+    onClick: () => setActiveView(() => FinishDelivery),
+  },
 ];

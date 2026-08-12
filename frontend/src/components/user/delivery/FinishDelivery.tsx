@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getStoredAuthToken } from "../../../utils/InternalUtils";
 import {
-    getAssignedPackageList,
+    getDeliveryOnlyPackageList,
     getDeliveryCode,
 } from "../../../utils/ClientRequests/DeliveryApiCalls";
 import "../../general/GeneralView.css"
@@ -13,7 +13,7 @@ function FinishDelivery() {
 
     const fetchPackages = async () => {
         try {
-            const list = await getAssignedPackageList(getStoredAuthToken());
+            const list = await getDeliveryOnlyPackageList(getStoredAuthToken());
             setPackageList(list || []);
         } catch (err) {
             console.error(err);

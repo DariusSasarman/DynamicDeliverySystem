@@ -30,7 +30,8 @@ public interface PackageRepository extends JpaRepository<Package, Long> {
         
         List<Package> packages = new ArrayList<>();
         packages.addAll(findByPickUpBy(deliveryUser).stream()
-                .filter(pkg -> pkg.getStatus() == PackageStatus.PENDING)
+                .filter(pkg -> pkg.getStatus() == PackageStatus.PENDING
+                        || pkg.getStatus() == PackageStatus.PICKED_UP)
                 .toList());
         
         packages.addAll(findByDeliveredBy(deliveryUser).stream()
@@ -42,13 +43,7 @@ public interface PackageRepository extends JpaRepository<Package, Long> {
         }
 
         return packages.stream()
-        .filter(pkg -> pkg.getLocation() != null)
-        .min(
-            Comparator.comparingDouble
-            (pkg -> 
-                pkg.getLocation()
-                .distanceTo(userLocation)
-            )
-        );
+                .filter(pkg -> pkg.getLocation() != null)
+                .min(Comparator.comparingDouble(pkg -> pkg.getLocation().distanceTo(userLocation)));
     }
 }

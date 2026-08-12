@@ -56,12 +56,22 @@ public class Complaint {
         this.solutionInvoice = solutionInvoice;
     }
     
+    public void clearSolutionInvoice() {
+        this.solutionInvoice = null;
+    }
+    
     public ComplaintSummary toSummary() {
+        String deliveredOn = regardingPackage.getDeliveryDate() != null
+                ? regardingPackage.getDeliveryDate().toString()
+                : "Not delivered yet";
+        String courierEmail = regardingPackage.getDeliveredBy() != null
+                ? regardingPackage.getDeliveredBy().getEmail()
+                : "Not assigned yet";
         return new ComplaintSummary(
             this.id,
             this.regardingPackage.getId(),
-            this.regardingPackage.getDeliveryDate().toString(),
-            this.regardingPackage.getDeliveredBy().getEmail(),
+            deliveredOn,
+            courierEmail,
             this.description
         );
     }

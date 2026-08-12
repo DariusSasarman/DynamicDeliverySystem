@@ -1,3 +1,5 @@
+import { throwIfNotOk } from "./apiError";
+
 export async function getNearestPackage(
   currentPos: number[],
   authToken: string
@@ -12,35 +14,47 @@ export async function getNearestPackage(
     }
   );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch nearest package");
-  }
+  await throwIfNotOk(response, "Failed to fetch nearest package");
+  return response.json();
+}
 
-  return await response.json();
+export async function getPickupAssignments(authToken: string) {
+  const response = await fetch("/api/delivery/get-pickup-assignments", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
+
+  await throwIfNotOk(response, "Failed to fetch pick-up assignments");
+  return response.json();
+}
+
+export async function getDropoffAssignments(authToken: string) {
+  const response = await fetch("/api/delivery/get-dropoff-assignments", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
+
+  await throwIfNotOk(response, "Failed to fetch drop-off assignments");
+  return response.json();
 }
 
 export async function getAssignedPackageList(authToken: string) {
-  const response = await fetch(
-    "/api/delivery/get-assigned-packages",
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-    }
-  );
+  const response = await fetch("/api/delivery/get-assigned-packages", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch assigned package list");
-  }
-
-  return await response.json();
+  await throwIfNotOk(response, "Failed to fetch assigned package list");
+  return response.json();
 }
 
-export async function getPackageDetails(
-  authToken: string,
-  packageId: number
-) {
+export async function getPackageDetails(authToken: string, packageId: number) {
   const response = await fetch(
     `/api/delivery/get-package-details?packageId=${packageId}`,
     {
@@ -51,17 +65,11 @@ export async function getPackageDetails(
     }
   );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch package details");
-  }
-
-  return await response.json();
+  await throwIfNotOk(response, "Failed to fetch package details");
+  return response.json();
 }
 
-export async function getDeliveryCode(
-  packageId: number,
-  authToken: string
-) {
+export async function getDeliveryCode(packageId: number, authToken: string) {
   const response = await fetch(
     `/api/delivery/get-delivery-code?packageId=${packageId}`,
     {
@@ -72,9 +80,39 @@ export async function getDeliveryCode(
     }
   );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch delivery code");
-  }
+  await throwIfNotOk(response, "Failed to fetch delivery code");
+  return response.text();
+}
 
-  return await response.text();
+export async function confirmPickup(authToken: string, packageId: number) {
+  const response = await fetch(
+    `/api/delivery/confirm-pickup?packageId=${packageId}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    }
+  );
+
+  await throwIfNotOk(response, "Failed to confirm pickup");
+}
+
+export async function confirmDeposit(authToken: string, packageId: number) {
+  const response = await fetch(
+    `/api/delivery/confirm-deposit?packageId=${packageId}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    }
+  );
+
+  await throwIfNotOk(response, "Failed to confirm deposit");
+}
+
+export async function getDeliveryOnlyPackageList(authToken: string) {
+  const packages = await getDropoffAssignments(authToken);
+  return packages.map((pkg: { id: number }) => ({ id: pkg.id }));
 }
