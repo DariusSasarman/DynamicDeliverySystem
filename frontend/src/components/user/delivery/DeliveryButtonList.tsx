@@ -16,8 +16,4 @@ export const getDeliveryButtonList = (setActiveView) => [
     label: "Drop-offs",
     onClick: () => setActiveView(() => DropoffAssignments),
   },
-  {
-    label: "Finish delivery",
-    onClick: () => setActiveView(() => FinishDelivery),
-  },
 ];

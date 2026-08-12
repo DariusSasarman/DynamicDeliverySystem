@@ -53,7 +53,7 @@ export async function sendPickupRequest(
 ) {
   const formattedDate = pickUpDate.includes("T")
     ? pickUpDate
-    : `${pickUpDate}T00:00:00`;
+    : `${pickUpDate}T14:00:00`;
 
   const response = await fetch("/api/basic/pickup-request", {
     method: "POST",

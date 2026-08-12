@@ -1,13 +1,12 @@
 # DynamicDeliverySystem
-## Hiii 👋 - this is a work in progress project! I'm glad that you decided to visit it!
 
-It's meant to be a system that supports a delivery service where the user can define their schedule and have the parcel be delivered at their actual location. 📦🗓️🧭📍🔄 
+It's meant to be a system that enables a delivery service where the user can define their schedule and have the parcel be delivered at their actual location. 📦🗓️🧭📍🔄 
 
 ### Ever had to leave work early just to catch a parcel that's supposed to arrive at your home?
 
 Basically, for each day of the week, the user can **define the time periods and the locations** where they're found at.
 
-Using this schedule (*without needing to know ahead of time*), the courier can now do their job, at the **right place and at the right time ** - not just "Leave it at the entrance" or "It's been placed in an easybox where you can pick it up".
+Using this schedule (*without needing to know ahead of time*), the courier can now do their job, at the **right place and at the right time** - not just "Leave it at the entrance" or "It's been placed in an easybox where you can pick it up".
 
 ## Quick start (Docker)
 
@@ -58,8 +57,6 @@ cd frontend && npm run dev
 
 Copy `.env.example` to `.env` and adjust `DB_*` / `JWT_SECRET` as needed.
 
-If the backend fails on startup with a `phone_number` constraint error after upgrading, reset the database volume:
-
 ```bash
 docker compose down -v
 docker compose up --build
@@ -74,113 +71,108 @@ docker compose up --build
 
 
 ```mermaid
-erDiagram
-
-    USER {
-        long ID
-        string EMAIL
-        string HASHED_PASSWORD
-        string ROLE
-        datetime CREATED_AT
+classDiagram
+    class User {
+        <<abstract>>
+        Long id
+        String name
+        String email
+        String hashedPassword
+        AccountTypes accountType
+        LocalDateTime createdAt
+        getRole() String
+        getLocation() Location
     }
 
-    BASIC_USER {
-        string PHONE_NUMBER
+    class BasicUser {
+        String phoneNumber
+        Schedule schedule
     }
 
-    MANAGER {
-        long ID PK
-        long ACCOUNT_MADE_BY_ID
-        long MANAGING_LOCATION_ID
+    class DeliveryUser {
+        Location lastKnownLocation
     }
 
-    DELIVERY {
-        long ACCOUNT_MADE_BY
-        long MANAGER_ID
+    class Manager {
+        Location managingLocation
     }
 
-    SCHEDULE {
-        long SCHEDULE_ID
-        long USER_ID
-        datetime LAST_MODIFIED_AT
+    User <|-- BasicUser
+    User <|-- DeliveryUser
+    User <|-- Manager
+
+    class Schedule {
+        List~Entry~ scheduleEntries
+        LocalDateTime lastModifiedAt
+        addEntry(Entry)
+        getAverageLocation() Location
     }
 
-    ENTRY {
-        long LOCATION_ID
-        int FROM
-        int UNTIL
-        string DAYS_VALID
-        long SCHEDULE_ID
+    class Entry {
+        int from
+        int to
+        Set~DayOfWeek~ validDays
+        Location location
     }
 
-    LOCATION {
-        long LOCATION_ID
-        long LATITUDE
-        long LONGITUDE
+    class Location {
+        double latitude
+        double longitude
+        distanceTo(Location) double
     }
 
-    PACKAGE {
-        long SENDER_ID
-        long PICKUP_COURIER_ID
-        long MANAGER_ID
-        long DELIVERY_COURIER_ID
-        long RECEIVER_ID
-        datetime ISSUE_DATE
-        datetime PICKUP_DATE
-        datetime DELIVERY_DATE
-        string STATUS
+    BasicUser "1" --> "1" Schedule
+    Schedule "1" --> "*" Entry
+    Entry --> Location
+    DeliveryUser --> Location
+    Manager --> Location
+
+    class Package {
+        Long id
+        LocalDateTime pickUpDate
+        LocalDateTime deliveryDate
+        PackageStatus status
+        List~ChainOfOwnership~ chainOfOwnership
     }
 
-    INVOICE {
-        long ISSUED_TO_ID
-        long ISSUED_BY_ID
-        string TEXT
-        string CONFIRMATION_STATUS
+    class ChainOfOwnership {
+        LocalDateTime timestamp
     }
 
-    COMPLAINT {
-        long FILED_BY_ID
-        long REGARDING_ID
-        long COMPLAINT_ID
-        string TEXT
-        long SOLVING_INVOICE_ID
+    class PackageStatus {
+        <<enumeration>>
+        PENDING
+        PICKED_UP
+        IN_STORAGE
+        OUT_FOR_DELIVERY
+        DELIVERED
     }
 
-    %% Inheritance
-    USER ||--|| BASIC_USER : inherits
-    USER ||--|| MANAGER : inherits
-    USER ||--|| DELIVERY : inherits
+    Package "1" --> "*" ChainOfOwnership
+    ChainOfOwnership --> Package
+    ChainOfOwnership --> User : owner
+    Package --> PackageStatus
+    Package --> "1" BasicUser : issuedBy
+    Package --> "1" BasicUser : issuedTo
+    Package --> "0..1" DeliveryUser : pickUpBy
+    Package --> "0..1" DeliveryUser : deliveredBy
+    Package --> "0..1" Manager : managedBy
 
-    %% Manager belongs to City
-    LOCATION ||--o{ MANAGER : contains
+    class Complaint {
+        String description
+    }
 
-    %% Schedule
-    BASIC_USER ||--o{ SCHEDULE : owns
-    SCHEDULE ||--o{ ENTRY : contains
-    ENTRY }o--|| LOCATION : uses
+    class Invoice {
+        String invoiceDetails
+        boolean confirmed
+    }
 
-    %% Package relations
-    BASIC_USER ||--o{ PACKAGE : sender
-    BASIC_USER ||--o{ PACKAGE : receiver
+    Complaint --> BasicUser : filedBy
+    Complaint --> Package : regardingPackage
+    Complaint --> "0..1" Invoice : solutionInvoice
+    Invoice --> Manager : issuedBy
+    Invoice --> User : issuedTo
 
-    DELIVERY ||--o{ PACKAGE : pickup
-    DELIVERY ||--o{ PACKAGE : delivery
-
-    MANAGER ||--o{ PACKAGE : manages
-
-    %% Invoices
-    USER ||--o{ INVOICE : issued_to
-    MANAGER ||--o{ INVOICE : issued_by
-
-    %% Complaints
-    BASIC_USER ||--o{ COMPLAINT : files
-    PACKAGE ||--o{ COMPLAINT : regarding
-    INVOICE ||--o{ COMPLAINT : resolves
-
-    %% Account creation
-    MANAGER ||--o{ DELIVERY : manages
-    MANAGER ||--o{ DELIVERY : creates
-    MANAGER ||--o{ MANAGER : creates
 ```
 
 ## Regarding Security...
@@ -201,6 +193,8 @@ all they need is an email - no other personal details
 to be specified.
 
 4. Managers can't view the schedules of clients at all.
+
+5. Used JWT auth on every api call
 
 Unless attacked, this system is safer by design
 than the standard delivery apps.

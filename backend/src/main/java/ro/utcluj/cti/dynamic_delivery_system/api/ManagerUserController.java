@@ -196,6 +196,7 @@ public class ManagerUserController {
         return userRepository.findAll()
                 .stream()
                 .filter(user -> user instanceof Manager)
+                .filter(user -> !user.getEmail().equalsIgnoreCase(authentication.getName()))
                 .map(User::getEmail)
                 .collect(Collectors.toList());
     }

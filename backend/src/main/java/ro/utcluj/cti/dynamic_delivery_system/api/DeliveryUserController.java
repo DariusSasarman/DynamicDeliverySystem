@@ -19,8 +19,10 @@ import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
 import ro.utcluj.cti.dynamic_delivery_system.model.BasicUser;
 import ro.utcluj.cti.dynamic_delivery_system.model.DeliveryUser;
+import ro.utcluj.cti.dynamic_delivery_system.model.Invoice;
 import ro.utcluj.cti.dynamic_delivery_system.model.Location;
 import ro.utcluj.cti.dynamic_delivery_system.model.PointOnMap;
+import ro.utcluj.cti.dynamic_delivery_system.repos.InvoiceRepository;
 import ro.utcluj.cti.dynamic_delivery_system.repos.PackageRepository;
 import ro.utcluj.cti.dynamic_delivery_system.repos.UserRepository;
 import ro.utcluj.cti.dynamic_delivery_system.model.Package;
@@ -33,6 +35,7 @@ public class DeliveryUserController {
     
     private final PackageRepository packageRepository;
     private final UserRepository userRepository;
+    private final InvoiceRepository invoiceRepository;
     private record PackageDetails(
         String type,
         String status,
@@ -153,6 +156,9 @@ public class DeliveryUserController {
         }
 
         pkg.hasBeenPickedUp(LocalDateTime.now());
+        
+        Invoice invoice = new Invoice(deliveryUser.getManager(), deliveryUser, "Please confirm the deposit at HQ of package with ID: " + pkg.getId());
+        invoiceRepository.save(invoice);
         packageRepository.save(pkg);
     }
 
