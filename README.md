@@ -6,7 +6,22 @@ It's meant to be a system that enables a delivery service where the user can def
 
 Basically, for each day of the week, the user can **define the time periods and the locations** where they're found at.
 
-Using this schedule (*without needing to know ahead of time*), the courier can now do their job, at the **right place and at the right time** - not just "Leave it at the entrance" or "It's been placed in an easybox where you can pick it up".
+Using this schedule the system provides couriers with the customer's expected location during the scheduled delivery window, reducing failed delivery attempts, not just "Leave it at the entrance" or "It's been placed in an easybox where you can pick it up".
+
+## How does it look?
+
+Client view :
+
+[BasicUser.webm](https://github.com/user-attachments/assets/0970f919-1ee5-42de-92ab-7740ad6bfe72)
+
+Delivery person view :
+
+[Delivery.webm](https://github.com/user-attachments/assets/9a82fb6e-c05e-4cab-a2b2-856451dcc265)
+
+Manager person view : 
+
+[Manager.webm](https://github.com/user-attachments/assets/d3847efc-b099-4a0b-b72c-4a3a0059dd21)
+
 
 ## Quick start (Docker)
 
@@ -179,7 +194,7 @@ classDiagram
 
 Exposing your entire schedule might seem risky. It's true!
 
-Here's how information leak issues are avoided:
+Here's how the system reduces information leakage:
 
 1. Couriers are never aware about whom the package is 
 delivered to. All they see is a phone number,
@@ -194,7 +209,26 @@ to be specified.
 
 4. Managers can't view the schedules of clients at all.
 
-5. Used JWT auth on every api call
+5. All API endpoints require JWT authentication and authorization.
 
-Unless attacked, this system is safer by design
-than the standard delivery apps.
+The system reduces the amount of personal information exposed to delivery personnel compared to traditional delivery workflows.
+
+## Tech Stack
+
+Backend
+- Java 21
+- Spring Boot
+- Spring Security
+- JWT Authentication
+- MySQL
+- Maven
+
+Frontend
+- React
+- TypeScript
+- React Leaflet
+
+Infrastructure
+- Docker
+- Docker Compose
+- Nginx
